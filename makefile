@@ -12,11 +12,11 @@ finalize:
 clean:
 
 vsce-pack:
-	vsce package package.json
+	vsce package
 	mv *.vsix .output/
 
 vsce-publish:
-	vsce publish package.json
+	vsce publish
 
 package: initialize clean vsce-pack finalize
 
