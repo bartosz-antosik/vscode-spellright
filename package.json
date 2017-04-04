@@ -1,0 +1,105 @@
+{
+  "name": "spellright",
+  "displayName": "Spell Right",
+  "description": "Spell Checker for VSCode",
+  "version": "1.0.0",
+  "publisher": "ban",
+  "engines": {
+    "vscode": "^1.9.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./src/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Spell Right configuration",
+      "properties": {
+        "spellright.language": {
+          "type": "string",
+          "default": "en_US",
+          "description": "Default language (dictionary/culture name) used for spelling."
+        },
+        "spellright.documentType": {
+          "type": "array",
+          "default": ["markdown", "latex", "plaintext"],
+          "description": "Document types for which spelling will be turned ON by default."
+        },
+        "spellright.statusBarIndicator": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable language & status indicator switch in status bar."
+        },
+        "spellright.suggestionsInHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable including suggested corrections in hints."
+        },
+        "spellright.ignoreWords": {
+          "type": "array",
+          "default": [],
+          "description": "Words ignored by spell checker."
+        },
+        "spellright.ignoreRegExps": {
+          "type": "array",
+          "default": [],
+          "description": "Enable/disable including suggested corrections in hints."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "spellright.createUpdateSettings",
+        "title": "SpellRight: Create/Update Workspace Settings"
+      },
+      {
+        "command": "spellright.selectDictionary",
+        "title": "SpellRight: Select Dictionary (Language)"
+      },
+      {
+        "command": "spellright.setCurrentTypeOFF",
+        "title": "SpellRight: Turn OFF for Current Document Type"
+      }
+    ],
+    "keybindings": []
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.40",
+    "electron-prebuilt": "^1.4.13",
+    "electron-rebuild": "^1.5.7",
+    "eslint": "^3.6.0",
+    "mocha": "^2.3.3",
+    "vscode": "^1.9.0"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "jsonminify": "^0.4.1",
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
+    "spellchecker": "^3.3.1"
+  },
+  "icon": "icon.png",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "homepage": "https://github.com/bartosz-antosik/vscode-spellright/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bartosz-antosik/vscode-spellright.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bartosz-antosik/vscode-spellright/issues"
+  },
+  "__metadata": {
+    "id": "f6e8f06b-e4dc-40e4-83d6-afd7ef0f3e44",
+    "publisherId": "2274a5e4-f24b-4cd7-9d0b-d00ca3d481b1",
+    "publisherDisplayName": "Bartosz Antosik"
+  }
+}

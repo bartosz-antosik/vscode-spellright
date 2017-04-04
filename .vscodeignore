@@ -1,0 +1,11 @@
+.backup/**
+.output/**
+.vscode/**
+.study/**
+.test/**
+.helpers/**
+.media/**
+.gitignore
+.eslintrc.json
+jsconfig.json
+makefile

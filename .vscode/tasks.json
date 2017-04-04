@@ -1,0 +1,17 @@
+{
+    "version": "0.1.0",
+    "command": "make",
+    "isShellCommand": true,
+    "args": [],
+    "showOutput": "always",
+    "suppressTaskName": false,
+    "tasks": [
+        {
+            "isBuildCommand": true,
+            "taskName": "package"
+        },
+        {
+            "taskName": "publish"
+        }
+    ]
+}
