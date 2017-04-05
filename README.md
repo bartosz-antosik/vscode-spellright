@@ -4,14 +4,13 @@ Spell Checker for Visual Studio Code.
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, strings/comments on most **source code** documents and text/CDATA/comments nodes on **XML**/**HTML** class documents.
-* Uses system native spell checking service whenever possible: Windows Language Services (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux).
-* Whenever available (Windows 8/10, macOS) uses dictionaries installed with system spell checking engines.
-* Uses differential editing information - extension tries to minimize area spelled during editing (following document changes) only to lines touched by edits.
-* Unlike many other spell checkers it tries to spell short words and abbreviations (etc., i.e., ...)
+* Spells **plain text**/**markdown**/**LaTeX** documents, strings/comments of most **source code** documents and text/comments nodes on **XML**/**HTML** class documents ([see here](SCREENSHOTS.md)).
+* Uses **offline**, **system native** spell checking service whenever possible: Windows Language Services (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with these engines.
+* Fast with marginal CPU & memory usage - extension uses **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
+* Unlike many other spell checkers it tries to spell **short words and abbreviations** (etc., I'm, i.e., ...)
 * Unobtrusive **GUI**/**command palette** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
 
-> Until VSCode's team decides to support some sort of core spelling capabilities, like [node-spellchecker](https://github.com/atom/node-spellchecker), from inside of the VSCode's distribution, **this extension is compatible only with 64-bit Windows platform**. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+> This extension is **fully functional** although it is currently limited to **64-bit Windows platform**. It is due to problems with distribution of native modules in current VSCode's distribution model. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshot
 
@@ -36,7 +35,7 @@ Use **F8**/**Shift-F8** to jump to next/previous spelling error. Press **Ctrl+.*
 
 Extension has a handy list interface for switching spelling dictionary (language) or turning spelling OFF for currently open document type:
 
-![dcitionary](media/screenshot-dictionary.png)
+![dictionary](media/screenshot-dictionary.png)
 
 It can be reached by clicking on indicator field in status bar:
 
@@ -86,17 +85,13 @@ Words ignored by in spelling. Usually contains words which are considered misspe
 
 Regular expressions ignored in spelling. Allows to ignore generalized misspelled expressions.
 
-## Dependences
-
-This extension depends on [node-spellchecker](https://github.com/atom/node-spellchecker) native (binary) module. Module is installed along with the extension but only with binary bindings compatible with 64-bit Windows platform.
-
 ## Known Issues
 
 * VSCode is missing event that would tell extension about cursor jumps in the document. Recently entered word which has not been ended with a white space or punctuation character will be spelled not on cursor jump but on a subsequent edit somewhere else in the document (this is probably more of a VSCode's issue).
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as all the above this is probably more of a VSCode's issue).
 
-This extension can still be considered a Work In Progress so please report all the annoyances that you see on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
+This extension can still be considered a Work In Progress. Please report all the errors and/or annoyances that you see on the [issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
 ## Acknowledgments
 
