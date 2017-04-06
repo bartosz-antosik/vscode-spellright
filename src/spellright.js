@@ -71,7 +71,7 @@ var SpellRight = (function () {
         this.diagnosticCollection = vscode.languages.createDiagnosticCollection('spellright');
 
         // Disabled because the document (paremeter of the event) contains
-        // strange date like languageID set to 'plaintext' no mater what type
+        // strange data like languageID set to 'plaintext' no mater what type
         // of document it refers to, text size is always 1 character etc.
         //
         // vscode.workspace.onDidOpenTextDocument(this.doSpellCheck, this, subscriptions);
