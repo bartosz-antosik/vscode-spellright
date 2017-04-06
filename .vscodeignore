@@ -1,6 +1,7 @@
 .backup/**
 .output/**
 .vscode/**
+.samples/**
 .study/**
 .test/**
 .helpers/**
