@@ -24,15 +24,12 @@ var controller;
 var SpellRight = (function () {
 
     function SpellRight() {
-        this.problemCollection = {};
-        this.diagnostics = [];
         this.diagnosticMap = {};
         this.lastChanges = null;
+        this.spellingNow = [];
     }
 
     SpellRight.prototype.dispose = function () {
-        this.diagnosticCollection.clear();
-        this.diagnosticCollection.dispose();
         this.suggestCommand.dispose();
         this.ignoreCommand.dispose();
         this.alwaysIgnoreCommand.dispose();
@@ -74,20 +71,20 @@ var SpellRight = (function () {
         // strange data like languageID set to 'plaintext' no mater what type
         // of document it refers to, text size is always 1 character etc.
         //
-        // vscode.workspace.onDidOpenTextDocument(this.doSpellCheck, this, subscriptions);
+        // vscode.workspace.onDidOpenTextDocument(this.doInitiateSpellCheck, this, subscriptions);
 
         vscode.workspace.onDidCloseTextDocument(function (textDocument) {
             _this.diagnosticCollection.delete(textDocument.uri);
         }, this, subscriptions);
 
-        vscode.workspace.onDidSaveTextDocument(this.doSpellCheck, this, subscriptions);
+        vscode.workspace.onDidSaveTextDocument(this.doInitiateSpellCheck, this, subscriptions);
         vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
 
         vscode.window.onDidChangeVisibleTextEditors(function (editors) {
             editors.forEach((editor, index, array) => {
                 var _document = editor._documentData._document;
                 if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                    _this.doSpellCheck(_document);
+                    _this.doInitiateSpellCheck(_document);
                 }
             });
         }, null);
@@ -97,7 +94,7 @@ var SpellRight = (function () {
 
         // Spell check all open documents
         if (typeof vscode.window.activeTextEditor !== 'undefined')
-            this.doSpellCheck(vscode.window.activeTextEditor.document);
+            this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
     };
 
     SpellRight.prototype.setCurrentTypeON = function () {
@@ -115,7 +112,7 @@ var SpellRight = (function () {
                 indicator.updateLanguage();
 
                 // Spell check current document
-                _this.doSpellCheck(_document._document);
+                _this.doInitiateSpellCheck(_document._document);
             }
         });
     }
@@ -178,7 +175,7 @@ var SpellRight = (function () {
         });
     };
 
-    SpellRight.prototype.checkAndMark = function (token, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (diagnostics, token, linenumber, colnumber) {
 
         if (spellchecker.isMisspelled(token)) {
             var lineRange = new vscode.Range(linenumber, colnumber, linenumber, colnumber + token.length);
@@ -201,8 +198,8 @@ var SpellRight = (function () {
 
                 var diag = new vscode.Diagnostic(lineRange, message, vscode.DiagnosticSeverity.Error);
                 diag.source = 'spelling';
-                this.diagnostics.push(diag);
-                this.problemCollection[token] = message;
+                //diagnostics.unshift(diag);
+                diagnostics.push(diag);
             }
         }
     }
@@ -232,6 +229,11 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
+        // Check if not being spelled right now
+        if (this.spellingNow.indexOf(event.document.uri.toString()) != (-1)) {
+            return;
+        }
+
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
             return;
@@ -243,7 +245,7 @@ var SpellRight = (function () {
         if (speller == null) return;
 
         if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
-            this.doSpellCheck(document);
+            this.doInitiateSpellCheck(document);
             return;
         }
 
@@ -265,7 +267,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range.start.line, range.end.line, shift);
 
-            speller.spellCheckRange(document, (token, linenumber, colnumber) => this.checkAndMark(token, linenumber, colnumber), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -286,7 +288,7 @@ var SpellRight = (function () {
 
                         this.adjustDiagnostics(diagnostics, range.start.line + shift, range.end.line + shift, 0);
 
-                        speller.spellCheckRange(document, (token, linenumber, colnumber) => this.checkAndMark(token, linenumber, colnumber), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -298,7 +300,12 @@ var SpellRight = (function () {
         this.diagnosticCollection.set(document.uri, diagnostics);
     };
 
-    SpellRight.prototype.doSpellCheck = function (document) {
+    SpellRight.prototype.doInitiateSpellCheck = function (document) {
+
+        // Check if not being spelled right now
+        if (this.spellingNow.indexOf(document.uri.toString()) != (-1)) {
+            return;
+        }
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
@@ -311,15 +318,7 @@ var SpellRight = (function () {
             return;
         }
 
-        if (DEBUG_OUTPUT) {
-            console.log('Spell check start of \"' + document.fileName + '\" [' + document.languageId + '].');
-            // console.log(document);
-
-            var startTime = new Date().getTime();
-        }
-
-        this.diagnostics = [];
-
+        var diagnostics = [];
         var linenumber = 0;
         var colnumber = 0;
 
@@ -328,19 +327,44 @@ var SpellRight = (function () {
 
         if (speller == null) return;
 
-        speller.spellCheckAll(document, (token, linenumber, colnumber) => this.checkAndMark(token, linenumber, colnumber));
+        var _this = this;
 
-        this.diagnosticCollection.set(document.uri, this.diagnostics);
-        // create local copy so it can be updated
-        this.diagnosticMap[document.uri.toString()] = this.diagnostics;
+        // Mark as being spelled
+        this.spellingNow.push(document.uri.toString());
 
         if (DEBUG_OUTPUT) {
-            var endTime = new Date().getTime();
-            var secs = (endTime - startTime) / 1000;
-
-            console.log('Spell check completed in ' + String(secs) + 's, found ' + String(this.diagnostics.length) + ' errors.');
+            console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+            var start = new Date().getTime();
         }
-    };
+
+        // The rest is done "OnIdle"" state
+        setImmediate(function () { _this.doStepSpellCheck(_this, document, diagnostics, 0, speller, start) });
+    }
+
+    SpellRight.prototype.doStepSpellCheck = function (_this, document, diagnostics, line, speller, start) {
+
+        if (line <= document.lineCount) {
+            speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line, void 0);
+
+            setImmediate(function () { _this.doStepSpellCheck(_this, document, diagnostics, line + 1, speller, start) });
+        } else {
+            _this.diagnosticCollection.set(document.uri, diagnostics);
+            _this.diagnosticMap[document.uri.toString()] = diagnostics;
+
+            if (DEBUG_OUTPUT) {
+                var end = new Date().getTime();
+                var secs = (end - start) / 1000;
+
+                console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + String(diagnostics.length) + ' errors.');
+            }
+
+            // Remove from being spelled
+            var i = _this.spellingNow.indexOf(document.uri.toString());
+            if (i !== (-1)) {
+                _this.spellingNow.splice(i, 1);
+            }
+        }
+    }
 
     SpellRight.prototype.processUserIgnoreRegex = function (text) {
         for (var i = 0; i < settings.ignoreRegExp.length; i++) {
@@ -436,7 +460,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.ignoreWorkspaceCodeAction = function (document, word) {
         if (this.addWordToIgnoreList(word, true)) {
-            this.doSpellCheck(document);
+            this.doInitiateSpellCheck(document);
         } else {
             vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to the ignore list.');
         }
@@ -449,7 +473,7 @@ var SpellRight = (function () {
             console.log(Object.keys(document));
         }
         if (this.addWordToAlwaysIgnoreList(word)) {
-            this.doSpellCheck(document);
+            this.doInitiateSpellCheck(document);
         } else {
             vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to the ignore list.');
         }

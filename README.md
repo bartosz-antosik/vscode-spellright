@@ -5,8 +5,8 @@ Spell Checker for Visual Studio Code.
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, strings/comments of most **source code** documents and text/comments nodes on **XML**/**HTML** class documents ([see here](SCREENSHOTS.md)).
-* Uses **offline**, **system native** spell checking service whenever possible: Windows Language Services (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with these engines.
-* Fast with marginal CPU & memory usage - extension uses **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
+* Fast - extension uses **background processing** (on idle) and **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Language Services (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with these engines.
 * Unlike many other spell checkers it tries to spell **short words and abbreviations** (etc., I'm, i.e., ...)
 * Unobtrusive **GUI**/**command palette** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
 
