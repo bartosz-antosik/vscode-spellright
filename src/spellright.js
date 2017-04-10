@@ -177,10 +177,14 @@ var SpellRight = (function () {
 
     SpellRight.prototype.checkAndMark = function (diagnostics, token, linenumber, colnumber) {
 
+        var _linenumber = linenumber;
+        var _colnumber = colnumber;
+
         if (spellchecker.isMisspelled(token)) {
-            var lineRange = new vscode.Range(linenumber, colnumber, linenumber, colnumber + token.length);
             // Make sure word is not in the ignore list
             if (settings.ignoreWords.indexOf(token) < 0) {
+                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + token.length);
+
                 var message = '\"' + token + '\"';
                 if (settings.suggestionsInHints) {
                     var suggestions = spellchecker.getCorrectionsForMisspelling(token);
@@ -198,8 +202,38 @@ var SpellRight = (function () {
 
                 var diag = new vscode.Diagnostic(lineRange, message, vscode.DiagnosticSeverity.Error);
                 diag.source = 'spelling';
-                //diagnostics.unshift(diag);
-                diagnostics.push(diag);
+
+                // Now insert diagnostics at the right place
+                var append = false;
+                if (diagnostics.length > 0) {
+                    var _drange = diagnostics[diagnostics.length - 1].range;
+                    // At the end if fits there
+                    var append = (_linenumber > _drange._end._line ||
+                        (_linenumber == _drange._end._line &&
+                        _colnumber >= _drange._end._character));
+                } else {
+                    // Definetly at the end!
+                    var append = true;
+                }
+
+                if (append) {
+                    diagnostics.push(diag);
+                } else {
+                    // Linear search. This should maybe be bisection or some
+                    // other algorithm in the future, but on the other hand
+                    // this code is called only on differential edits so there
+                    // are very few calls thus it should not degrade
+                    // performance much.
+                    for (var i = 0; i < diagnostics.length; i++) {
+                        var _drange = diagnostics[i].range;
+                        if (_linenumber < _drange._end._line ||
+                            (_linenumber <= _drange._end._line &&
+                            _colnumber <= _drange._end._character)) {
+                            diagnostics.splice(i, 0, diag);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
