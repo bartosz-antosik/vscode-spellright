@@ -4,11 +4,11 @@ Spell Checker for Visual Studio Code.
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, strings/comments of most **source code** documents and text/comments nodes on **XML**/**HTML** class documents ([see here](SCREENSHOTS.md)).
-* Fast - extension uses **background processing** (on idle) and **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
-* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with these engines.
-* Unlike many other spell checkers it tries to spell **short words and abbreviations** (etc., I'm, i.e., ...)
-* Unobtrusive **GUI**/**command palette** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
+* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* of most **source code** documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here](SCREENSHOTS.md)).
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with any of these engines.
+* Spells **short words and abbreviations** (etc., I'm, i.e., ...)
+* Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
+* Extension uses **background processing** (on idle) and **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
 
 > This extension is currently limited to **64-bit Windows platform**. It is due to problems with distribution of native modules in current VSCode's distribution model. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
@@ -61,9 +61,9 @@ Turn spelling OFF for currently open document type.
 
 This extension contributes the following settings (with default values):
 
-`spellright.language: en_US`
+`spellright.language: en`
 
-Default language (dictionary/culture name) used for spelling. Typically in a LANGUAGE_CULTURE format (e.g. "en_US", "fr_CA", "pl_PL" etc.)
+Default language (dictionary/culture name) used for spelling. Typically in a LANGUAGE or LANGUAGE-CULTURE format (e.g.: "en", "fr", "en-US", "fr-CA", "pl-PL" etc.)
 
 `spellright.statusBarIndicator: true`
 
