@@ -26,7 +26,7 @@ var SpellRight = (function () {
     function SpellRight() {
         this.diagnosticMap = {};
         this.lastChanges = null;
-        this.spellingQueue = [];
+        this.spellingDoc = null;
     }
 
     SpellRight.prototype.dispose = function () {
@@ -193,6 +193,8 @@ var SpellRight = (function () {
             var roff = /\(x\)/g;
             var off = roff.exec(selection.label);
 
+            _this.doCancelSpellCheck();
+
             if (!off) {
                 settings.language = dict;
                 _this.setDictionary(settings.language);
@@ -292,8 +294,7 @@ var SpellRight = (function () {
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
         // Check if not being spelled right now
-        var inQueue = this.spellingQueue.find(o => o._document.uri.toString() === document.uri.toString());
-        if (typeof inQueue !== 'undefined') {
+        if (this.spellingDoc !== null && this.spellingDoc._document.uri === document.uri.toString()) {
             return;
         }
 
@@ -365,9 +366,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doInitiateSpellCheck = function (document) {
 
-        // Check if not being spelled right now
-        var inQueue = this.spellingQueue.find(o => o._document.uri.toString() === document.uri.toString());
-        if (typeof inQueue !== 'undefined') {
+        // Check if not being spelled right
+        if (this.spellingDoc !== null && this.spellingDoc._document.uri === document.uri.toString()) {
             return;
         }
 
@@ -384,49 +384,67 @@ var SpellRight = (function () {
 
         var diagnostics = [];
 
-        // Select appropriate parser
-        const speller = doctype.fromDocument(document);
+        // Speller was already started
+        var initiate = (this.spellingDoc === null);
 
-        if (speller == null) {
+        // Select appropriate parser
+        const parser = doctype.fromDocument(document);
+
+        if (parser == null) {
             return;
         }
 
-        var _this = this;
-
-        // Add to spelling queue
-        this.spellingQueue.push({
+        this.spellingDoc = {
             _document: document,
             _diagnostics: [],
             _line: 0,
             _start: Date.now(),
             _update: Date.now()
-        });
+        }
 
-        var start = Date.now();
-        var update = start;
+        var _this = this;
 
-        // The rest is done "OnIdle"" state
-        setImmediate(function () { _this.doStepSpellCheck(_this, document, diagnostics, 0, speller, start, update) });
+        if (initiate) {
+            // The rest is done "OnIdle"" state
+            setImmediate(function () { _this.doStepSpellCheck(_this, parser) });
+        }
 
         if (DEBUG_OUTPUT) {
             console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
         }
     }
 
-    SpellRight.prototype.doStepSpellCheck = function (_this, document, diagnostics, line, speller, start, update) {
+    SpellRight.prototype.doStepSpellCheck = function (_this, parser) {
+
+        if (_this.spellingDoc === null) {
+            return;
+        }
+
+        if (_this.spellingDoc._line == 0) _this.spellingDoc._start = Date.now();
+
+        var document = _this.spellingDoc._document;
+        var diagnostics = _this.spellingDoc._diagnostics;
+        var line = _this.spellingDoc._line;
+        var start = _this.spellingDoc._start;
+        var update = _this.spellingDoc._update;
 
         if (line <= document.lineCount) {
-            speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line, void 0);
+            parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line, void 0);
 
             // Update interface with already collected diagnostics
-            if (Date.now() - update > settings.updateInterval) {
-                _this.diagnosticCollection.set(document.uri, diagnostics);
-                _this.diagnosticMap[document.uri.toString()] = diagnostics;
+            if (settings.updateInterval > 0) {
+                if (Date.now() - update > settings.updateInterval) {
+                    _this.diagnosticCollection.set(document.uri, diagnostics);
+                    _this.diagnosticMap[document.uri.toString()] = diagnostics;
 
-                update = Date.now();
+                    _this.spellingDoc._update = Date.now();
+                }
             }
 
-            setImmediate(function () { _this.doStepSpellCheck(_this, document, diagnostics, line + 1, speller, start, update) });
+            // Push spelling a line forward
+            _this.spellingDoc._line++;
+
+            setImmediate(function () { _this.doStepSpellCheck(_this, parser) });
         } else {
             _this.diagnosticCollection.set(document.uri, diagnostics);
             _this.diagnosticMap[document.uri.toString()] = diagnostics;
@@ -438,10 +456,24 @@ var SpellRight = (function () {
                 console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + String(diagnostics.length) + ' errors.');
             }
 
-            // Delete the one that has been spelled
-            _this.spellingQueue.splice(0, 1);
+            // NULL document that has been finished
+            _this.spellingDoc = null;
         }
     }
+
+    SpellRight.prototype.doCancelSpellCheck = function () {
+
+        if (this.spellingDoc !== null) {
+            this.diagnosticCollection.set(this.spellingDoc._document.uri, []);
+            this.diagnosticMap[this.spellingDoc._document.uri.toString()] = [];
+
+            if (DEBUG_OUTPUT) {
+                console.log('Spelling of \"' + this.spellingDoc._document.fileName + '\" [' + this.spellingDoc._document.languageId + '] CANCELLED.');
+            }
+
+            this.spellingDoc = null;
+        }
+    };
 
     SpellRight.prototype.processUserIgnoreRegex = function (text) {
         for (var i = 0; i < settings.ignoreRegExp.length; i++) {
