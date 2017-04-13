@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.0.5** released on 10th April 2017
+## **1.0.5** released on 13th April 2017
 
 - **Change:** All processing shifted to Idle state to prevent main thread clogging in case of spelling large file ([#1](https://github.com/bartosz-antosik/vscode-spellright/issues/1)).
 - **Change:** Word separation rules updated.
