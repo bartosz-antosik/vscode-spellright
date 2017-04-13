@@ -187,11 +187,15 @@ var SpellRight = (function () {
             if (typeof selection === 'undefined') {
                 return;
             }
-            var rdict = /\$\(globe\) (.*)/g;
-            var dict = langcode.language2Code(rdict.exec(selection.label)[1]);
 
-            var roff = /\(x\)/g;
-            var off = roff.exec(selection.label);
+            var rdict = /\(globe\) (.*)/;
+            var roff = /\(x\)/;
+
+            if (rdict.test(selection.label)) {
+                var dict = langcode.language2Code(rdict.exec(selection.label)[1]);
+            } else if (roff.test(selection.label)) {
+                var off = roff.exec(selection.label);
+            }
 
             _this.doCancelSpellCheck();
 

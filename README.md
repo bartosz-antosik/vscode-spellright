@@ -63,7 +63,7 @@ This extension contributes the following settings (with default values):
 
 `spellright.language: en`
 
-Default language (dictionary/culture name) used for spelling. Typically in a LANGUAGE or LANGUAGE-CULTURE format (e.g.: "en", "fr", "en-US", "fr-CA", "pl-PL" etc.)
+Default language (dictionary/culture name) used for spelling. Typically in a LANGUAGE or LANGUAGE-CULTURE format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.)
 
 `spellright.statusBarIndicator: true`
 
