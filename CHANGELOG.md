@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.0.8** released on 19th April 2017
+
+- **Fix:** Spell check improperly interprets punctuation with ignore lists  ([#7](https://github.com/bartosz-antosik/vscode-spellright/issues/7)).
+- **Fix:** Global/workspace dictionary incorrectly saving & naming ([#8](https://github.com/bartosz-antosik/vscode-spellright/issues/8)).
+
 ## **1.0.7** released on 18th April 2017
 
 - **New:** Skipping math enclosed between $...$ in LaTeX documents.
