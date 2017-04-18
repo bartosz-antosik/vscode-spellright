@@ -287,19 +287,23 @@ var SpellRight = (function () {
         });
     };
 
-    SpellRight.prototype.checkAndMark = function (diagnostics, token, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
-        if (spellchecker.isMisspelled(token)) {
+        if (spellchecker.isMisspelled(word)) {
             // Make sure word is not in the ignore list
-            if (settings.ignoreWords.indexOf(token) < 0) {
-                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + token.length);
 
-                var message = '\"' + token + '\"';
+            // Punctuation cleaned version of the word
+            var cword = word.replace(/[.,]/g, '');
+
+            if (settings.ignoreWords.indexOf(cword) < 0) {
+                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + word.length);
+
+                var message = '\"' + word + '\"';
                 if (settings.suggestionsInHints) {
-                    var suggestions = spellchecker.getCorrectionsForMisspelling(token);
+                    var suggestions = spellchecker.getCorrectionsForMisspelling(word);
                     if (suggestions.length > 0) {
                         var message = message + ': suggestions: ';
                         for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
@@ -665,7 +669,7 @@ var SpellRight = (function () {
         if (this.addWordToIgnoreList(word, true)) {
             this.doInitiateSpellCheck(document);
         } else {
-            vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to the ignore list.');
+            vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to workspace ignore list.');
         }
     };
 
@@ -678,7 +682,7 @@ var SpellRight = (function () {
         if (this.addWordToAlwaysIgnoreList(word)) {
             this.doInitiateSpellCheck(document);
         } else {
-            vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to the ignore list.');
+            vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to global ignore list.');
         }
     };
 
@@ -686,7 +690,9 @@ var SpellRight = (function () {
         // Only add the word if it's not already in the list
         if (settings.ignoreWords.indexOf(word) < 0) {
             settings.ignoreWords.push(word);
-            this.saveWorkspaceSettings(settings);
+            if (save) {
+                this.saveWorkspaceSettings(settings);
+            }
             return true;
         }
         return false;
@@ -695,16 +701,16 @@ var SpellRight = (function () {
     SpellRight.prototype.addWordToAlwaysIgnoreList = function (word) {
         if (this.addWordToIgnoreList(word, false)) {
             var userSettingsData = this.getUserSettings();
-            if (Object.keys(userSettingsData).indexOf('spellchecker.ignoreWords') > 0) {
-                if (userSettingsData['spellchecker.ignoreWords'].indexOf(word) < 0) {
-                    userSettingsData['spellchecker.ignoreWords'].push(word);
+            if (Object.keys(userSettingsData).indexOf('spellright.ignoreWords') > 0) {
+                if (userSettingsData['spellright.ignoreWords'].indexOf(word) < 0) {
+                    userSettingsData['spellright.ignoreWords'].push(word);
                     this.saveUserSettings(userSettingsData);
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                userSettingsData['spellchecker.ignoreWords'] = [word];
+                userSettingsData['spellright.ignoreWords'] = [word];
                 this.saveUserSettings(userSettingsData);
                 return true;
             }
@@ -713,7 +719,6 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.setDictionary = function (dictionary) {
-
         // Check if what we are trying to set is on the list of available
         // dictionaries. If not then set as [none], that is ''.
         settings.language = '';
