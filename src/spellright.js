@@ -16,10 +16,11 @@ var langcode = require('../lib/langcode')
 var doctype = require('../lib/doctype');
 const parsers = require('../lib/parser');
 
-var settings;
+var settings = null;
+var dictionaries = [];
 
-var indicator;
-var controller;
+var indicator = null;
+var controller = null;
 
 var SpellRight = (function () {
 
@@ -27,6 +28,8 @@ var SpellRight = (function () {
         this.diagnosticMap = {};
         this.lastChanges = null;
         this.spellingDoc = null;
+        this.updateInterval = 1000;
+        this.hunspell = false;
     }
 
     SpellRight.prototype.dispose = function () {
@@ -42,6 +45,20 @@ var SpellRight = (function () {
         this.extensionRoot = context.extensionPath;
 
         settings = this.getSettings();
+
+        // Force HUNSPELL - seems it does not work.
+        //process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
+
+        // Detect HUNSPELL: Windows 7 & other that use Hunspell do not report
+        // dictionaries available. Same if the environment variable
+        // SPELLCHECKER_PREFER_HUNSPELL is set node-spellchecker will use
+        // Hunspell instead of native service. It requires to list folder as
+        // the list of available dictionaries.
+        var _dictionaries = spellchecker.getAvailableDictionaries();
+        this.hunspell = (_dictionaries.length === 0 || (typeof process.env.SPELLCHECKER_PREFER_HUNSPELL !== 'undefined'));
+
+        this.collectDictionaries();
+
         this.setDictionary(settings.language);
 
         indicator = new LanguageIndicator();
@@ -67,7 +84,7 @@ var SpellRight = (function () {
 
         this.diagnosticCollection = vscode.languages.createDiagnosticCollection('spellright');
 
-        // Disabled because the document (paremeter of the event) contains
+        // Disabled because the document (parameter of the event) contains
         // strange data like languageID set to 'plaintext' no mater what type
         // of document it refers to, text size is always 1 character etc.
         //
@@ -133,46 +150,102 @@ var SpellRight = (function () {
             console.log('Spell check has been turned OFF for \"' + _documenttype + '\"" document type.');
     }
 
-    SpellRight.prototype.selectDictionary = function() {
+    SpellRight.prototype.collectDictionaries = function () {
 
-        var items = [];
+        var _dictionaries = [];
         var languages = {};
 
-        var _document = vscode.window.activeTextEditor._documentData;
-        var _documenttype = _document._languageId;
-
-        spellchecker.getAvailableDictionaries().forEach(function(entry) {
-            var languageShort = langcode.code2Language(entry);
-            if (typeof languageShort !== 'undefined') {
-                if (settings.groupDictionaries) {
-                    if (languageShort in languages) {
-                        languages[languageShort].push(entry);
-                    }  else {
-                        languages[languageShort] = [entry];
+        if (this.hunspell) {
+            // Hunspell dictionaries are files in the directory
+            if (fs.existsSync(this.getDictionariesPath())) {
+                var dict = /(.*).(dic)/;
+                var _files = fs.readdirSync(this.getDictionariesPath());
+                for (var i = 0; i < _files.length; i++) {
+                    var _file = _files[i];
+                    if (dict.test(_file)) {
+                        _dictionaries.push(dict.exec(_file)[1]);
                     }
-                } else {
-                    // Report dictionaries in a long list with language/culture
-                    items.push({
-                        label: '$(globe) ' + langcode.code2LanguageCulture(entry),
-                        description: '[' + entry + ']'
-                    });
                 }
+            } else {
+//                vscode.window.showErrorMessage('[spellright] The path to dictionaries \"' + this.getDictionariesPath() + '\" does not exist.')
+            }
+        } else {
+            // Other dictionaries are ISO language/culture paris
+            _dictionaries = spellchecker.getAvailableDictionaries();
+        }
+
+        dictionaries = [];
+
+        var _this = this;
+        _dictionaries.forEach(function (entry) {
+            if (!_this.hunspell) {
+                // Native spellcheckers - operate on ISO language codes
+                var languageShort = langcode.code2Language(entry);
+                if (typeof languageShort !== 'undefined') {
+                    if (settings.groupDictionaries) {
+                        // Group languages by main ISO entry.
+                        if (languageShort in languages) {
+                            languages[languageShort].push(entry);
+                        } else {
+                            languages[languageShort] = [entry];
+                        }
+                    } else {
+                        // Report all language/culture entries.
+                        dictionaries.push({
+                            id: entry,
+                            label: langcode.code2LanguageCulture(entry),
+                            description: entry
+                        });
+                    }
+                }
+            } else {
+                // Hunspell - operate on file names in designated directory
+                var _label = entry;
+                if (typeof langcode.code2LanguageCulture(entry) !== 'undefined') {
+                    _label = langcode.code2LanguageCulture(entry);
+                }
+                dictionaries.push({
+                    id: entry,
+                    label: _label,
+                    description: entry
+                });
             }
         });
 
-        // List languages to QuickPick here
         for (var key in languages) {
             if (DEBUG_OUTPUT) {
-                var _description = '[' + languages[key] + ']';
+                var _description = languages[key];
             } else {
                 var _description = '';
             }
 
-            items.push({
-                label: '$(globe) ' + key,
+            dictionaries.push({
+                id: langcode.language2Code(key),
+                label: key,
                 description: _description
             });
         }
+    }
+
+    SpellRight.prototype.selectDictionary = function() {
+
+        var items = [];
+
+        var _document = vscode.window.activeTextEditor._documentData;
+        var _documenttype = _document._languageId;
+
+        dictionaries.forEach(function (entry) {
+            if (DEBUG_OUTPUT) {
+                items.push({
+                    label: '$(globe) ' + entry.label,
+                    description: '[' + entry.description + ']'
+                });
+            } else {
+                items.push({
+                    label: '$(globe) ' + entry.label
+                });
+            }
+        });
 
         items.push({
             label: '$(x) Turn OFF for Current Document Type',
@@ -192,7 +265,13 @@ var SpellRight = (function () {
             var roff = /\(x\)/;
 
             if (rdict.test(selection.label)) {
-                var dict = langcode.language2Code(rdict.exec(selection.label)[1]);
+                var dict = rdict.exec(selection.label)[1];
+                dictionaries.forEach(function (entry) {
+                    if (entry.label == dict) {
+                        dict = entry.id;
+                        return;
+                    }
+                });
             } else if (roff.test(selection.label)) {
                 var off = roff.exec(selection.label);
             }
@@ -200,8 +279,7 @@ var SpellRight = (function () {
             _this.doCancelSpellCheck();
 
             if (!off) {
-                settings.language = dict;
-                _this.setDictionary(settings.language);
+                _this.setDictionary(dict);
                 _this.setCurrentTypeON();
             } else {
                 _this.setCurrentTypeOFF();
@@ -246,7 +324,7 @@ var SpellRight = (function () {
                         (_linenumber == _drange._end._line &&
                         _colnumber >= _drange._end._character));
                 } else {
-                    // Definetly at the end!
+                    // Definitely at the end!
                     var append = true;
                 }
 
@@ -304,6 +382,11 @@ var SpellRight = (function () {
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
+            return;
+        }
+
+        // Is language set to "none"?
+        if (settings.language == '') {
             return;
         }
 
@@ -380,11 +463,18 @@ var SpellRight = (function () {
             return;
         }
 
+        // Is language set to "none"?
+        if (settings.language == '') {
+            return;
+        }
+
         // Is this a private URI? (VSCode started having 'private:' versions
         // of non-plaintext documents with languageId = 'plaintext')
         if (document.uri.scheme != 'file' && document.uri.scheme != 'untitled') {
             return;
         }
+
+        this.doCancelSpellCheck();
 
         var diagnostics = [];
 
@@ -409,7 +499,7 @@ var SpellRight = (function () {
         var _this = this;
 
         if (initiate) {
-            // The rest is done "OnIdle"" state
+            // The rest is done "OnIdle" state
             setImmediate(function () { _this.doStepSpellCheck(_this, parser) });
         }
 
@@ -436,8 +526,8 @@ var SpellRight = (function () {
             parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line, void 0);
 
             // Update interface with already collected diagnostics
-            if (settings.updateInterval > 0) {
-                if (Date.now() - update > settings.updateInterval) {
+            if (this.updateInterval > 0) {
+                if (Date.now() - update > this.updateInterval) {
                     _this.diagnosticCollection.set(document.uri, diagnostics);
                     _this.diagnosticMap[document.uri.toString()] = diagnostics;
 
@@ -622,16 +712,34 @@ var SpellRight = (function () {
         return false;
     };
 
-    SpellRight.prototype.setDictionary = function (language) {
+    SpellRight.prototype.setDictionary = function (dictionary) {
 
-        if (language === void 0) { language = 'en'; }
+        // Check if what we are trying to set is on the list of available
+        // dictionaries. If not then set as [none], that is ''.
+        settings.language = '';
+        dictionaries.forEach(function (entry) {
+            if (entry.id == dictionary) {
+                settings.language = dictionary;
+                return;
+            }
+        });
 
-        settings.language = language;
+        if (settings.language === '') {
+            return;
+        }
 
-        if (DEBUG_OUTPUT)
-            console.log('Dcitionary (language) set to: \"' + settings.language + '\".');
+        if (this.hunspell) {
+            var _dict = settings.language;
+            var _path = this.getDictionariesPath();
+        } else {
+            var _dict = settings.language;
+            var _path = '[none]';
+        }
 
-        spellchecker.setDictionary(settings.language, '');
+        if (DEBUG_OUTPUT) {
+            console.log('Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
+        }
+        spellchecker.setDictionary(_dict, _path);
     };
 
     SpellRight.prototype.getUniqueArray = function (array) {
@@ -643,6 +751,23 @@ var SpellRight = (function () {
             }
         }
         return a;
+    };
+
+    SpellRight.prototype.getDictionariesPath = function () {
+        var codeFolder = 'Code';
+        if (vscode.version.indexOf('insider') >= 0)
+            codeFolder = 'Code - Insiders';
+        if (process.platform == 'win32')
+            return path.join(process.env.APPDATA, codeFolder, 'Dictionaries');
+        else if (process.platform == 'darwin')
+            return path.join(process.env.HOME, 'Library', 'Application Support', codeFolder, 'Dictionaries');
+        else if (process.platform == 'linux')
+            return path.join(process.env.HOME, '.config', codeFolder, 'Dictionaries');
+        else
+            return '';
+
+        if (!path.existsSync(this.getDictionariesPath()))
+            return '';
     };
 
     SpellRight.prototype.getUserSettingsFilename = function () {
@@ -698,11 +823,10 @@ var SpellRight = (function () {
     SpellRight.prototype.getSettings = function () {
         var returnSettings = {
             language: 'en',
-            groupDictionaries: true,
             documentTypes: ['markdown', 'latex', 'plaintext'],
+            groupDictionaries: true,
             statusBarIndicator: true,
             suggestionsInHints: true,
-            updateInterval: 1000,
             ignoreWords: [],
             ignoreRegExps: []
         };
@@ -794,18 +918,29 @@ var LanguageIndicator = (function () {
         }
         var document = editor.document;
 
-        var language = this.isLanguage(document);
-        var message;
-        var color;
+        var message = settings.language;
+        var color = 'white';
+
+        dictionaries.forEach(function (entry) {
+            if (entry.id == settings.language) {
+                message = entry.label;
+                if (DEBUG_OUTPUT) {
+                    message = message + ' [' + settings.language + ']';
+                }
+                return;
+            }
+        });
+
         if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
             message = '[off]';
             color = 'white';
         } else {
-            message = langcode.code2Language(settings.language);
-            if (DEBUG_OUTPUT) {
-                message = message + ' [' + settings.language + ']';
+            if (settings.language == '') {
+                message = '[none]';
+                color = 'white';
+            } else {
+                color = 'white';
             }
-            color = 'white';
         }
 
         this.statusBarItem.text = '$(eye) ' + message;
