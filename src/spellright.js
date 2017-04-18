@@ -170,7 +170,7 @@ var SpellRight = (function () {
 //                vscode.window.showErrorMessage('[spellright] The path to dictionaries \"' + this.getDictionariesPath() + '\" does not exist.')
             }
         } else {
-            // Other dictionaries are ISO language/culture paris
+            // Other dictionaries are ISO language/culture pairs
             _dictionaries = spellchecker.getAvailableDictionaries();
         }
 
