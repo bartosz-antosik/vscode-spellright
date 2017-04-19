@@ -292,14 +292,33 @@ var SpellRight = (function () {
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
-        if (spellchecker.isMisspelled(word)) {
-            // Make sure word is not in the ignore list
+        // Words are selected by language specific parsers but from here on
+        // they are treated in the same way.
 
+        // Special case of words ending with period - abbreviations, etc.
+        var _endsWithPeriod = word.endsWith('.');
+        if (_endsWithPeriod) {
+            var cword = word.slice(0, -1);
+        } else {
+            var cword = word;
+        }
+
+        if (spellchecker.isMisspelled(cword)) {
             // Punctuation cleaned version of the word
-            var cword = word.replace(/[.,]/g, '');
 
+            // Make sure word is not in the ignore list
             if (settings.ignoreWords.indexOf(cword) < 0) {
-                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + word.length);
+
+                // Special case of words ending with period  - if spelling
+                // with dot at the end is correct contrary to spelling
+                // without the dot then pass on it.
+                if (_endsWithPeriod) {
+                    if (!spellchecker.isMisspelled(cword + '.')) {
+                        return;
+                    }
+                }
+
+                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
                 var message = '\"' + word + '\"';
                 if (settings.suggestionsInHints) {
