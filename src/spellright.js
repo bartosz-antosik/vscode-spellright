@@ -10,6 +10,7 @@ var fs = require('fs');
 var vscode = require('vscode');
 var mkdirp = require('mkdirp');
 var jsonMinify = require('jsonminify');
+var XRegExp = require('xregexp');
 var spellchecker = require('spellchecker');
 
 var langcode = require('../lib/langcode')
@@ -27,6 +28,7 @@ var SpellRight = (function () {
     function SpellRight() {
         this.diagnosticMap = {};
         this.lastChanges = null;
+        this.lastSyntax = 0;
         this.spellingDoc = null;
         this.updateInterval = 1000;
         this.hunspell = false;
@@ -101,6 +103,7 @@ var SpellRight = (function () {
             editors.forEach((editor, index, array) => {
                 var _document = editor._documentData._document;
                 if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
+                    _this.doCancelSpellCheck();
                     _this.doInitiateSpellCheck(_document);
                 }
             });
@@ -287,13 +290,63 @@ var SpellRight = (function () {
         });
     };
 
+    SpellRight.prototype.splitCamelCase = function (word) {
+
+        // CamelCase cases: HTMLScript, camelCase, CamelCase, innerHTML,
+        // start0Case, snake_case, Snake_Case, HOMEToRent.
+        var rcamel = XRegExp('(^[\\p{Ll}.@\']+)|[0-9]+|[\\p{Lu}.@\'][\\p{Ll}.@\']+|[\\p{Lu}.@\']+(?=[\\p{Lu}.@\'][\\p{Ll}.@\']|[0-9])|[\\p{Lu}.@\']+');
+
+        var parts = [];
+        XRegExp.forEach(word, rcamel, (match, i) => {
+            parts.push({
+                word: match[0],
+                offset: match.index
+            });
+        });
+
+        return parts;
+    }
+
+    SpellRight.prototype.splitSnakeCase = function (word) {
+
+        // SnakeCase cases: HTML_Script, snake_Case, __test__.
+        var rsnake = XRegExp('([^_]+)');
+
+        var parts = [];
+        XRegExp.forEach(word, rsnake, (match, i) => {
+            parts.push({
+                word: match[0],
+                offset: match.index
+            });
+        });
+
+        return parts;
+    }
+
+    SpellRight.prototype.splitByPeriod = function (word) {
+
+        // Split phrases with period inside `terminal.integrated.scrollback`.
+        var rperiod = XRegExp('([^\.]+)');
+
+        var parts = [];
+        XRegExp.forEach(word, rperiod, (match, i) => {
+            parts.push({
+                word: match[0],
+                offset: match.index
+            });
+        });
+
+        return parts;
+    }
+
     SpellRight.prototype.checkAndMark = function (diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
         // Words are selected by language specific parsers but from here on
-        // they are treated in the same way.
+        // they are treated in the same way so these are operations done on
+        // every word/lexem spelled.
 
         // Special case of words ending with period - abbreviations, etc.
         var _endsWithPeriod = word.endsWith('.');
@@ -301,6 +354,47 @@ var SpellRight = (function () {
             var cword = word.slice(0, -1);
         } else {
             var cword = word;
+        }
+        var _containsPeriod = /[.]/.test(cword);
+
+        // Split words containing period inside. Period does not break words
+        // because it is part of legit abbreviations (e.g., i.e., etc.) which
+        // should be spelled as well. So there can be lexems containing periods
+        // inside. But they should be later on spelled as parts to minimize
+        // the number of false positives.
+        var _split = this.splitByPeriod(cword);
+        if (_split.length > 1) {
+            var _this = this;
+            _split.forEach (function(e) {
+                if (e.word.length > 2) {
+                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                }
+            });
+            return;
+        }
+
+        // Deal with CamelCase
+        _split = this.splitCamelCase(cword);
+        if (_split.length > 1) {
+            var _this = this;
+            _split.forEach(function (e) {
+                if (e.word.length > 2) {
+                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                }
+            });
+            return;
+        }
+
+        // Deal with snake_case
+        _split = this.splitSnakeCase(cword);
+        if (_split.length > 1) {
+            var _this = this;
+            _split.forEach(function (e) {
+                if (e.word.length > 2) {
+                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                }
+            });
+            return;
         }
 
         if (spellchecker.isMisspelled(cword)) {
@@ -311,7 +405,7 @@ var SpellRight = (function () {
 
                 // Special case of words ending with period  - if spelling
                 // with dot at the end is correct contrary to spelling
-                // without the dot then pass on it.
+                // without the dot then pass over.
                 if (_endsWithPeriod) {
                     if (!spellchecker.isMisspelled(cword + '.')) {
                         return;
@@ -398,11 +492,6 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
-        // Check if not being spelled right now
-        if (this.spellingDoc !== null && this.spellingDoc._document.uri === document.uri.toString()) {
-            return;
-        }
-
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
             return;
@@ -416,6 +505,8 @@ var SpellRight = (function () {
         var document = event.document;
         var speller = doctype.fromDocument(document);
 
+        var _syntax_level = 0;
+
         if (speller == null) return;
 
         if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
@@ -423,7 +514,15 @@ var SpellRight = (function () {
             return;
         }
 
-        var diagnostics = this.diagnosticMap[document.uri.toString()];
+        // If the document is being spelled (e.g. is large) adjust diagnostics
+        // that are being prepared in the background, not those from the store.
+        var diagnostics = [];
+
+        if (this.spellingDoc === null) {
+            diagnostics = this.diagnosticMap[document.uri.toString()];
+        } else {
+            diagnostics = this.spellingDoc._diagnostics;
+        }
 
         // Calculate whether changes have shifted document lines up/down
         var shift = 0;
@@ -441,7 +540,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range.start.line, range.end.line, shift);
 
-            speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _syntax_level = speller.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -472,12 +571,18 @@ var SpellRight = (function () {
         this.lastChanges = event.contentChanges;
 
         this.diagnosticCollection.set(document.uri, diagnostics);
+
+        if (_syntax_level != this.lastSyntax) {
+            this.lastSyntax = _syntax_level;
+            this.doCancelSpellCheck();
+            this.doInitiateSpellCheck(document);
+        }
     };
 
     SpellRight.prototype.doInitiateSpellCheck = function (document) {
 
         // Check if not being spelled right
-        if (this.spellingDoc !== null && this.spellingDoc._document.uri === document.uri.toString()) {
+        if (this.spellingDoc !== null) {
             return;
         }
 
@@ -498,8 +603,6 @@ var SpellRight = (function () {
         }
 
         this.doCancelSpellCheck();
-
-        var diagnostics = [];
 
         // Speller was already started
         var initiate = (this.spellingDoc === null);
