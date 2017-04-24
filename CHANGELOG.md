@@ -1,5 +1,13 @@
 # Change Log
 
+## **1.0.9** released on 25th April 2017
+
+- **New:** CamelCase and snake_case separation & spelling.
+- **New:** E-mails & URLs excluded from spelling in markdown/plaintext/LaTeX/source code documents.
+- **Change:** Compound lexemes separation rules updated (period).
+- **Change:** Code section excluded from spelling in Markdown documents ([#10](https://github.com/bartosz-antosik/vscode-spellright/issues/10)).
+
+
 ## **1.0.8** released on 19th April 2017
 
 - **Fix:** Spell check improperly interprets punctuation with ignore lists  ([#7](https://github.com/bartosz-antosik/vscode-spellright/issues/7)).

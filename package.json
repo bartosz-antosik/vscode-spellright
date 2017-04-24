@@ -89,7 +89,8 @@
         "jsonminify": "^0.4.1",
         "mkdirp": "^0.5.1",
         "path": "^0.12.7",
-        "spellchecker": "^3.3.1"
+        "spellchecker": "^3.3.1",
+        "xregexp": "^3.2.0"
     },
     "icon": "icon.png",
     "license": "SEE LICENSE IN LICENSE.md",

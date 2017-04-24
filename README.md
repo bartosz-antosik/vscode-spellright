@@ -4,12 +4,14 @@ Spell Checker for Visual Studio Code.
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* of most **source code** documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here](SCREENSHOTS.md)).
+* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here for examples](SCREENSHOTS.md)).
 * **Case sensitive** which means that it will distinguish between incorrect *english* and correct *English* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
+* Spells **CamelCase** and **snake_case** compound phrases.
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
-* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows XP/vista/7, macOS, Linux) and **all dictionaries** installed with any of these engines.
-* Extension uses **background processing** (on idle) and **differential edits notifications** to minimize area spelled during editing (following document changes) only to lines touched by edits.
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
+* Supports **every language dictionary** supported respectively by either of these spelling engines.
+* Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
 > This extension is currently limited to **64-bit Windows platform**. It is due to problems with distribution of native modules in current VSCode's distribution model. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
@@ -25,6 +27,7 @@ Search for *Spell Right* from the extension installer within VSCode or execute b
 ```
 ext install spellright
 ```
+
 ### Windows 7 installation note
 
 Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary/Affixes (\*.dic/\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory (usually located at `c:\Users\%USERNAME%\AppData\Roaming\Code\`, `Dictionaries` subfolder does not exists there by default and has to be created manually). Dictionaries will be then listed in the language selection list and used for spelling documents. Because Hunspell is very slow in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
