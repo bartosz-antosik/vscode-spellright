@@ -103,7 +103,6 @@ var SpellRight = (function () {
             editors.forEach((editor, index, array) => {
                 var _document = editor._documentData._document;
                 if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                    _this.doCancelSpellCheck();
                     _this.doInitiateSpellCheck(_document);
                 }
             });
@@ -574,16 +573,15 @@ var SpellRight = (function () {
 
         if (_syntax_level != this.lastSyntax) {
             this.lastSyntax = _syntax_level;
-            this.doCancelSpellCheck();
             this.doInitiateSpellCheck(document);
         }
     };
 
     SpellRight.prototype.doInitiateSpellCheck = function (document) {
 
-        // Check if not being spelled right
+        // Check if not spelling something right now!
         if (this.spellingDoc !== null) {
-            return;
+            this.doCancelSpellCheck();
         }
 
         // Is off for this document type?
@@ -601,8 +599,6 @@ var SpellRight = (function () {
         if (document.uri.scheme != 'file' && document.uri.scheme != 'untitled') {
             return;
         }
-
-        this.doCancelSpellCheck();
 
         // Speller was already started
         var initiate = (this.spellingDoc === null);
