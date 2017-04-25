@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Spell Checker for VSCode",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.9.0"
