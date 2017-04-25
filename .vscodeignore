@@ -1,11 +1,11 @@
 .backup/**
+.helpers/**
+.media/**
 .output/**
-.vscode/**
 .samples/**
 .study/**
 .test/**
-.helpers/**
-.media/**
+.vscode/**
 .gitignore
 .eslintrc.json
 jsconfig.json

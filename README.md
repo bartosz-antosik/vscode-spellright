@@ -13,7 +13,9 @@ Spell Checker for Visual Studio Code.
 * Can use **every language dictionary** supported by either of the above mentioned spelling engines.
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
-> This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Internals edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. This extension could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+## Usability
+
+This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Internals edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It certainly could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshot
 
@@ -97,6 +99,8 @@ Regular expressions ignored in spelling. Allows to ignore generalized misspelled
 * VSCode is missing event that would tell extension about cursor jumps in the document. Recently entered word which has not been ended with a white space or punctuation character will be spelled not on cursor jump but on a subsequent edit somewhere else in the document (this is probably more of a VSCode's issue).
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as all the above this is probably more of a VSCode's issue).
+
+## Notice
 
 This extension can still be considered a Work In Progress. Please report all the errors and/or annoyances that you see on the [issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
