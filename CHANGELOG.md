@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.11** released on 26th April 2017
+
+- **Fix:** Regression in word separation rules ([#11](https://github.com/bartosz-antosik/vscode-spellright/issues/11)).
+
 ## **1.0.10** released on 25th April 2017
 
 - **New:** CamelCase and snake_case separation & spelling.

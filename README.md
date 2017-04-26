@@ -15,7 +15,7 @@ Spell Checker for Visual Studio Code.
 
 ## Usability
 
-This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Internals edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It certainly could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It certainly could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshot
 

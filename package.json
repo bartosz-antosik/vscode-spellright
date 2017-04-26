@@ -94,7 +94,7 @@
     },
     "icon": "icon.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "homepage": "https://github.com/bartosz-antosik/vscode-spellright/README.md",
+    "homepage": "https://github.com/bartosz-antosik/vscode-spellright",
     "repository": {
         "type": "git",
         "url": "https://github.com/bartosz-antosik/vscode-spellright.git"
