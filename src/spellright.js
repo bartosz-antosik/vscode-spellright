@@ -27,6 +27,7 @@ var SpellRight = (function () {
 
     function SpellRight() {
         this.diagnosticMap = {};
+        this.regexpMap = [];
         this.lastChanges = null;
         this.lastSyntax = 0;
         this.spellingDoc = null;
@@ -36,8 +37,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.dispose = function () {
         this.suggestCommand.dispose();
-        this.ignoreCommand.dispose();
-        this.alwaysIgnoreCommand.dispose();
+        this.ignoreWorkspaceCommand.dispose();
+        this.ignoreGlobalCommand.dispose();
         this.lastChanges.dispose();
     };
 
@@ -61,6 +62,8 @@ var SpellRight = (function () {
 
         this.collectDictionaries();
 
+        this.prepareIgnoreRegExps();
+
         this.setDictionary(settings.language);
 
         indicator = new LanguageIndicator();
@@ -73,13 +76,15 @@ var SpellRight = (function () {
         vscode.commands.registerCommand('spellright.createUpdateSettings', this.createUpdateSettings, this);
         vscode.commands.registerCommand('spellright.selectDictionary', this.selectDictionary, this);
         vscode.commands.registerCommand('spellright.setCurrentTypeOFF', this.setCurrentTypeOFF, this);
+        vscode.commands.registerCommand('spellright.ignoreWorkspaceFromSelection', this.ignoreWorkspaceFromSelection, this);
+        vscode.commands.registerCommand('spellright.ignoreGlobalFromSelection', this.ignoreGlobalFromSelection, this);
 
         this.suggestCommand = vscode.commands.registerCommand(
             SpellRight.suggestCommandId, this.fixSuggestionCodeAction, this);
-        this.ignoreCommand = vscode.commands.registerCommand(
-            SpellRight.ignoreCommandId, this.ignoreWorkspaceCodeAction, this);
-        this.alwaysIgnoreCommand = vscode.commands.registerCommand(
-            SpellRight.alwaysIgnoreCommandId, this.ignoreGlobalCodeAction, this);
+        this.ignoreWorkspaceCommand = vscode.commands.registerCommand(
+            SpellRight.ignoreWorkspaceCommandId, this.ignoreWorkspaceCodeAction, this);
+        this.ignoreGlobalCommand = vscode.commands.registerCommand(
+            SpellRight.ignoreGlobalCommandId, this.ignoreGlobalCodeAction, this);
         subscriptions.push(this);
 
         var _this = this;
@@ -148,7 +153,7 @@ var SpellRight = (function () {
         }
         indicator.updateLanguage();
 
-        if (DEBUG_OUTPUT)
+        if (SPELLRIGHT_DEBUG_OUTPUT)
             console.log('Spell check has been turned OFF for \"' + _documenttype + '\"" document type.');
     }
 
@@ -215,7 +220,7 @@ var SpellRight = (function () {
         });
 
         for (var key in languages) {
-            if (DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
                 var _description = languages[key];
             } else {
                 var _description = '';
@@ -237,7 +242,7 @@ var SpellRight = (function () {
         var _documenttype = _document._languageId;
 
         dictionaries.forEach(function (entry) {
-            if (DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
                 items.push({
                     label: '$(globe) ' + entry.label,
                     description: '[' + entry.description + ']'
@@ -338,6 +343,36 @@ var SpellRight = (function () {
         return parts;
     }
 
+     SpellRight.prototype.prepareIgnoreRegExps = function () {
+        for (var i = 0; i < settings.ignoreRegExps.length; i++) {
+            // Convert the JSON of RegExp Strings into a real RegExp
+            var flags = settings.ignoreRegExps[i].replace(/.*\/([gimy]*)$/, '$1');
+            var pattern = settings.ignoreRegExps[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+            pattern = pattern.replace(/\\\\/g, '\\');
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
+            }
+            this.regexpMap.push(new RegExp(pattern, flags));
+        }
+    };
+
+     SpellRight.prototype.testIgnoreRegExps = function (word) {
+        for (var i = 0; i < this.regexpMap.length; i++) {
+            if (word.match(this.regexpMap[i]) == word) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+     SpellRight.prototype.testIgnoreWords = function (word) {
+         for (var i = 0; i < settings.ignoreWords.length; i++) {
+             if (settings.ignoreWords[i].toLowerCase() == word.toLowerCase())
+                 return true;
+         }
+         return false;
+     };
+
     SpellRight.prototype.checkAndMark = function (diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
@@ -349,12 +384,19 @@ var SpellRight = (function () {
 
         // Special case of words ending with period - abbreviations, etc.
         var _endsWithPeriod = word.endsWith('.');
-        if (_endsWithPeriod) {
+        var _endsWithApostrophe = word.endsWith('\'');
+        if (_endsWithPeriod || _endsWithApostrophe) {
             var cword = word.slice(0, -1);
         } else {
             var cword = word;
         }
         var _containsPeriod = /[.]/.test(cword);
+
+        // Before splitting make sure word is not in the ignore list or
+        // regular expressions to ignore as a whole.
+        if (this.testIgnoreWords(cword) || this.testIgnoreRegExps(cword)) {
+            return;
+        }
 
         // Split words containing period inside. Period does not break words
         // because it is part of legit abbreviations (e.g., i.e., etc.) which
@@ -400,7 +442,7 @@ var SpellRight = (function () {
             // Punctuation cleaned version of the word
 
             // Make sure word is not in the ignore list
-            if (settings.ignoreWords.indexOf(cword) < 0) {
+            if (!this.testIgnoreWords(cword) || !this.testIgnoreRegExps(cword)) {
 
                 // Special case of words ending with period  - if spelling
                 // with dot at the end is correct contrary to spelling
@@ -411,9 +453,16 @@ var SpellRight = (function () {
                     }
                 }
 
+                // Same case if it ends with apostrophe
+                if (_endsWithApostrophe) {
+                    if (!spellchecker.isMisspelled(cword + '\'')) {
+                        return;
+                    }
+                }
+
                 var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
-                var message = '\"' + word + '\"';
+                var message = '\"' + cword + '\"';
                 if (settings.suggestionsInHints) {
                     var suggestions = spellchecker.getCorrectionsForMisspelling(word);
                     if (suggestions.length > 0) {
@@ -625,7 +674,7 @@ var SpellRight = (function () {
             setImmediate(function () { _this.doStepSpellCheck(_this, parser) });
         }
 
-        if (DEBUG_OUTPUT) {
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
         }
     }
@@ -645,7 +694,7 @@ var SpellRight = (function () {
         var update = _this.spellingDoc._update;
 
         if (line <= document.lineCount) {
-            parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line, void 0);
+            parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -658,14 +707,14 @@ var SpellRight = (function () {
             }
 
             // Push spelling a line forward
-            _this.spellingDoc._line++;
+            _this.spellingDoc._line += SPELLRIGHT_LINES_BATCH;
 
             setImmediate(function () { _this.doStepSpellCheck(_this, parser) });
         } else {
             _this.diagnosticCollection.set(document.uri, diagnostics);
             _this.diagnosticMap[document.uri.toString()] = diagnostics;
 
-            if (DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
                 var end = Date.now();
                 var secs = (end - start) / 1000;
 
@@ -683,31 +732,12 @@ var SpellRight = (function () {
             this.diagnosticCollection.set(this.spellingDoc._document.uri, []);
             this.diagnosticMap[this.spellingDoc._document.uri.toString()] = [];
 
-            if (DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('Spelling of \"' + this.spellingDoc._document.fileName + '\" [' + this.spellingDoc._document.languageId + '] CANCELLED.');
             }
 
             this.spellingDoc = null;
         }
-    };
-
-    SpellRight.prototype.processUserIgnoreRegex = function (text) {
-        for (var i = 0; i < settings.ignoreRegExp.length; i++) {
-            // Convert the JSON of RegExp Strings into a real RegExp
-            var flags = settings.ignoreRegExp[i].replace(/.*\/([gimy]*)$/, '$1');
-            var pattern = settings.ignoreRegExp[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
-            pattern = pattern.replace(/\\\\/g, '\\');
-            if (DEBUG_OUTPUT) {
-                console.log(settings.ignoreRegExp[i]);
-                console.log(pattern);
-                console.log(flags);
-            }
-            var regex = new RegExp(pattern, flags);
-            if (DEBUG_OUTPUT)
-                console.log(text.match(regex));
-            text = text.replace(regex, ' ');
-        }
-        return text;
     };
 
     SpellRight.prototype.provideCodeActions = function (document, range, context, token) {
@@ -739,13 +769,13 @@ var SpellRight = (function () {
                 });
             });
             commands.push({
-                title: 'Add \"' + cword + '\" to workspace dictionary',
-                command: SpellRight.ignoreCommandId,
+                title: 'Add \"' + cword + '\" to workspace ignore list',
+                command: SpellRight.ignoreWorkspaceCommandId,
                 arguments: [document, cword]
             });
             commands.push({
-                title: 'Add \"' + cword + '\" to global dictionary',
-                command: SpellRight.alwaysIgnoreCommandId,
+                title: 'Add \"' + cword + '\" to global ignore list',
+                command: SpellRight.ignoreGlobalCommandId,
                 arguments: [document, cword]
             });
         }
@@ -784,27 +814,52 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.ignoreWorkspaceCodeAction = function (document, word) {
-        if (this.addWordToIgnoreList(word, true)) {
+        if (this.addWordToWorkspaceIgnoreList(word, true)) {
             this.doInitiateSpellCheck(document);
         } else {
             vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to workspace ignore list.');
         }
     };
 
-    SpellRight.prototype.ignoreGlobalCodeAction = function (document, word) {
-        if (DEBUG_OUTPUT) {
-            console.log(word);
-            console.log(document);
-            console.log(Object.keys(document));
+    SpellRight.prototype.ignoreWorkspaceFromSelection = function () {
+        var editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return; // No open text editor
         }
-        if (this.addWordToAlwaysIgnoreList(word)) {
+
+        var selection = editor.selection;
+        if (selection.isSingleLine) {
+            var text = editor.document.getText(selection);
+            this.addWordToWorkspaceIgnoreList(text, true);
+        } else {
+            vscode.window.showInformationMessage('Can not ad multiline text to ignore list.');
+        }
+    }
+
+    SpellRight.prototype.ignoreGlobalCodeAction = function (document, word) {
+        if (this.addWordToGlobalIgnoreList(word)) {
             this.doInitiateSpellCheck(document);
         } else {
             vscode.window.showWarningMessage('The word \"' + word + '\" has already been added to global ignore list.');
         }
     };
 
-    SpellRight.prototype.addWordToIgnoreList = function (word, save) {
+    SpellRight.prototype.ignoreGlobalFromSelection = function () {
+        var editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return; // No open text editor
+        }
+
+        var selection = editor.selection;
+        if (selection.isSingleLine) {
+            var text = editor.document.getText(selection);
+            this.addWordToGlobalIgnoreList(text);
+        } else {
+            vscode.window.showInformationMessage('Can not ad multiline text to ignore list.');
+        }
+    }
+
+    SpellRight.prototype.addWordToWorkspaceIgnoreList = function (word, save) {
         // Only add the word if it's not already in the list
         if (settings.ignoreWords.indexOf(word) < 0) {
             settings.ignoreWords.push(word);
@@ -816,8 +871,8 @@ var SpellRight = (function () {
         return false;
     };
 
-    SpellRight.prototype.addWordToAlwaysIgnoreList = function (word) {
-        if (this.addWordToIgnoreList(word, false)) {
+    SpellRight.prototype.addWordToGlobalIgnoreList = function (word) {
+        if (this.addWordToWorkspaceIgnoreList(word, false)) {
             var userSettingsData = this.getUserSettings();
             if (Object.keys(userSettingsData).indexOf('spellright.ignoreWords') > 0) {
                 if (userSettingsData['spellright.ignoreWords'].indexOf(word) < 0) {
@@ -859,7 +914,7 @@ var SpellRight = (function () {
             var _path = '[none]';
         }
 
-        if (DEBUG_OUTPUT) {
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
         }
         spellchecker.setDictionary(_dict, _path);
@@ -938,7 +993,7 @@ var SpellRight = (function () {
                 fs.writeFileSync(SpellRight.CONFIGFILE, JSON.stringify(settings, null, 4));
             }
             catch (e) {
-                if (DEBUG_OUTPUT) console.log(e);
+                if (SPELLRIGHT_DEBUG_OUTPUT) console.log(e);
             }
         }
     };
@@ -970,7 +1025,7 @@ var SpellRight = (function () {
 
             var settings_1 = JSON.parse(jsonMinify(fs.readFileSync(SpellRight.CONFIGFILE, 'utf-8')));
 
-            if (DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('Configuration file: \"' + SpellRight.CONFIGFILE + '\".');
                 console.log(settings_1);
             }
@@ -985,33 +1040,34 @@ var SpellRight = (function () {
             }, this);
         }
         else {
-            if (DEBUG_OUTPUT)
+            if (SPELLRIGHT_DEBUG_OUTPUT)
                 console.log('Configuration file: \"' + SpellRight.CONFIGFILE + '\" not found.');
         }
+
         return returnSettings;
     };
 
     SpellRight.prototype.createUpdateSettings = function () {
 
         if (SpellRight.CONFIGFILE.length > 0 && !fs.existsSync(SpellRight.CONFIGFILE)) {
-            if (DEBUG_OUTPUT)
+            if (SPELLRIGHT_DEBUG_OUTPUT)
                 console.log('Creating configuration file: \"' + SpellRight.CONFIGFILE + '\".');
             this.saveWorkspaceSettings(settings);
         }
         else if (fs.existsSync(SpellRight.CONFIGFILE)) {
-            if (DEBUG_OUTPUT)
+            if (SPELLRIGHT_DEBUG_OUTPUT)
                 console.log('Overwriting configuration file: \"' + SpellRight.CONFIGFILE + '\".');
             this.saveWorkspaceSettings(settings);
         }
         else {
-            if (DEBUG_OUTPUT)
+            if (SPELLRIGHT_DEBUG_OUTPUT)
                 console.log('Invalid configuration file name: \"' + SpellRight.CONFIGFILE + '\".');
         }
     };
 
     SpellRight.suggestCommandId = 'spellright.fixSuggestionCodeAction';
-    SpellRight.ignoreCommandId = 'spellright.ignoreWorkspaceCodeAction';
-    SpellRight.alwaysIgnoreCommandId = 'spellright.ignoreGlobalCodeAction';
+    SpellRight.ignoreWorkspaceCommandId = 'spellright.ignoreWorkspaceCodeAction';
+    SpellRight.ignoreGlobalCommandId = 'spellright.ignoreGlobalCodeAction';
 
     SpellRight.CONFIGFILE = '';
 
@@ -1047,7 +1103,7 @@ var LanguageIndicator = (function () {
         dictionaries.forEach(function (entry) {
             if (entry.id == settings.language) {
                 message = entry.label;
-                if (DEBUG_OUTPUT) {
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
                     message = message + ' [' + settings.language + ']';
                 }
                 return;

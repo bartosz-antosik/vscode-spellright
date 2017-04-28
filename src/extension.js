@@ -5,14 +5,15 @@
 
 'use strict';
 
-global.DEBUG_OUTPUT = false;
+global.SPELLRIGHT_DEBUG_OUTPUT = true;
+global.SPELLRIGHT_LINES_BATCH = 100;
 
 var spellright = require('./spellright');
 var vscode = require('vscode');
 
 function activate(context) {
 
-    if (DEBUG_OUTPUT) {
+    if (SPELLRIGHT_DEBUG_OUTPUT) {
         console.log('SpellRight activated.');
 
         var config = vscode.workspace.getConfiguration('');
@@ -36,7 +37,7 @@ exports.activate = activate;
 
 function deactivate() {
 
-    if (DEBUG_OUTPUT)
+    if (SPELLRIGHT_DEBUG_OUTPUT)
         console.log('SpellRight deactivated.');
 }
 exports.deactivate = deactivate;
