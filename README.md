@@ -5,15 +5,15 @@ Spell Checker for Visual Studio Code.
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here for examples](SCREENSHOTS.md)).
-* **Case sensitive** which means that it will distinguish between incorrect *english* and correct *English*, *french* and *French* etc.
+* **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
-* Spells **CamelCase** (Unicode) and **snake_case** compound phrases.
+* Spells **CamelCase** and **snake_case** compound phrases respecting Unicode capital/small letters distinction.
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Can use **every language dictionary** supported by either of the above mentioned spelling engines.
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
-## Usability
+## Note on Usability
 
 This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It certainly could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
@@ -30,7 +30,7 @@ Search for *Spell Right* from the extension installer within VSCode or execute b
 ext install spellright
 ```
 
-### Windows 7 installation note
+### Note on Windows 7 Installation
 
 Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary/Affixes (\*.dic/\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory (usually located at `c:\Users\%USERNAME%\AppData\Roaming\Code\`, `Dictionaries` subfolder does not exists there by default and has to be created manually). Dictionaries will be then listed in the language selection list and used for spelling documents. Because Hunspell is very slow in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
@@ -54,13 +54,15 @@ Alternatively same result can be achieved selecting command `SpellRight: Select 
 
 ## Commands
 
+This extension contributes the following commands:
+
 `SpellRight: Create/Update Workspace Settings`
 
 Creates or updates workspace settings file `spellright.json`.
 
 `SpellRight: Select Dictionary (Language)`
 
-Pops dictionary selection GUI. The list also allows to turn spelling OFF for currently open document type. Can also be reached by clicking indicator field in status bar.
+Pops dictionary selection list. Selecting language also turns spelling ON. The list also allows to turn spelling OFF for currently open document type. Can also be reached by clicking indicator field in status bar.
 
 `SpellRight: Turn OFF for Current Document Type`
 
@@ -88,11 +90,11 @@ Document types for which spelling will be turned ON by default.
 
 `spellright.ignoreWords: []`
 
-Words ignored by in spelling. Usually contains words which are considered misspelled by the main spelling engine but should be ignored/treated as spelled correctly by the extension.
+Words ignored in spelling. Usually contains words which are considered misspelled by the main spelling engine but should be ignored/consider as spelled correctly by the extension. Words on the list are compared case insensitive.
 
 `spellright.ignoreRegExps: []`
 
-Regular expressions ignored in spelling. Allows to ignore generalized misspelled expressions.
+Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works after separating word using language parsers in the same place where spelling engine is consulted and ignoreWords checked. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
 
 ## Known Issues
 
@@ -102,7 +104,7 @@ Regular expressions ignored in spelling. Allows to ignore generalized misspelled
 
 ## Notice
 
-This extension can still be considered a Work In Progress. Please report all the errors and/or annoyances that you see on the [issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
+This extension can be considered a Work In Progress. Please report all the errors and/or annoyances that you see on the [issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
 ## Acknowledgments
 

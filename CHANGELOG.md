@@ -1,5 +1,12 @@
 # Change Log
 
+## **1.0.12** released on 29th April 2017
+
+- **New:** Global/workspace ignore list & regular expressions matched also on compound phrase, before separation of camel/snake case parts.
+- **Change:** Significantly faster spelling of entire document (on save and document switch) especially for large documents.
+- **Fix:** Word separation rules updated (period, curly braces, apostrophe).
+- **Fix:** Small documentation improvements.
+
 ## **1.0.11** released on 26th April 2017
 
 - **Fix:** Regression in word separation rules ([#11](https://github.com/bartosz-antosik/vscode-spellright/issues/11)).
@@ -8,7 +15,7 @@
 
 - **New:** CamelCase and snake_case separation & spelling.
 - **New:** E-mails & URLs excluded from spelling in markdown/plaintext/LaTeX/source code documents.
-- **Change:** Compound lexemes separation rules updated (period, quotation marks).
+- **Change:** Compound lexemes separation rules updated (period, quotation mark).
 - **Change:** Code section excluded from spelling in Markdown documents ([#10](https://github.com/bartosz-antosik/vscode-spellright/issues/10)).
 - **Change:** Small touches to text documents.
 
