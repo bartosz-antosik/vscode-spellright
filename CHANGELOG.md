@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.0.13** released on 1st May 2017
+## **1.0.13** released on 4th May 2017
 
 - **Fix:** Word separation rules updated (period & apostrophe at the beginning of the word).
 - **Change:** Native module recompiled for new Electron version that comes with VSCode 1.12.
