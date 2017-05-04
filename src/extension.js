@@ -5,8 +5,8 @@
 
 'use strict';
 
-global.SPELLRIGHT_DEBUG_OUTPUT = true;
-global.SPELLRIGHT_LINES_BATCH = 100;
+global.SPELLRIGHT_DEBUG_OUTPUT = false;
+global.SPELLRIGHT_LINES_BATCH = 10;
 
 var spellright = require('./spellright');
 var vscode = require('vscode');

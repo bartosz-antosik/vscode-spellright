@@ -382,15 +382,20 @@ var SpellRight = (function () {
         // they are treated in the same way so these are operations done on
         // every word/lexem spelled.
 
+        cword = word;
+
         // Special case of words ending with period - abbreviations, etc.
-        var _endsWithPeriod = word.endsWith('.');
-        var _endsWithApostrophe = word.endsWith('\'');
+        var _endsWithPeriod = cword.endsWith('.');
+        var _endsWithApostrophe = cword.endsWith('\'');
         if (_endsWithPeriod || _endsWithApostrophe) {
-            var cword = word.slice(0, -1);
-        } else {
-            var cword = word;
+            var cword = cword.slice(0, -1);
+        }
+        while (cword.startsWith('.') || cword.startsWith('\'')) {
+            var cword = cword.slice(1);
+            _colnumber++;
         }
         var _containsPeriod = /[.]/.test(cword);
+        var _containsApostrophe = /[.]/.test(cword);
 
         // Before splitting make sure word is not in the ignore list or
         // regular expressions to ignore as a whole.
@@ -408,7 +413,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -420,7 +425,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -432,7 +437,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, linenumber, colnumber + e.offset);
+                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;

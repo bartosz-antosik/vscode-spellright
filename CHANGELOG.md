@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.0.13** released on 1st May 2017
+
+- **Fix:** Word separation rules updated (period & apostrophe at the beginning of the word).
+- **Change:** Native module recompiled for new Electron version that comes with VSCode 1.12.
+
 ## **1.0.12** released on 29th April 2017
 
 - **New:** Global/workspace ignore list & regular expressions matched also on compound phrase, before separation of camel/snake case parts.
@@ -9,7 +14,7 @@
 
 ## **1.0.11** released on 26th April 2017
 
-- **Fix:** Regression in word separation rules ([#11](https://github.com/bartosz-antosik/vscode-spellright/issues/11)).
+- **Fix:** Regression in word separation rules fixed ([#11](https://github.com/bartosz-antosik/vscode-spellright/issues/11)).
 
 ## **1.0.10** released on 25th April 2017
 
