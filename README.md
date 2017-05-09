@@ -7,7 +7,7 @@ Spell Checker for Visual Studio Code.
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here for examples](SCREENSHOTS.md)).
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
-* Spells **CamelCase** and **snake_case** compound phrases respecting Unicode capital/small letters distinction.
+* Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction respecting capital letter adhesion.
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Can use **every language dictionary** supported by either of the above mentioned spelling engines.
@@ -15,7 +15,7 @@ Spell Checker for Visual Studio Code.
 
 ## Note on Usability
 
-This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It certainly could work on all platforms (macOS, Linux and Windows) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshot
 

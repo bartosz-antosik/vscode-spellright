@@ -1,5 +1,11 @@
 # Change Log
 
+## **1.0.16** released on 9th May 2017
+
+- **Change:** Word separation rules updated (digit inside a word).
+- **Fix:** Global setting should be "spellright.documentTypes" not "spellright.documentType" ([#12](https://github.com/bartosz-antosik/vscode-spellright/issues/12)).
+- **Change:** Spelling enabled for 'mustache' type ([#13](https://github.com/bartosz-antosik/vscode-spellright/issues/13)).
+
 ## **1.0.15** released on 5th May 2017
 
 - **Fix:** Word separation rules updated (period & apostrophe at the beginning of the word).
