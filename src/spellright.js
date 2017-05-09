@@ -327,10 +327,10 @@ var SpellRight = (function () {
         return parts;
     }
 
-    SpellRight.prototype.splitByPeriod = function (word) {
+    SpellRight.prototype.splitByPeriodOrDigit = function (word) {
 
         // Split phrases with period inside `terminal.integrated.scrollback`.
-        var rperiod = XRegExp('([^\.]+)');
+        var rperiod = XRegExp('([^\.0-9]+)');
 
         var parts = [];
         XRegExp.forEach(word, rperiod, (match, i) => {
@@ -408,7 +408,7 @@ var SpellRight = (function () {
         // should be spelled as well. So there can be lexems containing periods
         // inside. But they should be later on spelled as parts to minimize
         // the number of false positives.
-        var _split = this.splitByPeriod(cword);
+        var _split = this.splitByPeriodOrDigit(cword);
         if (_split.length > 1) {
             var _this = this;
             _split.forEach (function(e) {
