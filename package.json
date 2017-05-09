@@ -24,7 +24,7 @@
                     "default": "en_US",
                     "description": "Default language (dictionary/culture name) used for spelling."
                 },
-                "spellright.documentType": {
+                "spellright.documentTypes": {
                     "type": "array",
                     "default": [
                         "markdown",
