@@ -10,7 +10,7 @@ Spell Checker for Visual Studio Code.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
-* In document commands (**InDoc commands**) allow to switch spelling ON and OFF despite global settings.
+* **In document commands** (abbreviated *InDoc*) allow to switch spelling ON and OFF despite global settings.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
@@ -53,11 +53,11 @@ It can be reached by clicking on indicator field in status bar:
 
 Alternatively same result can be achieved selecting command `SpellRight: Select Dictionary (Language)` or `SpellRight: Turn OFF for Current Document Type` from the **command palette** (**F1**/**Ctrl+Shift+P**).
 
-Status Bar indicator also shows when spelling for particular document class has been turned OFF:
+Status bar indicator also shows when spelling for particular document class has been turned OFF:
 
 ![switch](media/screenshot-switch-off.png)
 
-Or when it has been FORCED off by InDoc command, like `spellcheck-off` or rule in `.spellignore`:
+Or when it has been forced OFF by InDoc command, like `spellcheck-off` or rule in `.spellignore`:
 
 ![switch](media/screenshot-switch-forced-off.png)
 
@@ -76,22 +76,6 @@ Pops dictionary selection list. Selecting language also turns spelling ON. The l
 `SpellRight: Turn OFF for Current Document Type`
 
 Turn spelling OFF for currently open document type.
-
-## InDoc Commands
-
-Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
-
-`spellcheck-off` (alternative syntax: `spellcheck: off`)
-
-Forces turning spelling **OFF** for the entire document despite global settings.
-
-`spellcheck-on` (alternative syntax: `spellcheck: on`)
-
-Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *InDoc* `spellcheck-off` command and `.spellignore` patterns.
-
-## Ignore file
-
-`.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
 ## Settings
 
@@ -120,6 +104,26 @@ Words ignored in spelling. Usually contains words which are considered misspelle
 `spellright.ignoreRegExps: []`
 
 Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works after separating word using language parsers in the same place where spelling engine is consulted and ignoreWords checked. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
+
+`spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
+
+Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
+
+## InDoc Commands
+
+Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
+
+`spellcheck-off` (alternative syntax: `spellcheck: off`)
+
+Forces turning spelling **OFF** for the entire document despite global settings.
+
+`spellcheck-on` (alternative syntax: `spellcheck: on`)
+
+Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *InDoc* `spellcheck-off` command and `.spellignore` patterns.
+
+## Ignore file
+
+`.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
 ## Known Issues
 

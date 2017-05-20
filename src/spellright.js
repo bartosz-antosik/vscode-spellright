@@ -50,7 +50,7 @@ var SpellRight = (function () {
         this.extensionRoot = context.extensionPath;
 
         settings = this.getSettings();
-        spellignore = this.getIgnore()
+        spellignore = this.getIgnore();
 
         // Force HUNSPELL - seems it does not work.
         //process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
@@ -94,6 +94,7 @@ var SpellRight = (function () {
 
         fs.watchFile(SpellRight.CONFIGFILE, { interval: 100 }, function (_old, _new) {
             settings = _this.getSettings();
+            indicator.updateLanguageState();
         });
 
         fs.watchFile(SpellRight.IGNOREFILE, { interval: 100 }, function (_old, _new) {
@@ -618,6 +619,11 @@ var SpellRight = (function () {
             return
         };
 
+        // Silently ignore files defined by spellright.ignoreFiles
+        if (settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+            return;
+        }
+
         var _this = this;
 
         settings._commands.ignore = false;
@@ -768,6 +774,11 @@ var SpellRight = (function () {
             _language: '',
             _enabled: true
         };
+
+        // Silently ignore files defined by spellright.ignoreFiles 
+        if (settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+            return;
+        }
 
         var _this = this;
         var _length = this.spellingContext.length;
@@ -1129,7 +1140,8 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.replacer = function (key, value) {
-        if (key == '_commands') return undefined;
+        if (key == '_ignoreFiles') return undefined;
+        else if (key == '_commands') return undefined;
         else return value;
     }
 
@@ -1166,6 +1178,9 @@ var SpellRight = (function () {
             suggestionsInHints: true,
             ignoreWords: [],
             ignoreRegExps: [],
+            ignoreFiles: ['**/.gitignore', '**/.spellignore'],
+
+            _ignoreFiles: {},
             _commands: {
                 ignore: false, // spellcheck-off or .spellignore
                 force: false, // spellcheck-on
@@ -1177,7 +1192,7 @@ var SpellRight = (function () {
         var userSettingsData = this.getUserSettings();
         if (userSettingsData) {
             Object.keys(returnSettings).forEach(function (key) {
-                if (userSettingsData['spellright.' + key]) {
+                if ('spellright.' + key in userSettingsData) {
                     returnSettings[key] = userSettingsData['spellright.' + key];
                 }
             });
@@ -1207,6 +1222,12 @@ var SpellRight = (function () {
             if (SPELLRIGHT_DEBUG_OUTPUT)
                 console.log('Configuration file: \"' + SpellRight.CONFIGFILE + '\" not found.');
         }
+
+        returnSettings._ignoreFiles = ignore();
+
+        returnSettings.ignoreFiles.forEach(function (key) {
+            returnSettings._ignoreFiles.add(key);
+        });
 
         return returnSettings;
     };
@@ -1292,15 +1313,10 @@ var LanguageIndicator = (function () {
             message = '[off]';
             if (settings._commands.ignore && !settings._commands.force) {
                 color = '#ff5858';
-            } else {
-                color = 'white';
             }
         } else {
             if (settings.language == '') {
                 message = '[none]';
-                color = 'white';
-            } else {
-                color = 'white';
             }
         }
 
@@ -1308,7 +1324,11 @@ var LanguageIndicator = (function () {
         this.statusBarItem.color = color;
         this.statusBarItem.tooltip = 'Spell Checking Language & State';
 
-        if (settings.statusBarIndicator) this.statusBarItem.show();
+        if (settings.statusBarIndicator) {
+            this.statusBarItem.show();
+        } else {
+            this.statusBarItem.hide();
+        }
     };
     LanguageIndicator.prototype.isLanguage = function (document) {
         var filePath = document.fileName;
