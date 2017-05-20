@@ -37,6 +37,8 @@ exports.activate = activate;
 
 function deactivate() {
 
+    SpellRight.deactivate();
+
     if (SPELLRIGHT_DEBUG_OUTPUT)
         console.log('SpellRight deactivated.');
 }

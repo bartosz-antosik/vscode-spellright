@@ -5,12 +5,13 @@ Spell Checker for Visual Studio Code.
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here for examples](SCREENSHOTS.md)).
+* Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. all languages available in Microsoft Office etc.)
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
-* Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction respecting capital letter adhesion.
-* Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document type.
+* Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
+* Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
+* In document commands (**InDoc commands**) allow to switch spelling ON and OFF despite global settings.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
-* Can use **every language dictionary** supported by either of the above mentioned spelling engines.
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
 ## Note on Usability
@@ -52,6 +53,14 @@ It can be reached by clicking on indicator field in status bar:
 
 Alternatively same result can be achieved selecting command `SpellRight: Select Dictionary (Language)` or `SpellRight: Turn OFF for Current Document Type` from the **command palette** (**F1**/**Ctrl+Shift+P**).
 
+Status Bar indicator also shows when spelling for particular document class has been turned OFF:
+
+![switch](media/screenshot-switch-off.png)
+
+Or when it has been FORCED off by InDoc command, like `spellcheck-off` or rule in `.spellignore`:
+
+![switch](media/screenshot-switch-forced-off.png)
+
 ## Commands
 
 This extension contributes the following commands:
@@ -67,6 +76,22 @@ Pops dictionary selection list. Selecting language also turns spelling ON. The l
 `SpellRight: Turn OFF for Current Document Type`
 
 Turn spelling OFF for currently open document type.
+
+## InDoc Commands
+
+Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
+
+`spellcheck-off` (alternative syntax: `spellcheck: off`)
+
+Forces turning spelling **OFF** for the entire document despite global settings.
+
+`spellcheck-on` (alternative syntax: `spellcheck: on`)
+
+Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *InDoc* `spellcheck-off` command and `.spellignore` patterns.
+
+## Ignore file
+
+`.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
 ## Settings
 
@@ -108,7 +133,7 @@ This extension can be considered a Work In Progress. Please report all the error
 
 ## Acknowledgments
 
-Part of extension's code is loosely based on code found in *Spell Checker* extension ([vscode-spellchecker](https://github.com/swyphcosmo/vscode-spellchecker)) by Michael Vernier. This extension has in turn, if I understand things correctly, evolved from *Spelling and Grammar Checker* extension ([vscode-spell-check](https://github.com/Microsoft/vscode-spell-check)) by Sean McBreen.
+Part of extension's code was loosely based on code found in *Spell Checker* extension ([vscode-spellchecker](https://github.com/swyphcosmo/vscode-spellchecker)) by Michael Vernier. This extension has in turn, if I understand things correctly, evolved from *Spelling and Grammar Checker* extension ([vscode-spell-check](https://github.com/Microsoft/vscode-spell-check)) by Sean McBreen.
 
 ## Release Notes
 

@@ -1,16 +1,25 @@
 # Change Log
 
+## **1.0.17** released on 20th May 2017
+
+- **New:** InDoc commands to allow disabling/enabling spelling for the document independent of the global settings ([#14](https://github.com/bartosz-antosik/vscode-spellright/issues/14)).
+- **New:** Status Bar indicator shows spelling state respecting the InDoc commands and `.spellignore` file actions (Language name when spelling enabled, OFF in white when disabled for document class; OFF in red when disabled by InDoc commands or `.spellignore` file pattern).
+- **New:** Workspace settings `spellright.json` file is watched for changes (e.g. manually editing list of ignored words) and is reloaded in case it has been altered on the disk.
+- **New:** Ignore file `.spellignore` located in workspace root directory allows to disable spelling for files indicated by [gitignore](https://git-scm.com/docs/gitignore) syntax patterns ([#16](https://github.com/bartosz-antosik/vscode-spellright/issues/16)). Also watched for changes.
+- **Change:** Word separation rules updated (digit at the beginning/end, hash, dollar sign).
+- **Fix:** Wrong file type handling in split view ([#15](https://github.com/bartosz-antosik/vscode-spellright/issues/15)).
+
 ## **1.0.16** released on 9th May 2017
 
 - **Change:** Word separation rules updated (digit inside a word).
+- **Change:** Spelling enabled for 'mustache' file type ([#13](https://github.com/bartosz-antosik/vscode-spellright/issues/13)).
 - **Fix:** Global setting should be "spellright.documentTypes" not "spellright.documentType" ([#12](https://github.com/bartosz-antosik/vscode-spellright/issues/12)).
-- **Change:** Spelling enabled for 'mustache' type ([#13](https://github.com/bartosz-antosik/vscode-spellright/issues/13)).
 
 ## **1.0.15** released on 5th May 2017
 
-- **Fix:** Word separation rules updated (period & apostrophe at the beginning of the word).
 - **Change:** Native module recompiled for new Electron version that comes with VSCode 1.12.
 - **Change:** Screenshots update.
+- **Fix:** Word separation rules updated (period & apostrophe at the beginning of the word).
 
 ## **1.0.12** released on 29th April 2017
 
