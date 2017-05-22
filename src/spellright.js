@@ -775,7 +775,7 @@ var SpellRight = (function () {
             _enabled: true
         };
 
-        // Silently ignore files defined by spellright.ignoreFiles 
+        // Silently ignore files defined by spellright.ignoreFiles
         if (settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
             return;
         }
@@ -908,6 +908,10 @@ var SpellRight = (function () {
 
         var diagnostic = context.diagnostics[0];
         if (!diagnostic) return null;
+
+        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (settings._commands.ignore && !settings._commands.force) || settings.language == '') {
+            return null;
+        }
 
         var rmatch = /\"(.*)\"/;
         var match = rmatch.exec(diagnostic.message);
