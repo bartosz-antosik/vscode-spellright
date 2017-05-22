@@ -3,6 +3,7 @@
 ## **1.0.18** released on 23rd May 2017
 
 - **Change:** Screenshots & documents polished a bit.
+- **Change:** Keywords provided in package metadata for easier reference.
 - **Fix:** Status bar indicator show/hide functionality & coloring corrected ([#17](https://github.com/bartosz-antosik/vscode-spellright/issues/17)).
 
 ## **1.0.17** released on 20th May 2017

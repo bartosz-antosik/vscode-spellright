@@ -10,6 +10,12 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "spell",
+        "spelling",
+        "multi-language",
+        "spell-checker"
+    ],
     "activationEvents": [
         "*"
     ],
