@@ -4,7 +4,7 @@ Spell Checker for Visual Studio Code.
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents ([see here for examples](SCREENSHOTS.md)).
+* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. all languages available in Microsoft Office etc.)
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
@@ -18,11 +18,21 @@ Spell Checker for Visual Studio Code.
 
 This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
-## Screenshot
+## Screenshots
+
+By default extension spells **plain text**/**markdown**/**LaTeX** documents:
 
 ![screenshot](media/screenshot-default.png)
 
-[More Screenshots](SCREENSHOTS.md)
+By changing one switch in settings (or by using **GUI**) extension can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*, *JavaScript*, *Batch* and lots of others) and *text*/*comment* nodes on **XML**/**HTML** class documents:
+
+![screenshot](media/screenshot-cpp.png)
+
+![screenshot](media/screenshot-python.png)
+
+![screenshot](media/screenshot-batch.png)
+
+![screenshot](media/screenshot-html.png)
 
 ## Installation
 
@@ -57,7 +67,7 @@ Status bar indicator also shows when spelling for particular document class has 
 
 ![switch](media/screenshot-switch-off.png)
 
-Or when it has been forced OFF by InDoc command, like `spellcheck-off` or rule in `.spellignore`:
+Or when it has been forced OFF by InDoc command (`spellcheck-off`) or rule in `.spellignore`:
 
 ![switch](media/screenshot-switch-forced-off.png)
 
@@ -134,10 +144,6 @@ Forces turning spelling **ON** for the entire document despite global settings. 
 ## Notice
 
 This extension can be considered a Work In Progress. Please report all the errors and/or annoyances that you see on the [issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
-
-## Acknowledgments
-
-Part of extension's code was loosely based on code found in *Spell Checker* extension ([vscode-spellchecker](https://github.com/swyphcosmo/vscode-spellchecker)) by Michael Vernier. This extension has in turn, if I understand things correctly, evolved from *Spelling and Grammar Checker* extension ([vscode-spell-check](https://github.com/Microsoft/vscode-spell-check)) by Sean McBreen.
 
 ## Release Notes
 

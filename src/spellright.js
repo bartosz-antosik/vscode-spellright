@@ -1297,7 +1297,7 @@ var LanguageIndicator = (function () {
         var document = editor.document;
 
         var message = settings.language;
-        var color = 'white';
+        var color = 'default';
 
         dictionaries.forEach(function (entry) {
             if (entry.id == settings.language) {
