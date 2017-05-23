@@ -20,11 +20,11 @@ This extension is currently limited to **64-bit Windows platform**, with the sam
 
 ## Screenshots
 
-By default extension spells **plain text**/**markdown**/**LaTeX** documents:
+Spelling of **plain text**/**markdown**/**LaTeX** documents:
 
 ![screenshot](media/screenshot-default.png)
 
-By changing one switch in settings (or by using **GUI**) extension can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*, *JavaScript*, *Batch* and lots of others) and *text*/*comment* nodes on **XML**/**HTML** class documents:
+It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*, *JavaScript*, *Batch* and lots of others) and *text*/*comment* nodes on **XML**/**HTML** class documents:
 
 ![screenshot](media/screenshot-cpp.png)
 
@@ -43,7 +43,13 @@ ext install spellright
 
 ### Note on Windows 7 Installation
 
-Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary/Affixes (\*.dic/\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory (usually located at `c:\Users\%USERNAME%\AppData\Roaming\Code\`, `Dictionaries` subfolder does not exists there by default and has to be created manually). Dictionaries will be then listed in the language selection list and used for spelling documents. Because Hunspell is very slow in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary/Affixes (\*.dic/\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, usually located at:
+
+```
+c:\Users\%USERNAME%\AppData\Roaming\Code\
+```
+
+`Dictionaries` subfolder does not exists there by default and has to be created manually. Dictionaries will be then listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
 ## Usage
 

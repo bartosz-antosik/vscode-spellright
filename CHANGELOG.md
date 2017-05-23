@@ -2,6 +2,7 @@
 
 ## **1.0.18** released on 23rd May 2017
 
+- **New:** New settings item `ignoreFiles` to allow globally define files to be ignored (in reference to [#16](https://github.com/bartosz-antosik/vscode-spellright/issues/16)).
 - **Change:** Screenshots & documents polished a bit.
 - **Change:** Keywords provided in package metadata for easier reference.
 - **Fix:** Status bar indicator show/hide functionality & coloring corrected ([#17](https://github.com/bartosz-antosik/vscode-spellright/issues/17)).
