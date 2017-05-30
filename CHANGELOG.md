@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.19** released on 30th May 2017
+
+- **Fix:** One wrong RegExp in `spellright.ignoreRegExps` will prevent other RegExps to be applied ([#18](https://github.com/bartosz-antosik/vscode-spellright/issues/18)). Many thanks to [@eilsustc](https://github.com/neilsustc) for help nailing this.
+
 ## **1.0.18** released on 23rd May 2017
 
 - **New:** New settings item `ignoreFiles` to allow globally define files to be ignored (in reference to [#16](https://github.com/bartosz-antosik/vscode-spellright/issues/16)).

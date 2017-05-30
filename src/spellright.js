@@ -29,7 +29,7 @@ var SpellRight = (function () {
 
     function SpellRight() {
         this.diagnosticMap = {};
-        this.regexpMap = [];
+        this.regExpMap = [];
         this.lastChanges = null;
         this.lastSyntax = 0;
         this.spellingContext = [];
@@ -52,6 +52,8 @@ var SpellRight = (function () {
         settings = this.getSettings();
         spellignore = this.getIgnore();
 
+        this.prepareIgnoreRegExps();
+
         // Force HUNSPELL - seems it does not work.
         //process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
 
@@ -64,8 +66,6 @@ var SpellRight = (function () {
         this.hunspell = (_dictionaries.length === 0 || (typeof process.env.SPELLCHECKER_PREFER_HUNSPELL !== 'undefined'));
 
         this.collectDictionaries();
-
-        this.prepareIgnoreRegExps();
 
         this.setDictionary(settings.language);
 
@@ -94,6 +94,7 @@ var SpellRight = (function () {
 
         fs.watchFile(SpellRight.CONFIGFILE, { interval: 100 }, function (_old, _new) {
             settings = _this.getSettings();
+            _this.prepareIgnoreRegExps();
             indicator.updateLanguageState();
         });
 
@@ -390,22 +391,30 @@ var SpellRight = (function () {
         return parts;
     }
 
-     SpellRight.prototype.prepareIgnoreRegExps = function () {
+    SpellRight.prototype.prepareIgnoreRegExps = function () {
         for (var i = 0; i < settings.ignoreRegExps.length; i++) {
-            // Convert the JSON of RegExp Strings into a real RegExp
-            var flags = settings.ignoreRegExps[i].replace(/.*\/([gimy]*)$/, '$1');
-            var pattern = settings.ignoreRegExps[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
-            pattern = pattern.replace(/\\\\/g, '\\');
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
+            try {
+                // Convert the JSON of RegExp Strings into a real RegExp
+                var flags = settings.ignoreRegExps[i].replace(/.*\/([gimy]*)$/, '$1');
+                var pattern = settings.ignoreRegExps[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+                pattern = pattern.replace(/\\\\/g, '\\');
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    console.log('RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
+                }
+                this.regExpMap.push(new RegExp(pattern, flags));
             }
-            this.regexpMap.push(new RegExp(pattern, flags));
+            catch (e) {
+                vscode.window.showErrorMessage('Ignore RexExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    console.log('Ignore RegExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
+                }
+            }
         }
     };
 
      SpellRight.prototype.testIgnoreRegExps = function (word) {
-        for (var i = 0; i < this.regexpMap.length; i++) {
-            if (word.match(this.regexpMap[i]) == word) {
+        for (var i = 0; i < this.regExpMap.length; i++) {
+            if (word.match(this.regExpMap[i]) == word) {
                 return true;
             }
         }
