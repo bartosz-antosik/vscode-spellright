@@ -326,23 +326,21 @@ var SpellRight = (function () {
     SpellRight.prototype.setDictionary = function (dictionary) {
         // Check if what we are trying to set is on the list of available
         // dictionaries. If not then set as [none], that is ''.
-        settings.language = '';
+        var _dict = '';
         dictionaries.forEach(function (entry) {
             if (entry.id == dictionary) {
-                settings.language = dictionary;
+                _dict = dictionary;
                 return;
             }
         });
 
-        if (settings.language === '') {
+        if (_dict === '') {
             return;
         }
 
         if (this.hunspell) {
-            var _dict = settings.language;
             var _path = this.getDictionariesPath();
         } else {
-            var _dict = settings.language;
             var _path = '[none]';
         }
 
@@ -620,6 +618,12 @@ var SpellRight = (function () {
                 this.spellingContext[0]._enabled = true;
             } else if (command === 'off') {
                 this.spellingContext[0]._enabled = false;
+            } else if (command === 'language') {
+                if (parameters !== '') {
+                    this.setDictionary(parameters);
+                } else {
+                    this.setDictionary(settings.language);
+                }
             }
         }
     }
@@ -673,12 +677,22 @@ var SpellRight = (function () {
 
         var _this = this;
 
+        var _syntax = 0;
+        var _signature = '';
+        var _local_context = false;
+
+        settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
         settings._commands.languages = [];
         settings._commands.nlanguages = [];
 
+        this.setDictionary(settings.language);
+
         parser.parseForCommands(document, function (command, parameters) {
+
+            _signature = _signature + command + parameters;
+
             if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('InDoc Command: ' + command + ' [' + parameters + ']');
             }
@@ -717,8 +731,6 @@ var SpellRight = (function () {
             return;
         }
 
-        var _syntax_level = 0;
-
         if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
             this.doInitiateSpellCheck(document);
             return;
@@ -730,6 +742,20 @@ var SpellRight = (function () {
 
         if (this.spellingContext.length == 0) {
             diagnostics = this.diagnosticMap[document.uri.toString()];
+
+            // Create temporary context
+            var _context = {
+                _document: document,
+                _parser: parser,
+                _diagnostics: diagnostics,
+                _line: 0,
+                _start: Date.now(),
+                _update: Date.now(),
+                _language: '',
+                _enabled: true
+            };
+            this.spellingContext.push(_context);
+            _local_context = true;
         } else {
             diagnostics = this.spellingContext[0]._diagnostics;
         }
@@ -750,7 +776,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range.start.line, range.end.line, shift);
 
-            _syntax_level = parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _syntax = parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -780,10 +806,15 @@ var SpellRight = (function () {
         // Save it for next pass change/jump detection
         this.lastChanges = event.contentChanges;
 
+        if (_local_context)
+            this.spellingContext.shift();
+
         this.diagnosticCollection.set(document.uri, diagnostics);
 
-        if (_syntax_level != this.lastSyntax) {
-            this.lastSyntax = _syntax_level;
+        if (_syntax != settings._commands.syntax || 
+            settings._commands.signature != _signature) {
+            settings._commands.syntax = _syntax;
+            settings._commands.signature = _signature;
             this.doInitiateSpellCheck(document);
         }
     };
@@ -840,6 +871,8 @@ var SpellRight = (function () {
         settings._commands.force = false;
         settings._commands.languages = [];
         settings._commands.nlanguages = [];
+
+        this.setDictionary(settings.language);
 
         parser.parseForCommands(document, function (command, parameters) {
             if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -1216,6 +1249,8 @@ var SpellRight = (function () {
 
             _ignoreFiles: {},
             _commands: {
+                signature: '',
+                syntax: 0,
                 ignore: false, // spellcheck-off or .spellignore
                 force: false, // spellcheck-on
                 languages: [],
