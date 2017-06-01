@@ -619,7 +619,7 @@ var SpellRight = (function () {
             } else if (command === 'off') {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
-                if (parameters !== '') {
+                if (this.checkDictionary(parameters)) {
                     this.setDictionary(parameters);
                 } else {
                     this.setDictionary(settings.language);
@@ -684,7 +684,7 @@ var SpellRight = (function () {
         settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
-        settings._commands.languages = [];
+        settings._commands.languages = [settings.language];
         settings._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
@@ -702,7 +702,7 @@ var SpellRight = (function () {
             if (command === 'on') {
                 settings._commands.force = true;
             }
-            if (command === 'language' && parameters !== '') {
+            if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
                 if (_this.checkDictionary(parameters)) {
                     settings._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
@@ -811,7 +811,7 @@ var SpellRight = (function () {
 
         this.diagnosticCollection.set(document.uri, diagnostics);
 
-        if (_syntax != settings._commands.syntax || 
+        if (_syntax != settings._commands.syntax ||
             settings._commands.signature != _signature) {
             settings._commands.syntax = _syntax;
             settings._commands.signature = _signature;
@@ -867,9 +867,10 @@ var SpellRight = (function () {
         var _this = this;
         var _length = this.spellingContext.length;
 
+        settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
-        settings._commands.languages = [];
+        settings._commands.languages = [ settings.language ];
         settings._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
@@ -884,7 +885,7 @@ var SpellRight = (function () {
             if (command === 'on') {
                 settings._commands.force = true;
             }
-            if (command === 'language' && parameters !== '') {
+            if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
                 if (_this.checkDictionary(parameters)) {
                     settings._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
