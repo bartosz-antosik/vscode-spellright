@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.20** released on 1st June 2017
+
+- **New:** InDoc command to switch between languages in one document (see `spellcheck-language` in README.md).
+
 ## **1.0.19** released on 30th May 2017
 
 - **Fix:** One wrong RegExp in `spellright.ignoreRegExps` will prevent other RegExps to be applied ([#18](https://github.com/bartosz-antosik/vscode-spellright/issues/18)). Many thanks to [@eilsustc](https://github.com/neilsustc) for help nailing this.

@@ -6,11 +6,12 @@ Spell Checker for Visual Studio Code.
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. all languages available in Microsoft Office etc.)
+* Spelling **multiple languages in one document** using InDoc commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
-* **In document commands** (abbreviated *InDoc*) allow to switch spelling ON and OFF despite global settings.
+* **In document commands** (abbreviated *InDoc*) allow to switch spelling ON and OFF despite global settings and switching spelling language.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
@@ -43,7 +44,7 @@ ext install spellright
 
 ### Note on Windows 7 Installation
 
-Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary/Affixes (\*.dic/\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, usually located at:
+Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, usually located at:
 
 ```
 c:\Users\%USERNAME%\AppData\Roaming\Code\
@@ -76,6 +77,15 @@ Status bar indicator also shows when spelling for particular document class has 
 Or when it has been forced OFF by InDoc command (`spellcheck-off`) or rule in `.spellignore`:
 
 ![switch](media/screenshot-switch-forced-off.png)
+
+When there is multiple languages selected by InDoc command `spellcheck-language` placed within document:
+
+![switch](media/screenshot-switch-multiple.png)
+
+And when at least one spelling language is missing dictionary:
+
+![switch](media/screenshot-switch-multiple-missing.png)
+
 
 ## Commands
 
@@ -128,6 +138,12 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 ## InDoc Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
+
+`spellcheck-language CODE` (alternative syntax: `spellcheck: language CODE`)
+
+Forces **switching spelling language** for the following part of the document or until next `spellcheck-language CODE` command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
+
+Forces turning spelling **OFF** for the entire document despite global settings.
 
 `spellcheck-off` (alternative syntax: `spellcheck: off`)
 

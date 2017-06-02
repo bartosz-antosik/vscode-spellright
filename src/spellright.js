@@ -67,8 +67,6 @@ var SpellRight = (function () {
 
         this.collectDictionaries();
 
-        this.setDictionary(settings.language);
-
         indicator = new SpellRightIndicator();
         controller = new SpellRightIndicatorController(indicator);
 
@@ -92,13 +90,15 @@ var SpellRight = (function () {
 
         var _this = this;
 
-        fs.watchFile(SpellRight.CONFIGFILE, { interval: 100 }, function (_old, _new) {
-            settings = _this.getSettings();
-            _this.prepareIgnoreRegExps();
-            indicator.updateStatusBarIndicator();
+        fs.watchFile(SpellRight.CONFIGFILE, function (curr, prev) {
+            if (curr.mtime.getTime() !== prev.mtime.getTime()) {
+                settings = _this.getSettings();
+                _this.prepareIgnoreRegExps();
+                indicator.updateStatusBarIndicator();
+            }
         });
 
-        fs.watchFile(SpellRight.IGNOREFILE, { interval: 100 }, function (_old, _new) {
+        fs.watchFile(SpellRight.IGNOREFILE, function (curr, prev) {
             spellignore = _this.getIgnore();
         });
 
@@ -688,7 +688,7 @@ var SpellRight = (function () {
         settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
-        settings._commands.languages = [settings.language];
+        settings._commands.languages = [ settings.language ];
         settings._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
