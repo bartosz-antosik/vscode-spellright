@@ -567,7 +567,12 @@ var SpellRight = (function () {
                 if (settings.suggestionsInHints) {
                     var suggestions = spellchecker.getCorrectionsForMisspelling(word);
                     if (suggestions.length > 0) {
-                        var message = message + ': suggestions: ';
+                        var message = message + ': suggestions';
+                        if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
+                            var message = message + ' [' + this.spellingContext[0]._language + ']: ';
+                        } else {
+                            var message = message + ': ';
+                        }
                         for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
                             var s = suggestions_1[_i];
                             message += s + ', ';
@@ -625,8 +630,10 @@ var SpellRight = (function () {
             } else if (command === 'language') {
                 if (this.checkDictionary(parameters)) {
                     this.setDictionary(parameters);
+                    this.spellingContext[0]._language = parameters;
                 } else {
                     this.setDictionary(settings.language);
+                    this.spellingContext[0]._language = settings.language;
                 }
             }
         }
@@ -755,7 +762,7 @@ var SpellRight = (function () {
                 _line: 0,
                 _start: Date.now(),
                 _update: Date.now(),
-                _language: '',
+                _language: settings.language,
                 _enabled: true
             };
             this.spellingContext.push(_context);
@@ -859,7 +866,7 @@ var SpellRight = (function () {
             _line: 0,
             _start: Date.now(),
             _update: Date.now(),
-            _language: '',
+            _language: settings.language,
             _enabled: true
         };
 

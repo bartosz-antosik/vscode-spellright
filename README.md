@@ -78,6 +78,8 @@ Or when it has been forced OFF by InDoc command (`spellcheck-off`) or rule in `.
 
 ![switch](media/screenshot-switch-forced-off.png)
 
+### Multiple languages in one document
+
 When there is multiple languages selected by InDoc command `spellcheck-language` placed within document:
 
 ![switch](media/screenshot-switch-multiple.png)
