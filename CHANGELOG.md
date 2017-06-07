@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.21** released on 7th June 2017
+
+- **Change:** Added spelling for 'reStructuredText' file type ([#19](https://github.com/bartosz-antosik/vscode-spellright/issues/19)).
+
 ## **1.0.20** released on 1st June 2017
 
 - **New:** InDoc command to switch between languages in one document (see `spellcheck-language` in README.md).
