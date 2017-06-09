@@ -315,6 +315,8 @@ var SpellRight = (function () {
 
             _this.doCancelSpellCheck();
 
+            settings.language = dict;
+
             if (!off) {
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
@@ -432,6 +434,9 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.prepareIgnoreRegExps = function () {
+
+        this.regExpMap = [];
+
         for (var i = 0; i < settings.ignoreRegExps.length; i++) {
             try {
                 // Convert the JSON of RegExp Strings into a real RegExp

@@ -1,5 +1,11 @@
 # Change Log
 
+## **1.0.22** released on 9th June 2017
+
+- **Change:** Skipping Code Blocks from spelling in reStructuredText documents ([#20](https://github.com/bartosz-antosik/vscode-spellright/issues/20)).
+- **Fix:** Language switching regression introduced by multiple languages in one document ([#21](https://github.com/bartosz-antosik/vscode-spellright/issues/21)).
+- **Fix:** Incorrect reloading of `spellright.ignoreRegExps` when watching for manual file change.
+
 ## **1.0.21** released on 7th June 2017
 
 - **Change:** Added spelling for 'reStructuredText' file type ([#19](https://github.com/bartosz-antosik/vscode-spellright/issues/19)).
