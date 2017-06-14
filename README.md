@@ -6,12 +6,12 @@ Spell Checker for Visual Studio Code.
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. all languages available in Microsoft Office etc.)
-* Spelling **multiple languages in one document** using InDoc commands to switch between languages.
+* Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
-* **In document commands** (abbreviated *InDoc*) allow to switch spelling ON and OFF despite global settings and switching spelling language.
+* **In Document commands** allow to switch spelling ON and OFF despite global settings and switching spelling language.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
@@ -21,9 +21,13 @@ This extension is currently limited to **64-bit Windows platform**, with the sam
 
 ## Screenshots
 
+### Plain Documents
+
 Spelling of **plain text**/**markdown**/**LaTeX** documents:
 
 ![screenshot](media/screenshot-default.png)
+
+### Source Code & Markup Documents
 
 It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*, *JavaScript*, *Batch* and lots of others) and *text*/*comment* nodes on **XML**/**HTML** class documents:
 
@@ -74,17 +78,17 @@ Status bar indicator also shows when spelling for particular document class has 
 
 ![switch](media/screenshot-switch-off.png)
 
-Or when it has been forced OFF by InDoc command (`spellcheck-off`) or rule in `.spellignore`:
+Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule in `.spellignore`:
 
 ![switch](media/screenshot-switch-forced-off.png)
 
 ### Multiple languages in one document
 
-When there is multiple languages selected by InDoc command `spellcheck-language` placed within document:
+When there is multiple languages selected by In-Document command <code>spellcheck&#8208;language</code> placed within document:
 
 ![switch](media/screenshot-switch-multiple.png)
 
-And when at least one spelling language is missing dictionary:
+And when at least one language spelled is missing dictionary:
 
 ![switch](media/screenshot-switch-multiple-missing.png)
 
@@ -137,13 +141,13 @@ Regular expressions ignored in spelling. Allows to ignore/consider as spelled co
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
 
-## InDoc Commands
+## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
-`spellcheck-language CODE` (alternative syntax: `spellcheck: language CODE`)
+<code>spellcheck&#8208;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code>)
 
-Forces **switching spelling language** for the following part of the document or until next `spellcheck-language CODE` command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
+Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#8208;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
 Forces turning spelling **OFF** for the entire document despite global settings.
 
@@ -153,7 +157,7 @@ Forces turning spelling **OFF** for the entire document despite global settings.
 
 `spellcheck-on` (alternative syntax: `spellcheck: on`)
 
-Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *InDoc* `spellcheck-off` command and `.spellignore` patterns.
+Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *In-Document* `spellcheck-off` command and `.spellignore` patterns.
 
 ## Ignore file
 

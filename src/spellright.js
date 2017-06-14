@@ -710,7 +710,7 @@ var SpellRight = (function () {
             _signature = _signature + command + parameters;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('InDoc Command: ' + command + ' [' + parameters + ']');
+                console.log('In-Document Command: ' + command + ' [' + parameters + ']');
             }
             if (command === 'off') {
                 settings._commands.ignore = true;

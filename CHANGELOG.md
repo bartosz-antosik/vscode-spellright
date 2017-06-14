@@ -12,7 +12,7 @@
 
 ## **1.0.20** released on 1st June 2017
 
-- **New:** InDoc command to switch between languages in one document (see `spellcheck-language` in README.md).
+- **New:** In-Document command to switch between languages in one document (see `spellcheck-language` in README.md).
 
 ## **1.0.19** released on 30th May 2017
 
@@ -27,8 +27,8 @@
 
 ## **1.0.17** released on 20th May 2017
 
-- **New:** InDoc commands to allow disabling/enabling spelling for the document independent of the global settings ([#14](https://github.com/bartosz-antosik/vscode-spellright/issues/14)).
-- **New:** Status Bar indicator shows spelling state respecting the InDoc commands and `.spellignore` file actions (Language name when spelling enabled, OFF in white when disabled for document class; OFF in red when disabled by InDoc commands or `.spellignore` file pattern).
+- **New:** In-Document commands to allow disabling/enabling spelling for the document independent of the global settings ([#14](https://github.com/bartosz-antosik/vscode-spellright/issues/14)).
+- **New:** Status Bar indicator shows spelling state respecting the In-Document commands and `.spellignore` file actions (Language name when spelling enabled, OFF in white when disabled for document class; OFF in red when disabled by In-Document commands or `.spellignore` file pattern).
 - **New:** Workspace settings `spellright.json` file is watched for changes (e.g. manually editing list of ignored words) and is reloaded in case it has been altered on the disk.
 - **New:** Ignore file `.spellignore` located in workspace root directory allows to disable spelling for files indicated by [gitignore](https://git-scm.com/docs/gitignore) syntax patterns ([#16](https://github.com/bartosz-antosik/vscode-spellright/issues/16)). Also watched for changes.
 - **Change:** Word separation rules updated (digit at the beginning/end, hash, dollar sign).
