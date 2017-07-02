@@ -141,7 +141,7 @@ Regular expressions ignored in spelling. Allows to ignore/consider as spelled co
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
 
-## In-Document Commands
+## In Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
