@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.0.23** released on 2nd July 2017
+
+- **Change:** Word separation rules updated (pipe character).
+- **Fix:** Extension improperly initialized spelling language in certain circumstances ([#23](https://github.com/bartosz-antosik/vscode-spellright/issues/23)).
+
 ## **1.0.22** released on 9th June 2017
 
 - **Change:** Skipping Code Blocks from spelling in reStructuredText documents ([#20](https://github.com/bartosz-antosik/vscode-spellright/issues/20)).

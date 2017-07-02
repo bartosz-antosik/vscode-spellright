@@ -13,6 +13,7 @@ var jsonMinify = require('jsonminify');
 var XRegExp = require('xregexp');
 var ignore = require('ignore');
 var spellchecker = require('spellchecker');
+var osLocale = require('os-locale');
 
 var langcode = require('../lib/langcode')
 var doctype = require('../lib/doctype');
@@ -66,6 +67,24 @@ var SpellRight = (function () {
         this.hunspell = (_dictionaries.length === 0 || (typeof process.env.SPELLCHECKER_PREFER_HUNSPELL !== 'undefined'));
 
         this.collectDictionaries();
+
+        // After default settings & reading settings the language is unset.
+        // Lets try to initialize it from locales
+        if (settings.language === '') {
+            var _locale = osLocale.sync();
+            if (settings.groupDictionaries) {
+                _locale = langcode.code2Language(_locale);
+            } else {
+                _locale = langcode.code2LanguageCulture(_locale);
+            }
+            dictionaries.forEach(function (entry) {
+                if (entry.label == _locale) {
+                    settings.language = entry.id;
+                    return;
+                }
+            });
+
+        }
 
         indicator = new SpellRightIndicator();
         controller = new SpellRightIndicatorController(indicator);
@@ -687,7 +706,7 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
             return;
         }
 
@@ -732,7 +751,7 @@ var SpellRight = (function () {
         });
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (vscode.workspace.rootPath && spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
             settings._commands.ignore = true;
         }
 
@@ -876,7 +895,7 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
             return;
         }
 
@@ -915,7 +934,7 @@ var SpellRight = (function () {
         });
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (vscode.workspace.rootPath && spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
             settings._commands.ignore = true;
         }
 
@@ -1255,7 +1274,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getSettings = function () {
         var returnSettings = {
-            language: 'en',
+            language: '',
             documentTypes: ['markdown', 'latex', 'plaintext'],
             groupDictionaries: true,
             statusBarIndicator: true,
@@ -1408,6 +1427,7 @@ var SpellRightIndicator = (function () {
         } else {
             if (settings.language == '') {
                 message = '[none]';
+                tooltip = tooltip + 'No Language Selected';
             } else if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
                 message = '[multi]';
                 tooltip = tooltip + 'Multiple Languages';
