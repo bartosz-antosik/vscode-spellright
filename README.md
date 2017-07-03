@@ -42,6 +42,7 @@ It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*
 ## Installation
 
 Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (**F1**/**Ctrl+Shift+P**):
+
 ```
 ext install spellright
 ```
@@ -92,7 +93,6 @@ And when at least one language spelled is missing dictionary:
 
 ![switch](media/screenshot-switch-multiple-missing.png)
 
-
 ## Commands
 
 This extension contributes the following commands:
@@ -124,6 +124,10 @@ Enable/disable language & status indicator switch in status bar.
 `spellright.suggestionsInHints: true`
 
 Enable/disable including suggested corrections in hints. Disabling suggestions significantly speeds checking up. May be useful in case of large, often switched or saved documents.
+
+`spellright.groupDictionaries: true`
+
+Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-UK, en-CA) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only with Windows Spelling API.
 
 `spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
 

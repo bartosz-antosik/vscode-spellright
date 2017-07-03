@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.24** released on 3rd July 2017
+
+- **Change:** Dictionary grouping flag (`spellright.groupDictionaries`) exposed in settings.
+
 ## **1.0.23** released on 2nd July 2017
 
 - **Change:** Word separation rules updated (pipe character).

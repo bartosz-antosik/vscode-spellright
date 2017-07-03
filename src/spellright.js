@@ -68,23 +68,7 @@ var SpellRight = (function () {
 
         this.collectDictionaries();
 
-        // After default settings & reading settings the language is unset.
-        // Lets try to initialize it from locales
-        if (settings.language === '') {
-            var _locale = osLocale.sync();
-            if (settings.groupDictionaries) {
-                _locale = langcode.code2Language(_locale);
-            } else {
-                _locale = langcode.code2LanguageCulture(_locale);
-            }
-            dictionaries.forEach(function (entry) {
-                if (entry.label == _locale) {
-                    settings.language = entry.id;
-                    return;
-                }
-            });
-
-        }
+        this.selectDefaultLanguage();
 
         indicator = new SpellRightIndicator();
         controller = new SpellRightIndicatorController(indicator);
@@ -111,8 +95,24 @@ var SpellRight = (function () {
 
         fs.watchFile(SpellRight.CONFIGFILE, function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                settings = _this.getSettings();
-                _this.prepareIgnoreRegExps();
+
+                var _settings = _this.getSettings();
+
+                if (settings.ignoreRegExps != _settings.ignoreRegExps) {
+                    settings.ignoreRegExps != _settings.ignoreRegExps;
+
+                    _this.prepareIgnoreRegExps();
+                }
+
+                if (settings.groupDictionaries != _settings.groupDictionaries) {
+                    settings.groupDictionaries = _settings.groupDictionaries;
+
+                    _this.collectDictionaries();
+                    _this.selectDefaultLanguage();
+                }
+
+                settings = _settings;
+
                 indicator.updateStatusBarIndicator();
             }
         });
@@ -283,6 +283,27 @@ var SpellRight = (function () {
         }
     }
 
+    SpellRight.prototype.selectDefaultLanguage = function () {
+
+        // After default settings & reading settings the language is not set.
+        // If it is OFF ('') then lets try to initialize it from system locales
+        if (settings.language === '') {
+            var _locale = osLocale.sync();
+            if (settings.groupDictionaries) {
+                _locale = langcode.code2Language(_locale);
+            } else {
+                _locale = langcode.code2LanguageCulture(_locale);
+            }
+            dictionaries.forEach(function (entry) {
+                if (entry.label == _locale) {
+                    settings.language = entry.id;
+                    return;
+                }
+            });
+        }
+    }
+
+
     SpellRight.prototype.selectDictionary = function() {
 
         var items = [];
@@ -290,8 +311,10 @@ var SpellRight = (function () {
         var _document = vscode.window.activeTextEditor._documentData;
         var _documenttype = _document._languageId;
 
+        var _this = this;
+
         dictionaries.forEach(function (entry) {
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
+            if (SPELLRIGHT_DEBUG_OUTPUT || (settings.groupDictionaries === false && _this.hunspell === false)) {
                 items.push({
                     label: '$(globe) ' + entry.label,
                     description: '[' + entry.description + ']'
@@ -311,7 +334,7 @@ var SpellRight = (function () {
         var options = {
             placeHolder: 'Select dictionary (language) or turn spelling OFF'
         };
-        var _this = this;
+
         vscode.window.showQuickPick(items, options).then(function (selection) {
             if (typeof selection === 'undefined') {
                 return;

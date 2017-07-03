@@ -39,6 +39,11 @@
                     ],
                     "description": "Document types for which spelling will be turned ON by default."
                 },
+                "spellright.groupDictionaries": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/disable grouping of dictionaries by language."
+                },
                 "spellright.statusBarIndicator": {
                     "type": "boolean",
                     "default": true,
