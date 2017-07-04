@@ -289,17 +289,21 @@ var SpellRight = (function () {
         // If it is OFF ('') then lets try to initialize it from system locales
         if (settings.language === '') {
             var _locale = osLocale.sync();
+            var _locale_c = '';
             if (settings.groupDictionaries) {
-                _locale = langcode.code2Language(_locale);
+                _locale_c = langcode.code2Language(_locale);
             } else {
-                _locale = langcode.code2LanguageCulture(_locale);
+                _locale_c = langcode.code2LanguageCulture(_locale);
             }
             dictionaries.forEach(function (entry) {
-                if (entry.label == _locale) {
+                if (entry.label == _locale_c) {
                     settings.language = entry.id;
                     return;
                 }
             });
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('System locale: \"' + _locale + ', set locale: ' + settings.language + '\".');
+            }
         }
     }
 
@@ -1232,9 +1236,6 @@ var SpellRight = (function () {
         else if (process.platform == 'linux')
             return path.join(process.env.HOME, '.config', codeFolder, 'Dictionaries');
         else
-            return '';
-
-        if (!path.existsSync(this.getDictionariesPath()))
             return '';
     };
 

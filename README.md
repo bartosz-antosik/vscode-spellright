@@ -43,7 +43,7 @@ It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*
 
 Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (**F1**/**Ctrl+Shift+P**):
 
-```
+```PowerShell
 ext install spellright
 ```
 
@@ -51,7 +51,7 @@ ext install spellright
 
 Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, usually located at:
 
-```
+```PowerShell
 c:\Users\%USERNAME%\AppData\Roaming\Code\
 ```
 
@@ -113,9 +113,9 @@ Turn spelling OFF for currently open document type.
 
 This extension contributes the following settings (with default values):
 
-`spellright.language: en`
+`spellright.language: ""`
 
-Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.)
+Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE (e.g.: "en", "fr", when `groupDictionaries` is `true`) or LANGUAGE-COUNTRY format (e.g.: "en-US", "en-GB", "fr-CA", "pl-PL", when  `groupDictionaries` is `false`). When *Hunspell* spelling engine is used (e.g. in Windows 7) this setting should be the name of the dictionary file without extension. In case `language` parameter is not set then language from OS locales is used.
 
 `spellright.statusBarIndicator: true`
 
@@ -127,7 +127,7 @@ Enable/disable including suggested corrections in hints. Disabling suggestions s
 
 `spellright.groupDictionaries: true`
 
-Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-UK, en-CA) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only with Windows Spelling API.
+Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-UK, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only with Windows Spelling API.
 
 `spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
 
@@ -139,7 +139,7 @@ Words ignored in spelling. Usually contains words which are considered misspelle
 
 `spellright.ignoreRegExps: []`
 
-Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works after separating word using language parsers in the same place where spelling engine is consulted and ignoreWords checked. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
+Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works **after** separating word using language parsers in the same place where spelling engine is consulted and ignoreWords checked. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
 
 `spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
 

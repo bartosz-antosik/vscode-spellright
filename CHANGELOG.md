@@ -1,7 +1,8 @@
 # Change Log
 
-## **1.0.24** released on 3rd July 2017
+## **1.0.24** released on 4th July 2017
 
+- **Change:** Inline code excluded from spelling in Markdown documents because of ([#24](https://github.com/bartosz-antosik/vscode-spellright/issues/24)) and as a consequence of ([#10](https://github.com/bartosz-antosik/vscode-spellright/issues/10)).
 - **Change:** Dictionary grouping flag (`spellright.groupDictionaries`) exposed in settings.
 
 ## **1.0.23** released on 2nd July 2017
