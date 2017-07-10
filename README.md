@@ -11,7 +11,7 @@ Spell Checker for Visual Studio Code.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
-* **In Document commands** allow to switch spelling ON and OFF despite global settings and switching spelling language.
+* **In Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
@@ -56,7 +56,7 @@ c:\Users\%USERNAME%\AppData\Roaming\Code\
 ```
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually. Dictionaries will be then listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
-
+    
 ## Usage
 
 ### Correcting Spelling Errors

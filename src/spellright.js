@@ -96,24 +96,7 @@ var SpellRight = (function () {
         fs.watchFile(SpellRight.CONFIGFILE, function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
 
-                var _settings = _this.getSettings();
-
-                if (settings.ignoreRegExps != _settings.ignoreRegExps) {
-                    settings.ignoreRegExps != _settings.ignoreRegExps;
-
-                    _this.prepareIgnoreRegExps();
-                }
-
-                if (settings.groupDictionaries != _settings.groupDictionaries) {
-                    settings.groupDictionaries = _settings.groupDictionaries;
-
-                    _this.collectDictionaries();
-                    _this.selectDefaultLanguage();
-                }
-
-                settings = _settings;
-
-                indicator.updateStatusBarIndicator();
+                _this.doRefreshConfiguration();
             }
         });
 
@@ -137,13 +120,10 @@ var SpellRight = (function () {
         vscode.workspace.onDidSaveTextDocument(this.doInitiateSpellCheck, this, subscriptions);
         vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
 
+        vscode.workspace.onDidChangeConfiguration(this.doRefreshConfiguration, this, subscriptions);
+
         vscode.window.onDidChangeVisibleTextEditors(function (editors) {
-            editors.forEach((editor, index, array) => {
-                var _document = editor._documentData._document;
-                if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                    _this.doInitiateSpellCheck(_document);
-                }
-            });
+            _this.SpellCheckAll();
         }, null);
 
         vscode.window.onDidChangeActiveTextEditor(function (editor) {
@@ -156,13 +136,7 @@ var SpellRight = (function () {
         // register code actions provider for all languages
         vscode.languages.registerCodeActionsProvider('*', this);
 
-        // Spell check all open documents
-        vscode.window.visibleTextEditors.forEach((editor, index, array) => {
-            var _document = editor._documentData._document;
-            if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                _this.doInitiateSpellCheck(_document);
-            }
-        });
+        this.SpellCheckAll();
     };
 
     SpellRight.prototype.deactivate = function () {
@@ -411,6 +385,16 @@ var SpellRight = (function () {
         return result;
     }
 
+    SpellRight.prototype.SpellCheckAll = function () {
+
+        var _this = this;
+        vscode.window.visibleTextEditors.forEach((editor, index, array) => {
+            var _document = editor._documentData._document;
+            if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
+                _this.doInitiateSpellCheck(_document);
+            }
+        });
+    }
 
     SpellRight.prototype.splitCamelCase = function (word) {
 
@@ -711,6 +695,30 @@ var SpellRight = (function () {
                 }
             }
         }
+    }
+
+    SpellRight.prototype.doRefreshConfiguration = function (event) {
+
+        var _settings = this.getSettings();
+
+        if (settings.ignoreRegExps != _settings.ignoreRegExps) {
+            settings.ignoreRegExps != _settings.ignoreRegExps;
+
+            this.prepareIgnoreRegExps();
+        }
+
+        if (settings.groupDictionaries != _settings.groupDictionaries) {
+            settings.groupDictionaries = _settings.groupDictionaries;
+
+            this.collectDictionaries();
+            this.selectDefaultLanguage();
+        }
+
+        settings = _settings;
+
+        indicator.updateStatusBarIndicator();
+
+        this.SpellCheckAll();
     }
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {

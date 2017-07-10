@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.25** released on 9th July 2017
+
+- **New:** User settings are now watched for changes and reloaded after change (no restart required).
+
 ## **1.0.24** released on 4th July 2017
 
 - **Change:** Inline code excluded from spelling in Markdown documents because of ([#24](https://github.com/bartosz-antosik/vscode-spellright/issues/24)) and as a consequence of ([#10](https://github.com/bartosz-antosik/vscode-spellright/issues/10)).
