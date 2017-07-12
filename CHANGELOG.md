@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.26** released on 12th July 2017
+
+- **Change:** URLs in Markdown link excluded from spelling ([#27](https://github.com/bartosz-antosik/vscode-spellright/issues/27)).
+
 ## **1.0.25** released on 9th July 2017
 
 - **New:** User settings are now watched for changes and reloaded after change (no restart required).
