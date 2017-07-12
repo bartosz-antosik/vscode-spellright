@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.0.26** released on 12th July 2017
+## **1.0.27** released on 12th July 2017
 
 - **Change:** URLs in Markdown link excluded from spelling ([#27](https://github.com/bartosz-antosik/vscode-spellright/issues/27)).
 
