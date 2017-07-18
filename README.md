@@ -56,7 +56,7 @@ c:\Users\%USERNAME%\AppData\Roaming\Code\
 ```
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually. Dictionaries will be then listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
-    
+
 ## Usage
 
 ### Correcting Spelling Errors
@@ -153,15 +153,13 @@ Beside global settings following commands can be embedded inside spelled parts o
 
 Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#8208;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
-Forces turning spelling **OFF** for the entire document despite global settings.
-
 `spellcheck-off` (alternative syntax: `spellcheck: off`)
 
-Forces turning spelling **OFF** for the entire document despite global settings.
+Forces spelling **OFF** for the entire document despite global settings.
 
 `spellcheck-on` (alternative syntax: `spellcheck: on`)
 
-Forces turning spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *In-Document* `spellcheck-off` command and `.spellignore` patterns.
+Forces spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *In-Document* `spellcheck-off` command and `.spellignore` patterns.
 
 ## Ignore file
 
