@@ -14,7 +14,7 @@ var vscode = require('vscode');
 function activate(context) {
 
     if (SPELLRIGHT_DEBUG_OUTPUT) {
-        console.log('SpellRight activated.');
+        console.log('SpellRight activated (' + process.platform + ', ' + process.arch + ').');
 
         var config = vscode.workspace.getConfiguration('');
         console.log(config);

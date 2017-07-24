@@ -12,8 +12,9 @@ var mkdirp = require('mkdirp');
 var jsonMinify = require('jsonminify');
 var XRegExp = require('xregexp');
 var ignore = require('ignore');
-var spellchecker = require('spellchecker');
 var osLocale = require('os-locale');
+
+var spellchecker = require('../lib/spellchecker');
 
 var langcode = require('../lib/langcode')
 var doctype = require('../lib/doctype');
@@ -1268,7 +1269,7 @@ var SpellRight = (function () {
             if (fs.existsSync(userSettingsFilename)) {
                 var userSettingsFile = fs.readFileSync(userSettingsFilename, 'utf-8');
                 // parse and remove any comment lines in the settings file
-                return JSON.parse(jsonMinify(userSettingsFile));
+                return JSON.parse(userSettingsFile);
             }
         }
         return null;

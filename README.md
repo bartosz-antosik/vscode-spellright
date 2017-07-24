@@ -89,7 +89,7 @@ When there is multiple languages selected by In-Document command <code>spellchec
 
 ![switch](media/screenshot-switch-multiple.png)
 
-And when at least one language spelled is missing dictionary:
+And when at least one languages spelled is missing dictionary:
 
 ![switch](media/screenshot-switch-multiple-missing.png)
 

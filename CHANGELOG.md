@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.28** released on 24th July 2017
+
+- **Change:** Added binary dependencies for both ia32 and x64 architectures on Windows. Should work in both 32 and 64-bit builds of Visual Studio Code on 64-bit Windows ([#29](https://github.com/bartosz-antosik/vscode-spellright/issues/29)).
+
 ## **1.0.27** released on 12th July 2017
 
 - **Change:** URLs in Markdown link excluded from spelling ([#27](https://github.com/bartosz-antosik/vscode-spellright/issues/27)).
