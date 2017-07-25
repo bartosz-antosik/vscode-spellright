@@ -14,7 +14,7 @@ var XRegExp = require('xregexp');
 var ignore = require('ignore');
 var osLocale = require('os-locale');
 
-var spellchecker = require('../lib/spellchecker');
+var spellchecker = require('../lib/bindings');
 
 var langcode = require('../lib/langcode')
 var doctype = require('../lib/doctype');
@@ -1269,7 +1269,10 @@ var SpellRight = (function () {
             if (fs.existsSync(userSettingsFilename)) {
                 var userSettingsFile = fs.readFileSync(userSettingsFilename, 'utf-8');
                 // parse and remove any comment lines in the settings file
-                return JSON.parse(userSettingsFile);
+                try {
+                    return JSON.parse(jsonMinify(userSettingsFile));
+                } catch(e) {
+                }
             }
         }
         return null;

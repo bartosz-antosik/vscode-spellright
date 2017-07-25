@@ -8,6 +8,8 @@
 global.SPELLRIGHT_DEBUG_OUTPUT = false;
 global.SPELLRIGHT_LINES_BATCH = 10;
 
+console.log('SpellRight activated (' + process.platform + ', ' + process.arch + ').');
+
 var spellright = require('./spellright');
 var vscode = require('vscode');
 

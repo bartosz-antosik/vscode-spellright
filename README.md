@@ -5,7 +5,7 @@ Spell Checker for Visual Studio Code.
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
-* Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. all languages available in Microsoft Office etc.)
+* Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, **multiple languages** in Windows Single Language editions etc.)
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
