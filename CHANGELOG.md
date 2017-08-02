@@ -5,7 +5,7 @@
 - **New:** Added spelling for 'AsciiDoc' document type ([#30](https://github.com/bartosz-antosik/vscode-spellright/issues/30)).
 - **Change:** Custom words are no longer stored in user/workspace configuration files but in dedicated `spellright.dict` files located in User and/or Workspace directories. It is meant to be easier to edit, compare, synchronize etc. custom lists of words considered as spelled correctly.
 - **Change:** New settings flag `addToSystemDictionary` allows to store words added to user dictionary in appropriate system default custom spelling dictionary [#28](https://github.com/bartosz-antosik/vscode-spellright/issues/28).
-- **Fix:** With multiple languages in document suggestions always in default language ([#33](https://github.com/bartosz-antosik/vscode-spellright/issues/33)).
+- **Fix:** Multiple languages in document code action (bulb) suggestions always in default language ([#33](https://github.com/bartosz-antosik/vscode-spellright/issues/33)).
 
 ## **1.0.32** released on 25th July 2017
 

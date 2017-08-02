@@ -175,6 +175,10 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 `.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
+## User Dictionaries 
+
+SpellRight stores words considered as spelled correctly and not existing in the spelling engine in two dictionaries. These are user and workspace dictionaries, contained in `spellright.dict` file. User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
+
 ## Known Issues
 
 * VSCode is missing event that would tell extension about cursor jumps in the document. Recently entered word which has not been ended with a white space or punctuation character will be spelled not on cursor jump but on a subsequent edit somewhere else in the document (this is probably more of a VSCode's issue).

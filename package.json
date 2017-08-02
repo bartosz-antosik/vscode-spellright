@@ -57,7 +57,7 @@
                 "spellright.addToSystemDictionary": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Add words to system custom spelling dictionary instead of user dictionary."
+                    "description": "Enable/disable adding words to system custom spelling dictionary instead of user dictionary."
                 },
                 "spellright.ignoreRegExps": {
                     "type": "array",
