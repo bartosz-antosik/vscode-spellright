@@ -1,5 +1,7 @@
 # Spell Right
 
+[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
+
 Spell Checker for Visual Studio Code.
 
 ## Features
@@ -17,7 +19,7 @@ Spell Checker for Visual Studio Code.
 
 ## Note on Usability
 
-This extension is currently limited to **64-bit Windows platform**, with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+This extension is currently limited to **Windows platform** (both 32 and 63-bit Visual Studio Code), with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshots
 
@@ -109,6 +111,14 @@ Pops dictionary selection list. Selecting language also turns spelling ON. The l
 
 Turn spelling OFF for currently open document type.
 
+`SpellRight: Open User Dictionary File`
+
+Open in editor `spellright.dict` file from user settings folder.
+
+`SpellRight: Open Workspace Dictionary File`
+
+Open in editor `spellright.dict` file from workspace settings folder.
+
 ## Settings
 
 This extension contributes the following settings (with default values):
@@ -125,6 +135,10 @@ Enable/disable language & status indicator switch in status bar.
 
 Enable/disable including suggested corrections in hints. Disabling suggestions significantly speeds checking up. May be useful in case of large, often switched or saved documents.
 
+`spellright.addToSystemDictionary: false`
+
+When `true` words added to user dictionary are stored in system default custom spelling dictionary instead.
+
 `spellright.groupDictionaries: true`
 
 Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-UK, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only with Windows Spelling API.
@@ -132,10 +146,6 @@ Enable/disable grouping of dictionaries by language. Disabling grouping results 
 `spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
 
 Document types for which spelling will be turned ON by default.
-
-`spellright.ignoreWords: []`
-
-Words ignored in spelling. Usually contains words which are considered misspelled by the main spelling engine but should be ignored/consider as spelled correctly by the extension. Words on the list are compared case insensitive.
 
 `spellright.ignoreRegExps: []`
 

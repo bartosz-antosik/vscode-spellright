@@ -1,5 +1,12 @@
 # Change Log
 
+## **1.0.36** released on 2nd August 2017
+
+- **New:** Added spelling for 'AsciiDoc' document type ([#30](https://github.com/bartosz-antosik/vscode-spellright/issues/30)).
+- **Change:** Custom words are no longer stored in user/workspace configuration files but in dedicated `spellright.dict` files located in User and/or Workspace directories. It is meant to be easier to edit, compare, synchronize etc. custom lists of words considered as spelled correctly.
+- **Change:** New settings flag `addToSystemDictionary` allows to store words added to user dictionary in appropriate system default custom spelling dictionary [#28](https://github.com/bartosz-antosik/vscode-spellright/issues/28).
+- **Fix:** With multiple languages in document suggestions always in default language ([#33](https://github.com/bartosz-antosik/vscode-spellright/issues/33)).
+
 ## **1.0.32** released on 25th July 2017
 
 - **Change:** Added binary dependencies for both ia32 and x64 architectures on Windows. Should work in both 32 and 64-bit builds of Visual Studio Code on 64-bit Windows ([#29](https://github.com/bartosz-antosik/vscode-spellright/issues/29)). Many thanks to [@Moberstein](https://github.com/Moberstein), [@borekb](https://github.com/borekb), [@Eldaw](https://github.com/Eldaw) for nailing problem around it.
@@ -70,7 +77,7 @@
 
 ## **1.0.12** released on 29th April 2017
 
-- **New:** Global/workspace ignore list & regular expressions matched also on compound phrase, before separation of camel/snake case parts.
+- **New:** Global/workspace dictionaries & regular expressions matched also on compound phrase, before separation of camel/snake case parts.
 - **Change:** Significantly faster spelling of entire document (on save and document switch) especially for large documents.
 - **Fix:** Word separation rules updated (period, curly braces, apostrophe).
 - **Fix:** Small documentation improvements.
@@ -89,7 +96,7 @@
 
 ## **1.0.8** released on 19th April 2017
 
-- **Fix:** Spell check improperly interprets punctuation with ignore lists  ([#7](https://github.com/bartosz-antosik/vscode-spellright/issues/7)).
+- **Fix:** Spell check improperly interprets punctuation with custom dictionary words ([#7](https://github.com/bartosz-antosik/vscode-spellright/issues/7)).
 - **Fix:** Global/workspace dictionary incorrectly saving & naming ([#8](https://github.com/bartosz-antosik/vscode-spellright/issues/8)).
 
 ## **1.0.7** released on 18th April 2017

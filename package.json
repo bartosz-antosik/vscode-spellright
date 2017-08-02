@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Spell Checker for VSCode",
-    "version": "1.0.32",
+    "version": "1.0.36",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -54,20 +54,20 @@
                     "default": true,
                     "description": "Enable/disable including suggested corrections in hints."
                 },
-                "spellright.ignoreWords": {
-                    "type": "array",
-                    "default": [],
-                    "description": "Words ignored in spelling."
+                "spellright.addToSystemDictionary": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Add words to system custom spelling dictionary instead of user dictionary."
                 },
                 "spellright.ignoreRegExps": {
                     "type": "array",
                     "default": [],
-                    "description": "Regular expressions ignored in spelling."
+                    "description": "Regular expressions considered correct (ignored) in spelling."
                 },
                 "spellright.ignoreFiles": {
                     "type": "array",
                     "default": [],
-                    "description": "Files silently ignored during spelling."
+                    "description": "List of file patterns ignored during spelling."
                 }
             }
         },
@@ -83,6 +83,14 @@
             {
                 "command": "spellright.setCurrentTypeOFF",
                 "title": "SpellRight: Turn OFF for Current Document Type"
+            },
+            {
+                "command": "spellright.openWorkspaceDictionary",
+                "title": "SpellRight: Open Workspace Dictionary File"
+            },
+            {
+                "command": "spellright.openUserDictionary",
+                "title": "SpellRight: Open User Dictionary File"
             }
         ],
         "keybindings": []
@@ -109,7 +117,8 @@
         "ignore": "^3.3.3",
         "os-locale": "^2.0.0",
         "any-promise": "^1.3.0",
-        "nan": "^2.0.0"
+        "nan": "^2.0.0",
+        "glob": "^7.1.1"
     },
     "icon": "icon.png",
     "license": "SEE LICENSE IN LICENSE.md",
