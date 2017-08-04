@@ -244,6 +244,9 @@ var SpellRight = (function () {
             _dictionaries = bindings.getAvailableDictionaries();
         }
 
+        if (SPELLRIGHT_DEBUG_OUTPUT)
+            console.log(_dictionaries);
+
         dictionaries = [];
 
         var _this = this;
