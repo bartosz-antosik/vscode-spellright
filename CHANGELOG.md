@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.0.40** released on 4th August 2017
+
+- **New:** Added spelling parser settings for 'Pascal' (comments & strings) document type.
+- **Change:** README.md polished a bit (wrong Unicode characters prevented **In Document** commands from being ready to cut & paste to use).
+
 ## **1.0.36** released on 2nd August 2017
 
 - **New:** Added spelling for 'AsciiDoc' document type ([#30](https://github.com/bartosz-antosik/vscode-spellright/issues/30)).

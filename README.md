@@ -19,7 +19,7 @@ Spell Checker for Visual Studio Code.
 
 ## Note on Usability
 
-This extension is currently limited to **Windows platform** (both 32 and 63-bit Visual Studio Code), with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+This extension is currently limited to **Windows platform** (both 32 and 64-bit Visual Studio Code), with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
 
 ## Screenshots
 
@@ -87,7 +87,7 @@ Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule
 
 ### Multiple languages in one document
 
-When there is multiple languages selected by In-Document command <code>spellcheck&#8208;language</code> placed within document:
+When there is multiple languages selected by In-Document command <code>spellcheck&#x2d;language</code> placed within document:
 
 ![switch](media/screenshot-switch-multiple.png)
 
@@ -159,9 +159,9 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
-<code>spellcheck&#8208;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code>)
+<code>spellcheck&#x2d;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code>)
 
-Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#8208;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
+Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
 `spellcheck-off` (alternative syntax: `spellcheck: off`)
 
@@ -175,7 +175,7 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 `.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
-## User Dictionaries 
+## User Dictionaries
 
 SpellRight stores words considered as spelled correctly and not existing in the spelling engine in two dictionaries. These are user and workspace dictionaries, contained in `spellright.dict` file. User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
 
