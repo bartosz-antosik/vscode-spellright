@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.0.42** released on 7th August 2017
+
+- **Fix:** LaTeX parser now excludes more types of math braces, that is: `\(` ... `\)` and `\[` ... `\]`   ([#34](https://github.com/bartosz-antosik/vscode-spellright/issues/34)).
+
 ## **1.0.40** released on 4th August 2017
 
 - **New:** Added spelling parser settings for 'Pascal' (comments & strings) document type.
