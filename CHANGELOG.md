@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.8** released on 14th August 2017
+
+- **Change:** Removed spelling for compiler directives in 'Pascal' document type.
+
 ## **1.1.4** released on 11th August 2017
 
 - **New:** Support for **macOS** and **Linux**.

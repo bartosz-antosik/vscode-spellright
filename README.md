@@ -23,7 +23,7 @@ It should not change anything in **Windows** users' experience but for two other
 
 ### **Windows 8+**
 
-On Microsoft Windows from version 8 on Spell Right uses system spelling API. To install new dictionary follow instructions on how to add new spelling language to system (Please note that **Windows Single Language editions** CAN install multiple spelling languages).
+On Microsoft Windows from version 8 on Spell Right uses system spelling API. To install new dictionary follow instructions on how to add new spelling language to system.
 
 ### **macOS**
 
