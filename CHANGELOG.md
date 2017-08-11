@@ -1,9 +1,9 @@
 # Change Log
 
-## **1.1.4** released on 11th August 2017
+## **1.1.6** released on 11th August 2017
 
 - **New:** Support for **macOS** and **Linux**.
-- **Fix:** Turning off SpellRight leaves it stuck in enabled mode in other Editors ([#37](https://github.com/bartosz-antosik/vscode-spellright/issues/37)).
+- **Fix:** Turning off SpellRight leaves it stuck in enabled mode in other Editors ([#37](https://github.com/bartosz-antosik/vscode-spellright/issues/37)) and quick fix to quick fix ([#38](https://github.com/bartosz-antosik/vscode-spellright/issues/38)).
 
 ## **1.0.42** released on 6th August 2017
 
