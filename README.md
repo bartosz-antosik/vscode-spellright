@@ -1,8 +1,10 @@
-# Spell Right
+# Multilingual Spell Checker for Visual Studio Code
 
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
 
-Spell Checker for Visual Studio Code.
+## **NOTICE:** Version 1.1 starts support for **macOS** and **Linux**
+
+It should not change anything in **Windows** users' experience but for two other platforms please consider the support **BETA** and report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page. See below on how to install **dictionaries** on each platform.
 
 ## Features
 
@@ -17,9 +19,30 @@ Spell Checker for Visual Studio Code.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
-## Note on Usability
+## Dictionaries
 
-This extension is currently limited to **Windows platform** (both 32 and 64-bit Visual Studio Code), with the same Node.js version as the main distribution (VSCode Insiders Edition may not work). It is due to problems with distribution of native modules in current VSCode's distribution model. It could work on all platforms (including **macOS** and **Linux**) but VSCode team should include one module, used by this extension, in distribution builds. For details see (and up-vote maybe) discussion about VSCode's feature request [#20266](https://github.com/Microsoft/vscode/issues/20266).
+### **Windows 8+**
+
+On Microsoft Windows from version 8 on Spell Right uses system spelling API. To install new dictionary follow instructions on how to add new spelling language to system (Please note that **Windows Single Language editions** CAN install multiple spelling languages).
+
+### **macOS**
+
+On macOS Spell Right uses system spelling API. Follow system guidelines on how to install additional system dictionaries.
+
+### **Linux and Windows 7**
+
+On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
+
+* **Windows:** `%APPDATA%\Code\Dictionaries\`
+* **Linux:** `$HOME/.config/Code/Dictionaries/`
+
+`Dictionaries` subfolder does not exists there by default and has to be created manually.
+
+Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+
+### **User Dictionaries**
+
+Spell Right stores words considered as spelled correctly and not existing in the spelling engine (a.k.a. ignored words) in two dictionaries. These are user and workspace dictionaries, contained in `spellright.dict` file. User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
 
 ## Screenshots
 
@@ -48,16 +71,6 @@ Search for *Spell Right* from the extension installer within VSCode or execute b
 ```PowerShell
 ext install spellright
 ```
-
-### Note on Windows 7 Installation
-
-Windows 7 does not have Spell Checking API so in this case extension uses then built in *Hunspell* spell checker. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, usually located at:
-
-```PowerShell
-c:\Users\%USERNAME%\AppData\Roaming\Code\
-```
-
-`Dictionaries` subfolder does not exists there by default and has to be created manually. Dictionaries will be then listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
 ## Usage
 
@@ -174,10 +187,6 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 ## Ignore file
 
 `.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
-
-## User Dictionaries
-
-SpellRight stores words considered as spelled correctly and not existing in the spelling engine in two dictionaries. These are user and workspace dictionaries, contained in `spellright.dict` file. User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
 
 ## Known Issues
 

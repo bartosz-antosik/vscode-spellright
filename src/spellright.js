@@ -170,6 +170,9 @@ var SpellRight = (function () {
             var _document = editor._documentData._document;
             if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
                 _this.doInitiateSpellCheck(_document);
+            } else {
+                _this.diagnosticCollection.delete(_document.uri);
+                _this.diagnosticMap[_document.uri.toString()] = undefined;
             }
         }, null);
 
