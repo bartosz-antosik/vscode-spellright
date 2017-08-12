@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.1.8** released on 14th August 2017
+## **1.1.8** released on 12th August 2017
 
 - **Change:** Removed spelling for compiler directives in 'Pascal' document type.
 

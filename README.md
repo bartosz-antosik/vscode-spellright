@@ -2,10 +2,6 @@
 
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
 
-## **NOTICE:** Version 1.1 starts support for **macOS** and **Linux**
-
-It should not change anything in **Windows** users' experience but for two other platforms please consider the support **BETA** and report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page. See below on how to install **dictionaries** on each platform.
-
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
@@ -29,6 +25,8 @@ On Microsoft Windows from version 8 on Spell Right uses system spelling API. To 
 
 On macOS Spell Right uses system spelling API. Follow system guidelines on how to install additional system dictionaries.
 
+**NOTICE:** Support for macOS is considered **BETA**. Please report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
+
 ### **Linux and Windows 7**
 
 On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
@@ -39,6 +37,8 @@ On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker librar
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+
+**NOTICE:** Support for Linux is considered **BETA**. Please report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
 ### **User Dictionaries**
 
