@@ -1374,19 +1374,8 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getUserSettings = function () {
-        // Check user settings
-        var userSettingsFilename = this.getUserSettingsFilename('settings.json');
-        if (userSettingsFilename.length > 0) {
-            if (fs.existsSync(userSettingsFilename)) {
-                var userSettingsFile = fs.readFileSync(userSettingsFilename, 'utf-8');
-                // parse and remove any comment lines in the settings file
-                try {
-                    return JSON.parse(jsonMinify(userSettingsFile));
-                } catch(e) {
-                }
-            }
-        }
-        return null;
+        // Get user settings
+        return vscode.workspace.getConfiguration('spellright');
     };
 
     SpellRight.prototype.readDictionaryFile = function (fileName) {

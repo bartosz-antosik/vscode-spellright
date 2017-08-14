@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.10** released on 14th August 2017
+
+- **Fix:** Extensions fails to load when there's a trailing comma in settings.json ([#39](https://github.com/bartosz-antosik/vscode-spellright/issues/39)). Many thanks to [@DamianPereira](https://github.com/DamianPereira) for nailing the problem.
+
 ## **1.1.8** released on 12th August 2017
 
 - **Change:** Removed spelling for compiler directives in 'Pascal' document type.

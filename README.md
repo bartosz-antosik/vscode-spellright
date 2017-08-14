@@ -42,7 +42,7 @@ Dictionaries from the folder will be listed in the language selection list and u
 
 ### **User Dictionaries**
 
-Spell Right stores words considered as spelled correctly and not existing in the spelling engine (a.k.a. ignored words) in two dictionaries. These are user and workspace dictionaries, contained in `spellright.dict` file. User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
+Spell Right stores words considered as spelled correctly and not existing in the spelling engine (a.k.a. ignored words) in two dictionaries. These are user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
 
 ## Screenshots
 
