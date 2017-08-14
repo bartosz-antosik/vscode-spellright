@@ -131,13 +131,13 @@ var SpellRight = (function () {
 
         fs.watchFile(this.getUserDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                _this.doRefreshConfiguration();
+                settings._UserDictionary = _this.readDictionaryFile(_this.getUserDictionaryFilename());
             }
         });
 
         fs.watchFile(this.getWorkspaceDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                _this.doRefreshConfiguration();
+                settings._WorkspaceDictionary = _this.readDictionaryFile(_this.getWorkspaceDictionaryFilename());
             }
         });
 
@@ -1121,7 +1121,14 @@ var SpellRight = (function () {
 
     SpellRight.prototype.provideCodeActions = function (document, range, context, token) {
 
-        var diagnostic = context.diagnostics[0];
+        var diagnostic = undefined;
+
+        context.diagnostics.forEach(function (_diagnostics) {
+            if (_diagnostics.range._start._character >= range._start._character && _diagnostics.range._end._character <= range._end._character) {
+                diagnostic = _diagnostics;
+            }
+        });
+
         if (!diagnostic) return null;
 
         if (settings.documentTypes.indexOf(document.languageId) == (-1) || (settings._commands.ignore && !settings._commands.force) || settings.language == '') {
@@ -1138,6 +1145,10 @@ var SpellRight = (function () {
 
         // Punctuation cleaned version of the word
         var cword = word.replace(/[.,]/g, '');
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('Providing code action for \"' + word + '\".');
+        }
 
         var language = settings.language;
 
@@ -1162,9 +1173,10 @@ var SpellRight = (function () {
         // Get suggestions
         this.setDictionary(language);
 
-        var suggestions = bindings.getCorrectionsForMisspelling(word);
         var commands = [];
         if (word && word.length >= 2) {
+            var suggestions = bindings.getCorrectionsForMisspelling(word);
+
             // Add suggestions to command list
             suggestions.forEach(function (suggestion) {
                 commands.push({
@@ -1461,8 +1473,8 @@ var SpellRight = (function () {
         var userSettingsData = this.getUserSettings();
         if (userSettingsData) {
             Object.keys(returnSettings).forEach(function (key) {
-                if ('spellright.' + key in userSettingsData) {
-                    returnSettings[key] = userSettingsData['spellright.' + key];
+                if (key in userSettingsData) {
+                    returnSettings[key] = userSettingsData[key];
                 }
             });
         }
