@@ -728,19 +728,18 @@ var SpellRight = (function () {
 
     // Remove diagnostics in lines that were touched by change and in case
     // change brings any shift up/down - shift diagnostics.
-    SpellRight.prototype.adjustDiagnostics = function (diagnostics,
-        startline, endline, shift) {
+    SpellRight.prototype.adjustDiagnostics = function (diagnostics, range, shift) {
 
         for (var i = diagnostics.length - 1; i >= 0; i--) {
             var _drange = diagnostics[i].range;
-            if (_drange._start._line >= startline &&
-                _drange._end._line <= endline) {
+            if (_drange._start._line >= range._start._line &&
+                _drange._end._line <= range._end._line) {
                 // Remove diagnostics for changed lines range
                 diagnostics.splice(i, 1);
             } else {
                 // Adjust diagnostics behind changed lines range BEFORE
                 if (shift != 0) {
-                    if (_drange._end._line > endline) {
+                    if (_drange._end._line > range._end._line) {
                         _drange._start._line += shift;
                         _drange._end._line += shift;
                     }
@@ -894,9 +893,9 @@ var SpellRight = (function () {
 
         // Main incremental spell check loop: check change affected
         for (var i = 0, l = event.contentChanges.length; i < l; i++) {
-            var range = event.contentChanges[i].range;
 
-            this.adjustDiagnostics(diagnostics, range.start.line, range.end.line, shift);
+            var range = event.contentChanges[i].range;
+            this.adjustDiagnostics(diagnostics, range, shift);
 
             _syntax = parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
@@ -917,7 +916,8 @@ var SpellRight = (function () {
                             shift = 0;
                         }
 
-                        this.adjustDiagnostics(diagnostics, range.start.line + shift, range.end.line + shift, 0);
+                        var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
+                        this.adjustDiagnostics(diagnostics, _range, 0);
 
                         parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
@@ -1418,17 +1418,6 @@ var SpellRight = (function () {
         else if (key == '_commands') return undefined;
         else return value;
     }
-
-    SpellRight.prototype.saveUserSettings = function (settings) {
-        var userSettingsFilename = this.getUserSettingsFilename('settings.json');
-        if (userSettingsFilename.length > 0) {
-            var data = '//\n// Spell Right user configuration file.\n//\n' + JSON.stringify(settings, this.replacer, 4);
-            fs.writeFileSync(userSettingsFilename, data);
-            return true;
-        }
-        else
-            return false;
-    };
 
     SpellRight.prototype.saveWorkspaceSettings = function (settings) {
         if (SpellRight.CONFIGFILE.length > 0) {
