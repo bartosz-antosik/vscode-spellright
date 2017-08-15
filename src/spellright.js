@@ -887,7 +887,7 @@ var SpellRight = (function () {
         for (var i = 0, l = event.contentChanges.length; i < l; i++) {
             var range = event.contentChanges[i].range;
 
-            var _nlines = event.contentChanges[i].text.split('\n').length - 1;
+            var _nlines = event.contentChanges[i].text.split(os.EOL).length - 1;
             shift = _nlines - (range.end.line - range.start.line);
         }
 
