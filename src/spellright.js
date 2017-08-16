@@ -893,8 +893,8 @@ var SpellRight = (function () {
 
         // Main incremental spell check loop: check change affected
         for (var i = 0, l = event.contentChanges.length; i < l; i++) {
-
             var range = event.contentChanges[i].range;
+
             this.adjustDiagnostics(diagnostics, range, shift);
 
             _syntax = parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
