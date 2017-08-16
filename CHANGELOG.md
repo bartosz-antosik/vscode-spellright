@@ -1,5 +1,11 @@
 # Change Log
 
+## **1.1.12** released on 16th August 2017
+
+- **Fix:** Spell Right starts off enabled when configured not to ([#48](https://github.com/bartosz-antosik/vscode-spellright/issues/48)).
+- **Fix:** Right suggestion for wrong CamelCase word part displayed ([#44](https://github.com/bartosz-antosik/vscode-spellright/issues/44)).
+- **Fix:** Language selected for file is reset to none after adding word to user dictionary ([#42](https://github.com/bartosz-antosik/vscode-spellright/issues/42)).
+
 ## **1.1.10** released on 14th August 2017
 
 - **Fix:** Extensions fails to load when there's a trailing comma in settings.json ([#39](https://github.com/bartosz-antosik/vscode-spellright/issues/39)). Many thanks to [@DamianPereira](https://github.com/DamianPereira) for nailing the problem.
