@@ -908,6 +908,7 @@ var SpellRight = (function () {
 
                 for (var j = 0, k = event.contentChanges.length; j < k; j++) {
                     var erange = event.contentChanges[j].range;
+                    // Exclude actually modified line from trail
                     if (!(erange.start.line >= range.start.line &&
                         erange.end.line <= range.start.line)) {
 

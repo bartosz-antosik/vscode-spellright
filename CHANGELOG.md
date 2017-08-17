@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.1.14** released on 17th August 2017
+
+- **New:** Added spelling parser settings for 'HTTP' (comments) document type (used by REST Client Extension, [#41](https://github.com/bartosz-antosik/vscode-spellright/issues/41)).
+- **Change:** Documentation updated with dictionary reuse hint for Linux systems ([#45](https://github.com/bartosz-antosik/vscode-spellright/issues/45)). Thanks to [@slodki](https://github.com/slodki) for the hint.
+
 ## **1.1.12** released on 16th August 2017
 
 - **Fix:** Spell Right starts off enabled when configured not to ([#48](https://github.com/bartosz-antosik/vscode-spellright/issues/48)).

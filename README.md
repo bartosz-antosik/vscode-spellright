@@ -9,7 +9,7 @@
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
-* Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* -> *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* -> *HTML* *Test*).
+* Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
@@ -35,6 +35,12 @@ On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker librar
 * **Linux:** `$HOME/.config/Code/Dictionaries/`
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
+
+On most Linux distributions **system-wide dictionaries can be reused** by soft linking the system folder e.g.:
+
+```bash
+ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
+```
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
