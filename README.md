@@ -1,4 +1,4 @@
-# Multilingual Spell Checker for Visual Studio Code
+# Multilingual, offline Spell Checker for Visual Studio Code
 
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
 
@@ -11,7 +11,7 @@
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
-* **In Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
+* **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
@@ -29,20 +29,20 @@ On macOS Spell Right uses system spelling API. Follow system guidelines on how t
 
 ### **Linux and Windows 7**
 
-On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files have to be downloaded from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
+On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded e.g. from [here](https://github.com/titoBouzout/Dictionaries) (please remember to download RAW files) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
 
 * **Windows:** `%APPDATA%\Code\Dictionaries\`
 * **Linux:** `$HOME/.config/Code/Dictionaries/`
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
-On most Linux distributions **system-wide dictionaries can be reused** by soft linking the system folder e.g.:
+On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported) by soft linking the system folder e.g.:
 
 ```bash
 ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
 ```
 
-Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to false. It will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
 **NOTICE:** Support for Linux is considered **BETA**. Please report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
@@ -138,6 +138,14 @@ Open in editor `spellright.dict` file from user settings folder.
 
 Open in editor `spellright.dict` file from workspace settings folder.
 
+`SpellRight: Add Selection to Workspace Dictionary`
+
+Add text selected in editor to workspace dictionary.
+
+`SpellRight: Add Selection to User Dictionary`
+
+Add text selected in editor to user dictionary.
+
 ## Settings
 
 This extension contributes the following settings (with default values):
@@ -174,7 +182,11 @@ Regular expressions ignored in spelling. Allows to ignore/consider as spelled co
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
 
-## In Document Commands
+`spellright.notificationClass: "error"`
+
+Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
+
+## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 

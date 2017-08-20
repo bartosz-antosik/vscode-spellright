@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.1.16** released on 20th August 2017
+
+- **New:** New commands to add text selected in editor to User/Workspace dictionary ([#43](https://github.com/bartosz-antosik/vscode-spellright/issues/43)).
+- **New:** Configuration setting (`spellright.notificationClass`) to change class of diagnostic messages produced by Spell Right ([#49](https://github.com/bartosz-antosik/vscode-spellright/issues/49)).
+
 ## **1.1.14** released on 17th August 2017
 
 - **New:** Added spelling parser settings for 'HTTP' (comments) document type (used by REST Client Extension, [#41](https://github.com/bartosz-antosik/vscode-spellright/issues/41)).

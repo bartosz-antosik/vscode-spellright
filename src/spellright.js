@@ -110,8 +110,8 @@ var SpellRight = (function () {
         vscode.commands.registerCommand('spellright.createUpdateSettings', this.createUpdateSettings, this);
         vscode.commands.registerCommand('spellright.selectDictionary', this.selectDictionary, this);
         vscode.commands.registerCommand('spellright.setCurrentTypeOFF', this.setCurrentTypeOFF, this);
-        vscode.commands.registerCommand('spellright.addToWorkspaceDictionaryFromSelection', this.addToWorkspaceDictionaryFromSelection, this);
-        vscode.commands.registerCommand('spellright.addToUserFromDictionarySelection', this.addToUserFromDictionarySelection, this);
+        vscode.commands.registerCommand('spellright.addFromSelectionToWorkspaceDictionary', this.addFromSelectionToWorkspaceDictionary, this);
+        vscode.commands.registerCommand('spellright.addFromSelectionToUserDictionary', this.addFromSelectionToUserDictionary, this);
         vscode.commands.registerCommand('spellright.openWorkspaceDictionary', this.openWorkspaceDictionary, this);
         vscode.commands.registerCommand('spellright.openUserDictionary', this.openUserDictionary, this);
 
@@ -556,7 +556,7 @@ var SpellRight = (function () {
          return false;
      };
 
-    SpellRight.prototype.checkAndMark = function (diagnostics, word, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (context, diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
@@ -596,7 +596,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -608,7 +608,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -620,7 +620,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -651,14 +651,17 @@ var SpellRight = (function () {
                 var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
                 var message = '\"' + cword + '\"';
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    message += ' (' + context + ')';
+                }
                 if (settings.suggestionsInHints) {
                     var suggestions = bindings.getCorrectionsForMisspelling(word);
                     if (suggestions.length > 0) {
-                        var message = message + ': suggestions';
+                        message += ': suggestions';
                         if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
-                            var message = message + ' [' + this.spellingContext[0]._language + ']: ';
+                            message += ' [' + this.spellingContext[0]._language + ']: ';
                         } else {
-                            var message = message + ': ';
+                            message += ': ';
                         }
                         for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
                             var s = suggestions_1[_i];
@@ -670,7 +673,17 @@ var SpellRight = (function () {
                     }
                 }
 
-                var diag = new vscode.Diagnostic(lineRange, message, vscode.DiagnosticSeverity.Error);
+                var diagnosticsType = vscode.DiagnosticSeverity.Error;
+
+                if (settings.notificationClass === 'warning') {
+                    diagnosticsType = vscode.DiagnosticSeverity.Warning;
+                } else if (settings.notificationClass === 'information') {
+                    diagnosticsType = vscode.DiagnosticSeverity.Information;
+                } else if (settings.notificationClass === 'hint') {
+                    diagnosticsType = vscode.DiagnosticSeverity.Hint;
+                }
+
+                var diag = new vscode.Diagnostic(lineRange, message, diagnosticsType);
                 diag.source = 'spelling';
 
                 // Now insert diagnostics at the right place
@@ -897,7 +910,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _syntax = parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _syntax = parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -920,7 +933,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1069,7 +1082,7 @@ var SpellRight = (function () {
         var update = _this.spellingContext[0]._update;
 
         if (line <= document.lineCount) {
-            parser.spellCheckRange(document, diagnostics, (diagnostics, token, linenumber, colnumber) => _this.checkAndMark(diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -1081,7 +1094,7 @@ var SpellRight = (function () {
                 }
             }
 
-            // Push spelling a line forward
+            // Push spelling a few lines forward
             _this.spellingContext[0]._line += SPELLRIGHT_LINES_BATCH;
 
         } else {
@@ -1239,7 +1252,7 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.addToWorkspaceDictionaryFromSelection = function () {
+    SpellRight.prototype.addFromSelectionToWorkspaceDictionary = function () {
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
@@ -1248,9 +1261,15 @@ var SpellRight = (function () {
         var selection = editor.selection;
         if (selection.isSingleLine) {
             var text = editor.document.getText(selection);
-            this.addWordToWorkspaceDictionary(text, true);
+            if (!/\s/g.test(text)) {
+                if (this.addWordToWorkspaceDictionary(text, true)) {
+                    this.doInitiateSpellCheck(editor.document);
+                }
+            } else {
+                vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
+            }
         } else {
-            vscode.window.showInformationMessage('SpellRight: Can not ad multiline text to dictionary.');
+            vscode.window.showInformationMessage('SpellRight: Cannot add multiline text to dictionary.');
         }
     }
 
@@ -1262,7 +1281,7 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.addToUserFromDictionarySelection = function () {
+    SpellRight.prototype.addFromSelectionToUserDictionary = function () {
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
@@ -1271,9 +1290,15 @@ var SpellRight = (function () {
         var selection = editor.selection;
         if (selection.isSingleLine) {
             var text = editor.document.getText(selection);
-            this.addWordToUserDictionary(text);
+            if (!/\s/g.test(text)) {
+                if (this.addWordToUserDictionary(text)) {
+                    this.doInitiateSpellCheck(editor.document);
+                }
+            } else {
+                vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
+            }
         } else {
-            vscode.window.showInformationMessage('SpellRight: Can not ad multiline text to dictionary.');
+            vscode.window.showInformationMessage('SpellRight: Cannot add multiline text to dictionary.');
         }
     }
 
@@ -1443,6 +1468,7 @@ var SpellRight = (function () {
             addToSystemDictionary: false,
             ignoreRegExps: [],
             ignoreFiles: ['**/.gitignore', '**/.spellignore'],
+            notificationClass: 'error',
 
             // These are saved in spellright.dict in User/Workspace
             _UserDictionary: [],
