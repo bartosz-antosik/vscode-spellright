@@ -415,10 +415,16 @@ var SpellRight = (function () {
             var _path = '[none]';
         }
 
+        if (settings._currentDictionary === _dict && settings._currentPath === _path)
+            return;
+
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
         }
         bindings.setDictionary(_dict, _path);
+
+        settings._currentDictionary = _dict;
+        settings._currentPath = _path
     };
 
     SpellRight.prototype.checkDictionary = function (dictionary) {
@@ -709,12 +715,13 @@ var SpellRight = (function () {
                     // performance much.
                     for (var i = 0; i < diagnostics.length; i++) {
                         var _drange = diagnostics[i].range;
-                        if (_linenumber < _drange._end._line ||
-                            (_linenumber <= _drange._end._line &&
-                            _colnumber <= _drange._end._character)) {
-                            diagnostics.splice(i, 0, diag);
-                            break;
-                        }
+                        // if (_linenumber < _drange._end._line ||
+                        //     (_linenumber <= _drange._end._line &&
+                        //     _colnumber <= _drange._end._character)) {
+                        if (_drange._end.isBeforeOrEqual(diag.range.start))
+                            continue;
+                        diagnostics.splice(i, 0, diag);
+                        break;
                     }
                 }
             }
@@ -811,9 +818,10 @@ var SpellRight = (function () {
 
         var _this = this;
 
-        var _syntax = 0;
         var _signature = '';
         var _local_context = false;
+
+        var _return = {};
 
         settings._commands.signature = '';
         settings._commands.ignore = false;
@@ -910,7 +918,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _syntax = parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _return = parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -947,9 +955,9 @@ var SpellRight = (function () {
 
         this.diagnosticCollection.set(document.uri, diagnostics);
 
-        if (_syntax != settings._commands.syntax ||
+        if (_return.syntax != settings._commands.syntax ||
             settings._commands.signature != _signature) {
-            settings._commands.syntax = _syntax;
+            settings._commands.syntax = _return.syntax;
             settings._commands.signature = _signature;
             this.doInitiateSpellCheck(document);
         }
@@ -1438,7 +1446,9 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.replacer = function (key, value) {
-        if (key == '_UserDictionary') return undefined;
+        if (key == '_currentDictionary') return undefined;
+        else if (key == '_currentPath') return undefined;
+        else if (key == '_UserDictionary') return undefined;
         else if (key == '_WorkspaceDictionary') return undefined;
         else if (key == '_ignoreFiles') return undefined;
         else if (key == '_commands') return undefined;
@@ -1469,6 +1479,9 @@ var SpellRight = (function () {
             ignoreRegExps: [],
             ignoreFiles: ['**/.gitignore', '**/.spellignore'],
             notificationClass: 'error',
+
+            _currentDictionary: '',
+            _currentPath: '',
 
             // These are saved in spellright.dict in User/Workspace
             _UserDictionary: [],
