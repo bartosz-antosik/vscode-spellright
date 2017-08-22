@@ -1,5 +1,11 @@
 # Change Log
 
+## **1.1.22** released on 22nd August 2017
+
+- **Change:** CamelCase word is marked as correct when only one part was corrected ([#46](https://github.com/bartosz-antosik/vscode-spellright/issues/46)).
+- **Change:** Undo editor action doesn't trigger word re-check ([#47](https://github.com/bartosz-antosik/vscode-spellright/issues/47)).
+- **Fix:** Switching dictionaries often with Hunspell backend causes high CPU usage ([#51](https://github.com/bartosz-antosik/vscode-spellright/issues/51)).
+
 ## **1.1.16** released on 20th August 2017
 
 - **New:** New commands to add text selected in editor to User/Workspace dictionary ([#43](https://github.com/bartosz-antosik/vscode-spellright/issues/43)).

@@ -12,7 +12,7 @@
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
-* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking service whenever possible: Windows Spell Checking API (windows 8/10) or Hunspell (windows 7, macOS, Linux).
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backend: Windows Spell Checking API (windows 8/10), Hunspell (Linux, Windows 7) and NSSpellChecker (macOS).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
 ## Dictionaries
@@ -36,7 +36,7 @@ On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker librar
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
-On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported) by soft linking the system folder e.g.:
+On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported, verify `SET` line in \*.aff file) by soft linking the system folder e.g.:
 
 ```bash
 ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
@@ -72,7 +72,7 @@ It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*
 
 ## Installation
 
-Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (**F1**/**Ctrl+Shift+P**):
+Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (**F1** or **Ctrl+Shift+P**):
 
 ```PowerShell
 ext install spellright
@@ -82,7 +82,7 @@ ext install spellright
 
 ### Correcting Spelling Errors
 
-Use **F8**/**Shift-F8** to jump to next/previous spelling error. Press **Ctrl+.** or click *Lightbulb* to see context menu with suggestions.
+Use **F8** or **Shift-F8** to jump to next/previous spelling error. Press **Ctrl+.** or click *Lightbulb* to see context menu with suggestions.
 
 ### Changing Language and Turning OFF
 

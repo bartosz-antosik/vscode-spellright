@@ -1479,6 +1479,8 @@ var SpellRight = (function () {
             ignoreRegExps: [],
             ignoreFiles: ['**/.gitignore', '**/.spellignore'],
             notificationClass: 'error',
+            // spellSectionsGlobal: "all", // "", "comments", "strings", "body", "all"
+            // spellSectionsPerType: {}, // { "latex": "all", "cpp": "comments" }
 
             _currentDictionary: '',
             _currentPath: '',
