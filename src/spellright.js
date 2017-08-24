@@ -132,12 +132,14 @@ var SpellRight = (function () {
         fs.watchFile(this.getUserDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
                 settings._UserDictionary = _this.readDictionaryFile(_this.getUserDictionaryFilename());
+                _this.SpellCheckAll();
             }
         });
 
         fs.watchFile(this.getWorkspaceDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
                 settings._WorkspaceDictionary = _this.readDictionaryFile(_this.getWorkspaceDictionaryFilename());
+                _this.SpellCheckAll();
             }
         });
 
@@ -569,11 +571,11 @@ var SpellRight = (function () {
 
         // Check if current context not disabled by syntatic control
 
-        if (settings.spellSyntaxByClass[document.languageId]) {
-            if (settings.spellSyntaxByClass[document.languageId].indexOf(context) == (-1)) {
+        if (settings.spellContextByClass[document.languageId]) {
+            if (settings.spellContextByClass[document.languageId].indexOf(context) == (-1)) {
                 return;
             }
-        } else if (settings.spellSyntax.indexOf(context) == (-1)) {
+        } else if (settings.spellContext.indexOf(context) == (-1)) {
             return;
         }
 
@@ -1263,9 +1265,7 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.addToWorkspaceDictionaryCodeAction = function (document, word) {
-        if (this.addWordToWorkspaceDictionary(word, true)) {
-            this.doInitiateSpellCheck(document);
-        } else {
+        if (!this.addWordToWorkspaceDictionary(word, true)) {
             vscode.window.showWarningMessage('SpellRight: The word \"' + word + '\" has already been added to workspace dictionary.');
         }
     };
@@ -1292,9 +1292,7 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.addToUserDictionaryCodeAction = function (document, word) {
-        if (this.addWordToUserDictionary(word)) {
-            this.doInitiateSpellCheck(document);
-        } else {
+        if (!this.addWordToUserDictionary(word)) {
             vscode.window.showWarningMessage('SpellRight: The word \"' + word + '\" has already been added to user dictionary.');
         }
     };
@@ -1489,8 +1487,8 @@ var SpellRight = (function () {
             ignoreRegExps: [],
             ignoreFiles: ['**/.gitignore', '**/.spellignore'],
             notificationClass: 'error',
-            spellSyntax: "body comment string", // "body comment string"
-            spellSyntaxByClass: {}, // { "latex": "body comment", "cpp": "comment string" }
+            spellContext: "body comments strings", // "body comments strings"
+            spellContextByClass: {}, // { "latex": "body comments", "cpp": "comments strings" }
 
             _currentDictionary: '',
             _currentPath: '',

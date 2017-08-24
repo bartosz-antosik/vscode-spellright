@@ -1,5 +1,11 @@
 # Change Log
 
+## **1.1.25** released on 25th August 2017
+
+- **Change:** Recently introduced `spellright.spellSyntax` renamed to `spellright.spellContext` and `spellright.spellSyntaxByClass` renamed to `spellright.spellContextByClass` respectively.
+- **Fix:** Wrong syntactic identification of strings in programming languages parser ([#59](https://github.com/bartosz-antosik/vscode-spellright/issues/59)).
+- **Fix:** 'Add to workspace dictionary' doesn't make red squiggle disappear immediately ([#58](https://github.com/bartosz-antosik/vscode-spellright/issues/58)).
+
 ## **1.1.24** released on 24th August 2017
 
 - **New:** Spelling of comments/strings/body of documents & source code can be selectively enabled/disabled in configuration settings globally (`spellright.spellSyntax`) and per document type (`spellright.spellSyntaxByClass`) following inquiry ([#40](https://github.com/bartosz-antosik/vscode-spellright/issues/40)).

@@ -186,7 +186,7 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 
 Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
 
-`spellright.spellSyntax: "body comment string"`
+`spellright.spellContext: "body comments strings"`
 
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
@@ -194,15 +194,15 @@ Allows to enable (present in string) or disable (absent in string) spelling of s
 * `comment` - comment (block & line) sections of most programming languages
 * `string` - strings in code programming languages
 
-`spellright.spellSyntaxByClass: {}`
+`spellright.spellContextByClass: {}`
 
-Overrides setting of `spellSyntax` per document type. Accepts object of key-value pairs:
+Overrides setting of `spellContext` per document type. Accepts object of key-value pairs:
 
 ```JSON
-spellright.spellSyntaxByClass: {
-    "latex": "body comment",
-    "cpp": "comment string",
-    "python": "string"
+spellright.spellContextByClass: {
+    "latex": "body comments",
+    "cpp": "comments strings",
+    "python": "strings"
 }
 ```
 
