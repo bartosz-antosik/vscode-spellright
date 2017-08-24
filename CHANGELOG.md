@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.24** released on 24th August 2017
+
+- **New:** Spelling of comments/strings/body of documents & source code can be selectively enabled/disabled in configuration settings globally (`spellright.spellSyntax`) and per document type (`spellright.spellSyntaxByClass`) following inquiry ([#40](https://github.com/bartosz-antosik/vscode-spellright/issues/40)).
+
 ## **1.1.22** released on 22nd August 2017
 
 - **Change:** CamelCase word is marked as correct when only one part was corrected ([#46](https://github.com/bartosz-antosik/vscode-spellright/issues/46)).

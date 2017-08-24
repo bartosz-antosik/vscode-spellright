@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Spell Checker for VSCode",
-    "version": "1.1.22",
+    "version": "1.1.23",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -77,7 +77,18 @@
                         "information",
                         "hint"
                     ],
-                    "default": "error"
+                    "default": "error",
+                    "description": "Assign class of diagnostic messages produced by SpellRight."
+                },
+                "spellright.spellSyntax": {
+                    "type": "string",
+                    "default": "body comment string",
+                    "description": "Decide which syntactic parts of documents are spelled by default."
+                },
+                "spellright.spellSyntaxByClass": {
+                    "type": "object",
+                    "default": {},
+                    "description": "Decide which syntactic parts of documents are spelled per document type."
                 }
             }
         },

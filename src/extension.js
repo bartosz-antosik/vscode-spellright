@@ -17,9 +17,6 @@ function activate(context) {
     if (SPELLRIGHT_DEBUG_OUTPUT) {
         console.log('SpellRight activated (' + process.platform + ', ' + process.arch + ').');
 
-        var config = vscode.workspace.getConfiguration('');
-        console.log(config);
-
         // I would love if there would be a chance to get access to
         // languageId to LanguageName conversion. Similarly would be great to
         // have access to languages syntax elements like line/block comments,

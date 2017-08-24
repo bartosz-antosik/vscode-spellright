@@ -186,6 +186,26 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 
 Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
 
+`spellright.spellSyntax: "body comment string"`
+
+Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
+
+* `body` - body of document (e.g. LaTeX, Markdown etc.)
+* `comment` - comment (block & line) sections of most programming languages
+* `string` - strings in code programming languages
+
+`spellright.spellSyntaxByClass: {}`
+
+Overrides setting of `spellSyntax` per document type. Accepts object of key-value pairs:
+
+```JSON
+spellright.spellSyntaxByClass: {
+    "latex": "body comment",
+    "cpp": "comment string",
+    "python": "string"
+}
+```
+
 ## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
@@ -208,7 +228,6 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 ## Known Issues
 
-* VSCode is missing event that would tell extension about cursor jumps in the document. Recently entered word which has not been ended with a white space or punctuation character will be spelled not on cursor jump but on a subsequent edit somewhere else in the document (this is probably more of a VSCode's issue).
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as all the above this is probably more of a VSCode's issue).
 

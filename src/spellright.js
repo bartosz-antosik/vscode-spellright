@@ -550,7 +550,7 @@ var SpellRight = (function () {
         return false;
     };
 
-     SpellRight.prototype.testWordInDictionaries = function (word) {
+    SpellRight.prototype.testWordInDictionaries = function (word) {
          for (var i = 0; i < settings._UserDictionary.length; i++) {
              if (settings._UserDictionary[i].toLowerCase() == word.toLowerCase())
                  return true;
@@ -560,12 +560,22 @@ var SpellRight = (function () {
                  return true;
          }
          return false;
-     };
+    };
 
-    SpellRight.prototype.checkAndMark = function (context, diagnostics, word, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
+
+        // Check if current context not disabled by syntatic control
+
+        if (settings.spellSyntaxByClass[document.languageId]) {
+            if (settings.spellSyntaxByClass[document.languageId].indexOf(context) == (-1)) {
+                return;
+            }
+        } else if (settings.spellSyntax.indexOf(context) == (-1)) {
+            return;
+        }
 
         // Words are selected by language specific parsers but from here on
         // they are treated in the same way so these are operations done on
@@ -602,7 +612,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -614,7 +624,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -626,7 +636,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length > 2) {
-                    _this.checkAndMark(context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -918,7 +928,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _return = parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _return = parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -941,7 +951,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1090,7 +1100,7 @@ var SpellRight = (function () {
         var update = _this.spellingContext[0]._update;
 
         if (line <= document.lineCount) {
-            parser.spellCheckRange(document, diagnostics, (context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -1479,8 +1489,8 @@ var SpellRight = (function () {
             ignoreRegExps: [],
             ignoreFiles: ['**/.gitignore', '**/.spellignore'],
             notificationClass: 'error',
-            // spellSectionsGlobal: "all", // "", "comments", "strings", "body", "all"
-            // spellSectionsPerType: {}, // { "latex": "all", "cpp": "comments" }
+            spellSyntax: "body comment string", // "body comment string"
+            spellSyntaxByClass: {}, // { "latex": "body comment", "cpp": "comment string" }
 
             _currentDictionary: '',
             _currentPath: '',
