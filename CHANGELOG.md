@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.1.26** released on 28th August 2017
+
+- **Change:** Native module bindings for Electron version 1.7.4 (insiders preview) for all three platforms.
+- **Change:** Documentation in README.md polished in places.
+
 ## **1.1.25** released on 25th August 2017
 
 - **Change:** Recently introduced `spellright.spellSyntax` renamed to `spellright.spellContext` and `spellright.spellSyntaxByClass` renamed to `spellright.spellContextByClass` respectively.

@@ -12,20 +12,18 @@
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
-* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backend: Windows Spell Checking API (windows 8/10), Hunspell (Linux, Windows 7) and NSSpellChecker (macOS).
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backend: Windows Spell Checking API (windows 8/10), NSSpellChecker (macOS) and Hunspell (Linux, Windows 7).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
 ## Dictionaries
 
 ### **Windows 8+**
 
-On Microsoft Windows from version 8 on Spell Right uses system spelling API. To install new dictionary follow instructions on how to add new spelling language to system.
+On Microsoft Windows from version 8 on Spell Right uses system spelling API. Follow system guidelines on how to install additional system spelling dictionaries.
 
 ### **macOS**
 
-On macOS Spell Right uses system spelling API. Follow system guidelines on how to install additional system dictionaries.
-
-**NOTICE:** Support for macOS is considered **BETA**. Please report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
+On macOS Spell Right uses system spelling API. Follow system guidelines on how to install additional system spelling dictionaries.
 
 ### **Linux and Windows 7**
 
@@ -43,8 +41,6 @@ ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
 ```
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
-
-**NOTICE:** Support for Linux is considered **BETA**. Please report all issues on the [Issues](https://github.com/bartosz-antosik/vscode-spellright/issues) page.
 
 ### **User Dictionaries**
 
@@ -168,7 +164,7 @@ When `true` words added to user dictionary are stored in system default custom s
 
 `spellright.groupDictionaries: true`
 
-Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-UK, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only with Windows Spelling API.
+Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-GB, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only on native Windows & macOS spelling APIs.
 
 `spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
 
@@ -190,9 +186,9 @@ Allows to change class of diagnostic messages produced by Spell Right which chan
 
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
-* `body` - body of document (e.g. LaTeX, Markdown etc.)
-* `comment` - comment (block & line) sections of most programming languages
-* `string` - strings in code programming languages
+* `body` - body of document (e.g. LaTeX, Plaintext, Markdown etc.);
+* `comment` - comment (block & line) sections of most programming languages, also LaTeX;
+* `string` - strings in code programming languages.
 
 `spellright.spellContextByClass: {}`
 
@@ -200,9 +196,9 @@ Overrides setting of `spellContext` per document type. Accepts object of key-val
 
 ```JSON
 spellright.spellContextByClass: {
-    "latex": "body comments",
-    "cpp": "comments strings",
-    "python": "strings"
+    "latex": "body",                // Disables spelling of comments in LaTeX documents
+    "cpp": "comments",              // Disables spelling of strings in CPP documents
+    "python": "strings"             // Disables spelling of comments in Python documents
 }
 ```
 
@@ -229,7 +225,7 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 ## Known Issues
 
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
-* Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as all the above this is probably more of a VSCode's issue).
+* Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as the above, this is probably more of a VSCode's issue).
 
 ## Notice
 
