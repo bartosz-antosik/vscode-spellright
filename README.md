@@ -192,15 +192,19 @@ Allows to enable (present in string) or disable (absent in string) spelling of s
 
 `spellright.spellContextByClass: {}`
 
-Overrides setting of `spellContext` per document type. Accepts object of key-value pairs:
+Overrides setting of `spellContext` per document type. Accepts object of key-value pairs. For example following settings:
 
 ```JSON
 spellright.spellContextByClass: {
-    "latex": "body",                // Disables spelling of comments in LaTeX documents
-    "cpp": "comments",              // Disables spelling of strings in CPP documents
-    "python": "strings"             // Disables spelling of comments in Python documents
+    "latex": "body",
+    "cpp": "comments",
+    "python": "strings"
 }
 ```
+
+* disables spelling of comments in LaTeX documents;
+* disables spelling of strings in CPP documents;
+* disables spelling of comments in Python documents.
 
 ## In-Document Commands
 
