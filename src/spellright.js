@@ -1466,7 +1466,7 @@ var SpellRight = (function () {
     SpellRight.prototype.saveWorkspaceSettings = function (settings) {
         if (SpellRight.CONFIGFILE.length > 0) {
             try {
-                var data = '//\n// Spell Right workspace configuration file.\n//\n' + JSON.stringify(settings, this.replacer, 4);
+                var data = JSON.stringify(settings, this.replacer, 4);
                 mkdirp.sync(path.dirname(SpellRight.CONFIGFILE));
                 fs.writeFileSync(SpellRight.CONFIGFILE, data);
             }

@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.30** released on 30th August 2017
+
+- **Change:** Comment in workspace configuration file removed ([#60](https://github.com/bartosz-antosik/vscode-spellright/issues/60)).
+
 ## **1.1.26** released on 28th August 2017
 
 - **Change:** Native module bindings for Electron version 1.7.4 (insiders preview) for all three platforms.
