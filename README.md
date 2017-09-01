@@ -12,7 +12,7 @@
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
-* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backend: Windows Spell Checking API (windows 8/10), NSSpellChecker (macOS) and Hunspell (Linux, Windows 7).
+* Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backends: Windows Spell Checking API (windows 8/10), NSSpellChecker (macOS) and Hunspell (Linux, Windows 7).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
 ## Dictionaries
@@ -187,8 +187,8 @@ Allows to change class of diagnostic messages produced by Spell Right which chan
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
 * `body` - body of document (e.g. LaTeX, Plaintext, Markdown etc.);
-* `comment` - comment (block & line) sections of most programming languages, also LaTeX;
-* `string` - strings in code programming languages.
+* `comment` - comment (block & line) sections in programming languages, also LaTeX;
+* `string` - strings in programming languages.
 
 `spellright.spellContextByClass: {}`
 
