@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.31** released on 1st September 2017
+
+- **Fix:** Error in setting name in configuration contribution point (`spellright.notificationType` vs. `spellright.notificationClass`) ([#61](https://github.com/bartosz-antosik/vscode-spellright/issues/61)). Thanks to [@James-Yu](https://github.com/James-Yu) for the hint.
+
 ## **1.1.30** released on 30th August 2017
 
 - **Change:** Comment in workspace configuration file removed ([#60](https://github.com/bartosz-antosik/vscode-spellright/issues/60)).
