@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.1.32** released on 5th September 2017
+
+- **Change:** Word separation rules updated with tilde character which causes troubles especially in LaTeX ([#62](https://github.com/bartosz-antosik/vscode-spellright/issues/62)).
+- **Change:** Optimized spelling of whole document when In-Document Commands (like `spellcheck-off` etc.) are modified.
+
 ## **1.1.31** released on 1st September 2017
 
 - **Fix:** Error in setting name in configuration contribution point (`spellright.notificationType` vs. `spellright.notificationClass`) ([#61](https://github.com/bartosz-antosik/vscode-spellright/issues/61)). Thanks to [@James-Yu](https://github.com/James-Yu) for the hint.

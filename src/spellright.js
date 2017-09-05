@@ -830,12 +830,10 @@ var SpellRight = (function () {
 
         var _this = this;
 
+        var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
         var _local_context = false;
 
-        var _return = {};
-
-        settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
         settings._commands.languages = [ settings.language ];
@@ -843,9 +841,9 @@ var SpellRight = (function () {
 
         this.setDictionary(settings.language);
 
-        parser.parseForCommands(document, function (command, parameters, range) {
+        _return = parser.parseForCommands(document, function (command, parameters, range) {
 
-            _signature = _signature + command + parameters;
+            _signature = _signature + command + '-' + parameters;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('In-Document Command: ' + command + ' [' + parameters + ']');
@@ -879,6 +877,7 @@ var SpellRight = (function () {
         // Ignore spelling forced
         if (settings._commands.ignore && !settings._commands.force) {
             if (typeof this.diagnosticMap[document.uri.toString()] !== 'undefined') {
+                this.doCancelSpellCheck();
                 this.diagnosticCollection.delete(document.uri);
                 this.diagnosticMap[document.uri.toString()] = undefined;
             }
@@ -930,7 +929,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _return = parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -967,8 +966,9 @@ var SpellRight = (function () {
 
         this.diagnosticCollection.set(document.uri, diagnostics);
 
-        if (_return.syntax != settings._commands.syntax ||
-            settings._commands.signature != _signature) {
+        if (settings._commands.syntax != _return.syntax ||
+            settings._commands.signature !== _signature) {
+            this.doCancelSpellCheck();
             settings._commands.syntax = _return.syntax;
             settings._commands.signature = _signature;
             this.doInitiateSpellCheck(document);
@@ -1020,9 +1020,13 @@ var SpellRight = (function () {
             return;
         }
 
+        var _return = { syntax: 0, linecount: 0 };
+        var _signature = '';
+
         var _this = this;
         var _length = this.spellingContext.length;
 
+        settings._commands.syntax = 0;
         settings._commands.signature = '';
         settings._commands.ignore = false;
         settings._commands.force = false;
@@ -1031,7 +1035,10 @@ var SpellRight = (function () {
 
         this.setDictionary(settings.language);
 
-        parser.parseForCommands(document, function (command, parameters, range) {
+        _return = parser.parseForCommands(document, function (command, parameters, range) {
+
+            _signature = _signature + command + '-' + parameters;
+
             if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('InDoc Command: ' + command + ' [' + parameters + ']');
             }
@@ -1053,6 +1060,9 @@ var SpellRight = (function () {
                 }
             }
         });
+
+        settings._commands.syntax = _return.syntax;
+        settings._commands.signature = _signature;
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
         if (vscode.workspace.rootPath && spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
@@ -1088,6 +1098,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doStepSpellCheck = function (_this) {
 
+        var _return = { syntax: 0, linecount: 0 };
+
         if (_this.spellingContext.length == 0) {
             return;
         }
@@ -1102,7 +1114,8 @@ var SpellRight = (function () {
         var update = _this.spellingContext[0]._update;
 
         if (line <= document.lineCount) {
-            parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+
+            _return = parser.spellCheckRange(document, diagnostics, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -1125,7 +1138,7 @@ var SpellRight = (function () {
                 var end = Date.now();
                 var secs = (end - start) / 1000;
 
-                console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + String(diagnostics.length) + ' errors.');
+                console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + diagnostics.length + ' errors.');
             }
 
             // NULL document that has been finished
