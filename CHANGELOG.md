@@ -1,8 +1,13 @@
 # Change Log
 
+## **1.1.34** released on 7th September 2017
+
+- **New:** Added spelling parser settings for 'D' (comments & strings) source code files ([#63](https://github.com/bartosz-antosik/vscode-spellright/issues/63)).
+- **New:** Added multiline strings parsing to source code parser, following requirements in ([#63](https://github.com/bartosz-antosik/vscode-spellright/issues/63)).
+
 ## **1.1.32** released on 5th September 2017
 
-- **Change:** Word separation rules updated with tilde character which causes troubles especially in LaTeX ([#62](https://github.com/bartosz-antosik/vscode-spellright/issues/62)).
+- **Change:** Word separation rules updated with tilde ('~') character which is used as non breaking space in LaTeX ([#62](https://github.com/bartosz-antosik/vscode-spellright/issues/62)).
 - **Change:** Optimized spelling of whole document when In-Document Commands (like `spellcheck-off` etc.) are modified.
 
 ## **1.1.31** released on 1st September 2017
@@ -71,7 +76,7 @@
 ## **1.0.40** released on 4th August 2017
 
 - **New:** Added spelling parser settings for 'Pascal' (comments & strings) document type.
-- **Change:** README.md polished a bit (wrong Unicode characters prevented **In Document** commands from being ready to cut & paste to use).
+- **Change:** README.md polished a bit (wrong Unicode characters prevented **In-Document** commands from being ready to cut & paste to use).
 
 ## **1.0.36** released on 2nd August 2017
 

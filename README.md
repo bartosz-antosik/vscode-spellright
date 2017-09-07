@@ -78,7 +78,7 @@ ext install spellright
 
 ### Correcting Spelling Errors
 
-Press **Ctrl+.** (Windows, Linux) **⌘+.** or **Cmd+.** (macOS) or click *Lightbulb* to see context **menu with suggestions**. Use **F8** or **Shift-F8** to jump to **next**/**previous** spelling error.
+Press **Ctrl+.** (Windows, Linux) **⌘+.** or **Cmd+.** (macOS) or click *Lightbulb* to show a context **menu with suggestions**. Use **F8** or **Shift-F8** to jump to **next**/**previous** spelling error.
 
 ### Changing Language and Turning OFF
 
