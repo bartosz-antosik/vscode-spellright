@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.1.38** released on 7th September 2017
+
+- **New:** Regular expression from `spellright.ignoreRegExps` settings item are now matched against raw document not extracted words to spell. This is a huge change and allows to eliminate parts of document from spelling, like LaTeX `\begin{equation} ... \end{equation}` sections etc. ([#64](https://github.com/bartosz-antosik/vscode-spellright/issues/64)).
+
 ## **1.1.34** released on 7th September 2017
 
 - **New:** Added spelling parser settings for 'D' (comments & strings) source code files ([#63](https://github.com/bartosz-antosik/vscode-spellright/issues/63)).

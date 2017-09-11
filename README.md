@@ -172,7 +172,7 @@ Document types for which spelling will be turned ON by default.
 
 `spellright.ignoreRegExps: []`
 
-Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works **after** separating word using language parsers in the same place where spelling engine is consulted and ignoreWords checked. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
+Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works on raw document **before** separating words to spell which allows to ignore larger parts of the document. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
 
 `spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
 
