@@ -598,9 +598,9 @@ var SpellRight = (function () {
         var _containsPeriod = /[.]/.test(cword);
         var _containsApostrophe = /[.]/.test(cword);
 
-        // Before splitting make sure word is not in the ignore list or
-        // regular expressions to ignore as a whole.
-        if (this.testWordInDictionaries(cword) || this.testIgnoreRegExps(cword)) {
+        // Before splitting make sure word is not spelled correctly or on the
+        // ignore list or regular expressions to ignore as a whole.
+        if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
             return;
         }
 
@@ -644,98 +644,92 @@ var SpellRight = (function () {
             return;
         }
 
-        if (bindings.isMisspelled(cword)) {
-            // Punctuation cleaned version of the word
+        // Punctuation cleaned version of the word
 
-            // Make sure word is not in the ignore list
-            if (!this.testWordInDictionaries(cword) || !this.testIgnoreRegExps(cword)) {
+        // Special case of words ending with period  - if spelling
+        // with dot at the end is correct contrary to spelling
+        // without the dot then pass over.
+        if (_endsWithPeriod) {
+            if (!bindings.isMisspelled(cword + '.')) {
+                return;
+            }
+        }
 
-                // Special case of words ending with period  - if spelling
-                // with dot at the end is correct contrary to spelling
-                // without the dot then pass over.
-                if (_endsWithPeriod) {
-                    if (!bindings.isMisspelled(cword + '.')) {
-                        return;
-                    }
-                }
+        // Same case if it ends with apostrophe
+        if (_endsWithApostrophe) {
+            if (!bindings.isMisspelled(cword + '\'')) {
+                return;
+            }
+        }
 
-                // Same case if it ends with apostrophe
-                if (_endsWithApostrophe) {
-                    if (!bindings.isMisspelled(cword + '\'')) {
-                        return;
-                    }
-                }
+        var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
-                var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
-
-                var message = '\"' + cword + '\"';
-                if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    message += ' (' + context + ')';
-                }
-                if (settings.suggestionsInHints) {
-                    var suggestions = bindings.getCorrectionsForMisspelling(word);
-                    if (suggestions.length > 0) {
-                        message += ': suggestions';
-                        if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
-                            message += ' [' + this.spellingContext[0]._language + ']: ';
-                        } else {
-                            message += ': ';
-                        }
-                        for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
-                            var s = suggestions_1[_i];
-                            message += s + ', ';
-                        }
-                        message = message.slice(0, message.length - 2);
-                    } else {
-                        message += ': no suggestions';
-                    }
-                }
-
-                var diagnosticsType = vscode.DiagnosticSeverity.Error;
-
-                if (settings.notificationClass === 'warning') {
-                    diagnosticsType = vscode.DiagnosticSeverity.Warning;
-                } else if (settings.notificationClass === 'information') {
-                    diagnosticsType = vscode.DiagnosticSeverity.Information;
-                } else if (settings.notificationClass === 'hint') {
-                    diagnosticsType = vscode.DiagnosticSeverity.Hint;
-                }
-
-                var diag = new vscode.Diagnostic(lineRange, message, diagnosticsType);
-                diag.source = 'spelling';
-
-                // Now insert diagnostics at the right place
-                var append = false;
-                if (diagnostics.length > 0) {
-                    var _drange = diagnostics[diagnostics.length - 1].range;
-                    // At the end if fits there
-                    var append = (_linenumber > _drange._end._line ||
-                        (_linenumber == _drange._end._line &&
-                        _colnumber >= _drange._end._character));
+        var message = '\"' + cword + '\"';
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            message += ' (' + context + ')';
+        }
+        if (settings.suggestionsInHints) {
+            var suggestions = bindings.getCorrectionsForMisspelling(word);
+            if (suggestions.length > 0) {
+                message += ': suggestions';
+                if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
+                    message += ' [' + this.spellingContext[0]._language + ']: ';
                 } else {
-                    // Definitely at the end!
-                    var append = true;
+                    message += ': ';
                 }
+                for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
+                    var s = suggestions_1[_i];
+                    message += s + ', ';
+                }
+                message = message.slice(0, message.length - 2);
+            } else {
+                message += ': no suggestions';
+            }
+        }
 
-                if (append) {
-                    diagnostics.push(diag);
-                } else {
-                    // Linear search. This should maybe be bisection or some
-                    // other algorithm in the future, but on the other hand
-                    // this code is called only on differential edits so there
-                    // are very few calls thus it should not degrade
-                    // performance much.
-                    for (var i = 0; i < diagnostics.length; i++) {
-                        var _drange = diagnostics[i].range;
-                        // if (_linenumber < _drange._end._line ||
-                        //     (_linenumber <= _drange._end._line &&
-                        //     _colnumber <= _drange._end._character)) {
-                        if (_drange._end.isBeforeOrEqual(diag.range.start))
-                            continue;
-                        diagnostics.splice(i, 0, diag);
-                        break;
-                    }
-                }
+        var diagnosticsType = vscode.DiagnosticSeverity.Error;
+
+        if (settings.notificationClass === 'warning') {
+            diagnosticsType = vscode.DiagnosticSeverity.Warning;
+        } else if (settings.notificationClass === 'information') {
+            diagnosticsType = vscode.DiagnosticSeverity.Information;
+        } else if (settings.notificationClass === 'hint') {
+            diagnosticsType = vscode.DiagnosticSeverity.Hint;
+        }
+
+        var diag = new vscode.Diagnostic(lineRange, message, diagnosticsType);
+        diag.source = 'spelling';
+
+        // Now insert diagnostics at the right place
+        var append = false;
+        if (diagnostics.length > 0) {
+            var _drange = diagnostics[diagnostics.length - 1].range;
+            // At the end if fits there
+            var append = (_linenumber > _drange._end._line ||
+                (_linenumber == _drange._end._line &&
+                _colnumber >= _drange._end._character));
+        } else {
+            // Definitely at the end!
+            var append = true;
+        }
+
+        if (append) {
+            diagnostics.push(diag);
+        } else {
+            // Linear search. This should maybe be bisection or some
+            // other algorithm in the future, but on the other hand
+            // this code is called only on differential edits so there
+            // are very few calls thus it should not degrade
+            // performance much.
+            for (var i = 0; i < diagnostics.length; i++) {
+                var _drange = diagnostics[i].range;
+                // if (_linenumber < _drange._end._line ||
+                //     (_linenumber <= _drange._end._line &&
+                //     _colnumber <= _drange._end._character)) {
+                if (_drange._end.isBeforeOrEqual(diag.range.start))
+                    continue;
+                diagnostics.splice(i, 0, diag);
+                break;
             }
         }
     }

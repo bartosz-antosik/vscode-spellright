@@ -1,6 +1,10 @@
 # Change Log
 
-## **1.1.38** released on 7th September 2017
+## **1.1.40** released on 12th September 2017
+
+- **Fix:** Compound (e.g. CamelCase) words not consulted as whole with main spelling engine ([#66](https://github.com/bartosz-antosik/vscode-spellright/issues/66)).
+
+## **1.1.38** released on 11th September 2017
 
 - **New:** Regular expression from `spellright.ignoreRegExps` settings item are now matched against raw document not extracted words to spell. This is a huge change and allows to eliminate parts of document from spelling, like LaTeX `\begin{equation} ... \end{equation}` sections etc. ([#64](https://github.com/bartosz-antosik/vscode-spellright/issues/64)).
 
