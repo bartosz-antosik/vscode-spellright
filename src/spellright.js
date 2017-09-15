@@ -8,6 +8,7 @@
 var vscode = require('vscode');
 
 var path = require('path');
+var glob = require('glob');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var jsonMinify = require('jsonminify');
@@ -138,7 +139,7 @@ var SpellRight = (function () {
 
         fs.watchFile(this.getWorkspaceDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                settings._WorkspaceDictionary = _this.readDictionaryFile(_this.getWorkspaceDictionaryFilename());
+                settings._WorkspaceDictionary = _this.readDictionaryFiles(_this.getWorkspaceDictionaryPath());
                 _this.SpellCheckAll();
             }
         });
@@ -1422,9 +1423,17 @@ var SpellRight = (function () {
             return '';
     };
 
+    SpellRight.prototype.getWorkspaceDictionaryPath = function () {
+        if (vscode.workspace.rootPath) {
+            return path.join(vscode.workspace.rootPath, '.vscode');
+        } else {
+            return '';
+        }
+    };
+
     SpellRight.prototype.getWorkspaceDictionaryFilename = function () {
         if (vscode.workspace.rootPath) {
-            return path.join(vscode.workspace.rootPath, '.vscode', 'spellright.dict');
+            return path.join(this.getWorkspaceDictionaryPath(), 'spellright.dict');
         } else {
             return '';
         }
@@ -1459,6 +1468,19 @@ var SpellRight = (function () {
         }
         return [];
     };
+
+    SpellRight.prototype.readDictionaryFiles = function (pathName) {
+        const dictionaryFiles = glob(path.join(pathName, '*.dict', ''), { sync: true });
+        var result = [];
+
+        dictionaryFiles.forEach((file) => {
+            try {
+                result = result.concat(this.readDictionaryFile(file));
+            } catch (e) {
+            }
+        });
+        return result;
+    }
 
     SpellRight.prototype.replacer = function (key, value) {
         if (key == '_currentDictionary') return undefined;
@@ -1571,7 +1593,7 @@ var SpellRight = (function () {
             }
         }
 
-        returnSettings._WorkspaceDictionary = this.readDictionaryFile(this.getWorkspaceDictionaryFilename());
+        returnSettings._WorkspaceDictionary = this.readDictionaryFiles(this.getWorkspaceDictionaryPath());
         returnSettings._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
 
         returnSettings._ignoreFiles = ignore();
