@@ -9,8 +9,8 @@ global.SPELLRIGHT_DEBUG_OUTPUT = false;
 global.SPELLRIGHT_LINES_BATCH = 10;
 global.SPELLRIGHT_MILLISECS_BATCH = 100;
 
-var spellright = require('./spellright');
-var vscode = require('vscode');
+const spellright = require('./spellright');
+const vscode = require('vscode');
 
 function activate(context) {
 
