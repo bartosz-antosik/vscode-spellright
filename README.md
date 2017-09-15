@@ -1,4 +1,4 @@
-# Multilingual and Offline Spellchecker for Visual Studio Code
+# Multilingual, Offline and Lightweight Spellchecker for Visual Studio Code
 
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
 
@@ -6,6 +6,7 @@
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, **multiple languages** in Windows Single Language editions etc.)
+* Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* etc.
 * Spells **short words** and **abbreviations** (etc., I'm, i.e., ...)
@@ -44,7 +45,7 @@ Dictionaries from the folder will be listed in the language selection list and u
 
 ### **User Dictionaries**
 
-Spell Right stores words considered as spelled correctly and not existing in the spelling engine (a.k.a. ignored words) in two dictionaries. These are user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). User dictionary is always used and workspace dictionary is used in the context of opened folder. Both dictionaries are used in conjunction.
+Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. There are two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). All the extension's commands add words to these main dictionaries. Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
 
 ## Screenshots
 
@@ -136,11 +137,11 @@ Open in editor `spellright.dict` file from workspace settings folder.
 
 `SpellRight: Add Selection to Workspace Dictionary`
 
-Add text selected in editor to workspace dictionary.
+Add text selected in editor to main workspace dictionary.
 
 `SpellRight: Add Selection to User Dictionary`
 
-Add text selected in editor to user dictionary.
+Add text selected in editor to main user dictionary.
 
 ## Settings
 
