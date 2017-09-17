@@ -8,5 +8,6 @@
 .vscode/**
 .gitignore
 .eslintrc.json
+lib/bin/node-spellchecker/**
 jsconfig.json
 makefile
