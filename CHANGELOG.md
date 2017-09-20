@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.8** released on 15th September 2017
+
+- **New:** Native module bindings for RPM based distributions ([#69](https://github.com/bartosz-antosik/vscode-spellright/issues/69)).
+
 ## **1.2.2** released on 15th September 2017
 
 - **New:** Added spelling parser settings for Julia (comments & strings) source code files and Julia Markdown documents ([#68](https://github.com/bartosz-antosik/vscode-spellright/issues/68)).
