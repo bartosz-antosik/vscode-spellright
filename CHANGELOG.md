@@ -7,7 +7,7 @@
 ## **1.2.2** released on 15th September 2017
 
 - **New:** Added spelling parser settings for Julia (comments & strings) source code files and Julia Markdown documents ([#68](https://github.com/bartosz-antosik/vscode-spellright/issues/68)).
-- **New:** Extension can have multiple workspace dictionaries contained in `*.dict` files ([#65](https://github.com/bartosz-antosik/vscode-spellright/issues/65)) which may be useful to have separate dictionaries of medical terms, trademark names etc.
+- **New:** Extension can have multiple workspace dictionaries contained in `*.dict` files which may be useful to have separate dictionaries of medical terms, trademark names etc. ([#65](https://github.com/bartosz-antosik/vscode-spellright/issues/65)).
 - **New:** New icon & documentation updates.
 - **Fix:** In-Document commands parsing in strings stopped parsing of In-Document commands.
 
