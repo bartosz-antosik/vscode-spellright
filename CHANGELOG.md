@@ -1,13 +1,13 @@
 # Change Log
 
-## **1.2.8** released on 15th September 2017
+## **1.2.8** released on 20th September 2017
 
-- **New:** Native module bindings for RPM based distributions ([#69](https://github.com/bartosz-antosik/vscode-spellright/issues/69)).
+- **New:** Native module bindings for RPM based Linux distributions like RHEL, Fedora, CentoOS etc. ([#69](https://github.com/bartosz-antosik/vscode-spellright/issues/69)).
 
 ## **1.2.2** released on 15th September 2017
 
 - **New:** Added spelling parser settings for Julia (comments & strings) source code files and Julia Markdown documents ([#68](https://github.com/bartosz-antosik/vscode-spellright/issues/68)).
-- **New:** Extension can have multiple workspace dictionaries contained in `*.dict` files ([#65](https://github.com/bartosz-antosik/vscode-spellright/issues/65)).
+- **New:** Extension can have multiple workspace dictionaries contained in `*.dict` files ([#65](https://github.com/bartosz-antosik/vscode-spellright/issues/65)) which may be useful to have separate dictionaries of medical terms, trademark names etc.
 - **New:** New icon & documentation updates.
 - **Fix:** In-Document commands parsing in strings stopped parsing of In-Document commands.
 
