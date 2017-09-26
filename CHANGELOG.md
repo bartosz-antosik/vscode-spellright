@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.10** released on 26th September 2017
+
+- **New:** Added support for LaTeX 'magic comment' (`!TEX spellcheck = CODE`) which allow to switch spelling language inside LaTeX document, functionally identical to an `spellcheck-language CODE` In-Document command.
+
 ## **1.2.8** released on 20th September 2017
 
 - **New:** Native module bindings for RPM based Linux distributions like RHEL, Fedora, CentoOS etc. ([#69](https://github.com/bartosz-antosik/vscode-spellright/issues/69)).
