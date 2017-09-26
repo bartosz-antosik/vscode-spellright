@@ -1,6 +1,12 @@
 # Multilingual, Offline and Lightweight Spellchecker for Visual Studio Code
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md)
+[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
+[![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
+[![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md) 
+
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/bartosz-antosik/vscode-spellright.svg)](https://github.com/bartosz-antosik/vscode-spellright/issues)
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/bartosz-antosik/vscode-spellright.svg)](https://github.com/bartosz-antosik/vscode-spellright/issues)
 
 ## Features
 
@@ -211,7 +217,7 @@ spellright.spellContextByClass: {
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
-<code>spellcheck&#x2d;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code>)
+<code>spellcheck&#x2d;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code> and `!TEX spellcheck = CODE` in comment areas of `latex` document class only)
 
 Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
