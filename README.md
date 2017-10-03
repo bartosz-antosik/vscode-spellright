@@ -1,12 +1,8 @@
 # Multilingual, Offline and Lightweight Spellchecker for Visual Studio Code
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
-[![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
-[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/bartosz-antosik/vscode-spellright/blob/master/LICENSE.md) 
-
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/bartosz-antosik/vscode-spellright.svg)](https://github.com/bartosz-antosik/vscode-spellright/issues)
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/bartosz-antosik/vscode-spellright.svg)](https://github.com/bartosz-antosik/vscode-spellright/issues)
+[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) 
+[![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
 ## Features
 

@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.2.11** released on 3rd October 2017
+## **1.2.12** released on 3rd October 2017
 
 - **New:** Spelling of words separated by dash as a whole not only as parts ([#70](https://github.com/bartosz-antosik/vscode-spellright/issues/70)).
 
