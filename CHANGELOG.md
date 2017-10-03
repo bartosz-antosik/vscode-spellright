@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.11** released on 3rd October 2017
+
+- **New:** Spelling of words separated by dash as a whole not only as parts ([#70](https://github.com/bartosz-antosik/vscode-spellright/issues/70)).
+
 ## **1.2.10** released on 26th September 2017
 
 - **New:** Added support for LaTeX 'magic comment' (`!TEX spellcheck = CODE`) which allow to switch spelling language inside LaTeX document, functionally identical to an `spellcheck-language CODE` In-Document command.
