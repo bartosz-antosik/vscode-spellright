@@ -495,14 +495,16 @@ var SpellRight = (function () {
         return parts;
     }
 
-    SpellRight.prototype.splitByPeriodOrDigit = function (word) {
+    SpellRight.prototype.splitByOtherWhite = function (word) {
 
-        // Split phrases with period inside `terminal.integrated.scrollback`.
-        var rperiod = XRegExp('([^\.0-9]+)');
-        var rsep = /[\.0-9]/;
+        // Here split some special cases like: period (`terminal.integrated`),
+        // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
+        // be that these words are spelled both as split and as the whole.
+        var rother = XRegExp('([^\.0-9\-]+)');
+        var rsep = /[\.0-9\-]/;
         var parts = [];
 
-        // We need a phantom split (e.g. for "2sth: case).
+        // We need a phantom split (e.g. for "2sth" case).
         if (rsep.test(word)) {
             parts.push({
                 word: '',
@@ -510,7 +512,7 @@ var SpellRight = (function () {
             });
         }
 
-        XRegExp.forEach(word, rperiod, (match, i) => {
+        XRegExp.forEach(word, rother, (match, i) => {
             parts.push({
                 word: match[0],
                 offset: match.index
@@ -610,11 +612,11 @@ var SpellRight = (function () {
         // should be spelled as well. So there can be lexems containing periods
         // inside. But they should be later on spelled as parts to minimize
         // the number of false positives.
-        var _split = this.splitByPeriodOrDigit(cword);
+        var _split = this.splitByOtherWhite(cword);
         if (_split.length > 1) {
             var _this = this;
             _split.forEach (function(e) {
-                if (e.word.length > 2) {
+                if (e.word.length >= 2) {
                     _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
@@ -626,7 +628,7 @@ var SpellRight = (function () {
         if (_split.length > 1) {
             var _this = this;
             _split.forEach(function (e) {
-                if (e.word.length > 2) {
+                if (e.word.length >= 2) {
                     _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
@@ -638,7 +640,7 @@ var SpellRight = (function () {
         if (_split.length > 1) {
             var _this = this;
             _split.forEach(function (e) {
-                if (e.word.length > 2) {
+                if (e.word.length >= 2) {
                     _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
