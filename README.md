@@ -10,7 +10,7 @@
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, Python, JavaScript, Batch etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
+* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, C, Python, JavaScript, Batch, ..., D, Julia etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, **multiple languages** in Windows Single Language editions etc.)
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
@@ -194,8 +194,8 @@ Allows to change class of diagnostic messages produced by Spell Right which chan
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
 * `body` - body of document (e.g. LaTeX, Plaintext, Markdown etc.);
-* `comment` - comment (block & line) sections in programming languages, also LaTeX;
-* `string` - strings in programming languages.
+* `comments` - comment (block & line) sections in programming languages, also LaTeX;
+* `strings` - strings in programming languages.
 
 `spellright.spellContextByClass: {}`
 
