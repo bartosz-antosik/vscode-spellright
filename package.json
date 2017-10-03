@@ -12,7 +12,8 @@
     ],
     "keywords": [
         "multi-language",
-        "spellchecker"
+        "offline",
+        "spell-checker"
     ],
     "activationEvents": [
         "*"
