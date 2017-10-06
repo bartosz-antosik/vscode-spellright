@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.16** released on 6th October 2017
+
+- **Fix:** Regression introduced in 2.12: Words conposed only of dashes (e.g. horizontal rules in comments) considered misspelled when used with Hunspell back end.
+
 ## **1.2.15** released on 3rd October 2017
 
 - **New:** Added spelling parser settings for Git Commit Message & Git Rebase Message document types ([#71](https://github.com/bartosz-antosik/vscode-spellright/issues/71)).
