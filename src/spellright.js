@@ -599,7 +599,8 @@ var SpellRight = (function () {
             _colnumber++;
         }
         var _containsPeriod = /[.]/.test(cword);
-        var _containsApostrophe = /[.]/.test(cword);
+        var _containsApostrophe = /[\'']/.test(cword);
+        var _containsDash = /[-]/.test(cword);
 
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
@@ -663,6 +664,10 @@ var SpellRight = (function () {
             if (!bindings.isMisspelled(cword + '\'')) {
                 return;
             }
+        }
+
+        if (_containsDash) {
+            return;
         }
 
         var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
