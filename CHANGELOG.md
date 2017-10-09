@@ -6,7 +6,7 @@
 
 ## **1.2.16** released on 6th October 2017
 
-- **Fix:** Regression introduced in 2.12: Words conposed only of dashes (e.g. horizontal rules in comments) considered misspelled when used with Hunspell back end.
+- **Fix:** Regression introduced in 2.12: Words composed only of dashes (e.g. horizontal rules in comments) considered misspelled when used with Hunspell back end.
 
 ## **1.2.15** released on 3rd October 2017
 
