@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.18** released on 11th October 2017
+
+- **Change:** Added `erb` (Embedded Ruby) to list of file types using XML parser ([#74](https://github.com/bartosz-antosik/vscode-spellright/pull/74)). Thanks to [@segphault](https://github.com/segphault).
+
 ## **1.2.17** released on 9th October 2017
 
 - **Change:** Multiline strings not spelled in Python ([#73](https://github.com/bartosz-antosik/vscode-spellright/issues/73)).
