@@ -555,6 +555,24 @@ var SpellRight = (function () {
         return false;
     };
 
+    SpellRight.prototype.testIgnoreFile = function (uri) {
+
+        // if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
+
+        // No workspace folder in this context
+        if (typeof vscode.workspace.getWorkspaceFolder(uri) == undefined) {
+            return false;
+        }
+
+        var rootPath = vscode.workspace.getWorkspaceFolder(uri).uri._fsPath;
+
+        // Silently ignore files defined by spellright.ignoreFiles
+        if (settings._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath))) {
+            return true;
+        }
+        return false;
+    }
+
     SpellRight.prototype.testWordInDictionaries = function (word) {
          for (var i = 0; i < settings._UserDictionary.length; i++) {
              if (settings._UserDictionary[i].toLowerCase() == word.toLowerCase())
@@ -826,7 +844,7 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (this.testIgnoreFile(document.uri)) {
             return;
         }
 
@@ -870,7 +888,7 @@ var SpellRight = (function () {
         });
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (vscode.workspace.rootPath && spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (this.testIgnoreFile(document.uri)) {
             settings._commands.ignore = true;
         }
 
@@ -1018,7 +1036,7 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (this.testIgnoreFile(document.uri)) {
             return;
         }
 
@@ -1067,7 +1085,7 @@ var SpellRight = (function () {
         settings._commands.signature = _signature;
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (vscode.workspace.rootPath && spellignore.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) {
+        if (this.testIgnoreFile(document.uri)) {
             settings._commands.ignore = true;
         }
 
