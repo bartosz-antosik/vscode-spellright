@@ -1,6 +1,6 @@
 # Change Log
 
-## **1.2.19** released on 16th October 2017
+## **1.2.20** released on 16th October 2017
 
 - **Fix:** Regression ([#77](https://github.com/bartosz-antosik/vscode-spellright/pull/77)) introduced in 2.17: Failure when spelling programming languages which do not contain multiline string definition.
 
