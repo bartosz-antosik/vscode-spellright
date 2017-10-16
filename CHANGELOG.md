@@ -1,5 +1,9 @@
 # Change Log
 
+## **1.2.19** released on 16th October 2017
+
+- **Fix:** Regression ([#77](https://github.com/bartosz-antosik/vscode-spellright/pull/77)) introduced in 2.17: Failure when spelling programming languages which do not contain multiline string definition.
+
 ## **1.2.18** released on 11th October 2017
 
 - **Change:** Added `erb` (Embedded Ruby) to list of file types using XML parser ([#74](https://github.com/bartosz-antosik/vscode-spellright/pull/74)). Thanks to [@segphault](https://github.com/segphault).
