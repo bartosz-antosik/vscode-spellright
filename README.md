@@ -26,7 +26,7 @@ On Microsoft Windows from version 8 on Spell Right uses system spelling API. Fol
 
 ### **macOS**
 
-On macOS Spell Right uses system spelling API. Due to bug in `NSSpellChecker` layer of macOS Spell Right cannot currently use dictionaries installed in ~/Library/Spellcheck folder, just those that came with the system.
+On macOS Spell Right uses system spelling API. Due to bug in `NSSpellChecker` layer of macOS Spell Right cannot currently use dictionaries installed in `~/Library/Spelling` folder, just those that came with the system.
 
 ### **Linux and Windows 7**
 
