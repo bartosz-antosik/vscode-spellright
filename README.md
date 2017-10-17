@@ -89,7 +89,7 @@ Extension has a handy list interface for switching spelling dictionary (language
 
 ![dictionary](media/screenshot-dictionary.png)
 
-It can be reached by clicking on indicator field in status bar:
+It can be reached by clicking on indicator field with an "eye" symbol in status bar:
 
 ![switch](media/screenshot-switch-on.png)
 
