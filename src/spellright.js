@@ -560,7 +560,7 @@ var SpellRight = (function () {
         // if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
 
         // No workspace folder in this context
-        if (typeof vscode.workspace.getWorkspaceFolder(uri) == undefined) {
+        if (!vscode.workspace.getWorkspaceFolder(uri)) {
             return false;
         }
 
