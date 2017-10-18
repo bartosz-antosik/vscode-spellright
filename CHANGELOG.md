@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.2.22** released on 18th October 2017
+
+- **Change:** Screenshots updated.
+- **Fix:** Code refactoring caused regression: Extension not working at all when used without folder (workspace) open ([#79](https://github.com/bartosz-antosik/vscode-spellright/pull/79)).
+
 ## **1.2.20** released on 16th October 2017
 
 - **Fix:** Regression ([#77](https://github.com/bartosz-antosik/vscode-spellright/pull/77)) introduced in 2.17: Failure when spelling programming languages which do not contain multiline string definition.
