@@ -1575,13 +1575,6 @@ var SpellRight = (function () {
             });
         }
 
-        // Transfer words from settings.json to user spellright.dict
-        if (userSettingsData['spellright.ignoreWords']) {
-            userSettingsData['spellright.ignoreWords'].forEach(function (key) {
-                _userDictionaryTransfer.push(key);
-            });
-        }
-
         // Get workspace settings
         if (SpellRight.CONFIGFILE.length == 0 && vscode.workspace.rootPath) {
             SpellRight.CONFIGFILE = path.join(vscode.workspace.rootPath, '.vscode', 'spellright.json');
@@ -1604,13 +1597,6 @@ var SpellRight = (function () {
                         returnSettings[key] = settings_1[key];
                 }
             }, this);
-
-            // Transfer words from spellright.json to workspace spellright.dict
-            if (settings_1['ignoreWords']) {
-                settings_1['ignoreWords'].forEach(function (key) {
-                    _workspaceDictionaryTransfer.push(key);
-                });
-            }
         } else {
             if (SpellRight.CONFIGFILE.length == 0) {
                 if (SPELLRIGHT_DEBUG_OUTPUT)
