@@ -583,7 +583,7 @@ var SpellRight = (function () {
         var rootPath = vscode.workspace.getWorkspaceFolder(uri).uri._fsPath;
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (helpers._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath))) {
+        if (helpers._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath)) || spellignore.ignores(path.relative(rootPath, uri._fsPath))) {
             return true;
         }
         return false;
@@ -1560,8 +1560,8 @@ var SpellRight = (function () {
             spellContextByClass: {},
         };
 
-        // Get user settings
-        var userSettingsData = vscode.workspace.getConfiguration('spellright');
+        var userSettingsData = vscode.workspace.getConfiguration('spellright', '');
+
         if (userSettingsData) {
             Object.keys(returnSettings).forEach(function (key) {
                 if (key in userSettingsData) {
@@ -1624,7 +1624,6 @@ var SpellRight = (function () {
             return ignore();
         }
     }
-
 
     SpellRight.prototype.createUpdateSettings = function () {
 
