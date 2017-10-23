@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "1.2.22",
+    "version": "1.2.24",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -65,7 +65,10 @@
                 },
                 "spellright.ignoreFiles": {
                     "type": "array",
-                    "default": [],
+                    "default": [
+                        "**/.gitignore",
+                        "**/.spellignore"
+                    ],
                     "description": "List of file patterns ignored during spelling."
                 },
                 "spellright.notificationClass": {

@@ -1,5 +1,10 @@
 # Change Log
 
+## **1.2.24** released on 20th October 2017
+
+- **Change:** Added `ink` scripting language to list of file types using plaintext parser ([#81](https://github.com/bartosz-antosik/vscode-spellright/pull/81)). Thanks to [@segphault](https://github.com/segphault).
+- **Fix:** Bad recognition of syntax elements in some conditions while spelling source code files ([#80](https://github.com/bartosz-antosik/vscode-spellright/pull/80)).
+
 ## **1.2.22** released on 18th October 2017
 
 - **Change:** Screenshots updated.
