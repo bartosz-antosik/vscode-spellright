@@ -27,6 +27,22 @@ var settings = null;
 var spellignore = null;
 var dictionaries = [];
 
+var helpers = {
+    _currentDictionary: '',
+    _currentPath: '',
+    _UserDictionary: [],
+    _WorkspaceDictionary: [],
+    _ignoreFiles: {},
+    _commands: {
+        signature: '',
+        syntax: 0,
+        ignore: false, // spellcheck-off or .spellignore
+        force: false, // spellcheck-on
+        languages: [],
+        nlanguages: []
+    }
+};
+
 var indicator = null;
 var controller = null;
 
@@ -132,14 +148,14 @@ var SpellRight = (function () {
 
         fs.watchFile(this.getUserDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                settings._UserDictionary = _this.readDictionaryFile(_this.getUserDictionaryFilename());
+                helpers._UserDictionary = _this.readDictionaryFile(_this.getUserDictionaryFilename());
                 _this.SpellCheckAll();
             }
         });
 
         fs.watchFile(this.getWorkspaceDictionaryFilename(), function (curr, prev) {
             if (curr.mtime.getTime() !== prev.mtime.getTime()) {
-                settings._WorkspaceDictionary = _this.readDictionaryFiles(_this.getWorkspaceDictionaryPath());
+                helpers._WorkspaceDictionary = _this.readDictionaryFiles(_this.getWorkspaceDictionaryPath());
                 _this.SpellCheckAll();
             }
         });
@@ -418,7 +434,7 @@ var SpellRight = (function () {
             var _path = '[none]';
         }
 
-        if (settings._currentDictionary === _dict && settings._currentPath === _path)
+        if (helpers._currentDictionary === _dict && helpers._currentPath === _path)
             return;
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -426,8 +442,8 @@ var SpellRight = (function () {
         }
         bindings.setDictionary(_dict, _path);
 
-        settings._currentDictionary = _dict;
-        settings._currentPath = _path
+        helpers._currentDictionary = _dict;
+        helpers._currentPath = _path
     };
 
     SpellRight.prototype.checkDictionary = function (dictionary) {
@@ -557,7 +573,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.testIgnoreFile = function (uri) {
 
-        // if (vscode.workspace.rootPath && settings._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
+        // if (vscode.workspace.rootPath && helpers._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
 
         // No workspace folder in this context
         if (!vscode.workspace.getWorkspaceFolder(uri)) {
@@ -567,19 +583,19 @@ var SpellRight = (function () {
         var rootPath = vscode.workspace.getWorkspaceFolder(uri).uri._fsPath;
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (settings._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath))) {
+        if (helpers._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath))) {
             return true;
         }
         return false;
     }
 
     SpellRight.prototype.testWordInDictionaries = function (word) {
-         for (var i = 0; i < settings._UserDictionary.length; i++) {
-             if (settings._UserDictionary[i].toLowerCase() == word.toLowerCase())
+         for (var i = 0; i < helpers._UserDictionary.length; i++) {
+             if (helpers._UserDictionary[i].toLowerCase() == word.toLowerCase())
                  return true;
          }
-         for (var i = 0; i < settings._WorkspaceDictionary.length; i++) {
-             if (settings._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase())
+         for (var i = 0; i < helpers._WorkspaceDictionary.length; i++) {
+             if (helpers._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase())
                  return true;
          }
          return false;
@@ -702,7 +718,7 @@ var SpellRight = (function () {
             var suggestions = bindings.getCorrectionsForMisspelling(word);
             if (suggestions.length > 0) {
                 message += ': suggestions';
-                if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
+                if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
                     message += ' [' + this.spellingContext[0]._language + ']: ';
                 } else {
                     message += ': ';
@@ -858,10 +874,10 @@ var SpellRight = (function () {
         var _signature = '';
         var _local_context = false;
 
-        settings._commands.ignore = false;
-        settings._commands.force = false;
-        settings._commands.languages = [ settings.language ];
-        settings._commands.nlanguages = [];
+        helpers._commands.ignore = false;
+        helpers._commands.force = false;
+        helpers._commands.languages = [ settings.language ];
+        helpers._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
 
@@ -873,18 +889,18 @@ var SpellRight = (function () {
                 console.log('In-Document Command: ' + command + ' [' + parameters + ']');
             }
             if (command === 'off') {
-                settings._commands.ignore = true;
+                helpers._commands.ignore = true;
             }
             if (command === 'on') {
-                settings._commands.force = true;
+                helpers._commands.force = true;
             }
             if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
                 if (_this.checkDictionary(parameters)) {
-                    settings._commands.languages.pushIfNotExist(parameters, function (e) {
+                    helpers._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
                     });
                 } else {
-                    settings._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                    helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
                     });
                 }
@@ -893,13 +909,13 @@ var SpellRight = (function () {
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
         if (this.testIgnoreFile(document.uri)) {
-            settings._commands.ignore = true;
+            helpers._commands.ignore = true;
         }
 
         indicator.updateStatusBarIndicator();
 
         // Ignore spelling forced
-        if (settings._commands.ignore && !settings._commands.force) {
+        if (helpers._commands.ignore && !helpers._commands.force) {
             if (typeof this.diagnosticMap[document.uri.toString()] !== 'undefined') {
                 this.doCancelSpellCheck();
                 this.diagnosticCollection.delete(document.uri);
@@ -990,11 +1006,11 @@ var SpellRight = (function () {
 
         this.diagnosticCollection.set(document.uri, diagnostics);
 
-        if (settings._commands.syntax != _return.syntax ||
-            settings._commands.signature !== _signature) {
+        if (helpers._commands.syntax != _return.syntax ||
+            helpers._commands.signature !== _signature) {
             this.doCancelSpellCheck();
-            settings._commands.syntax = _return.syntax;
-            settings._commands.signature = _signature;
+            helpers._commands.syntax = _return.syntax;
+            helpers._commands.signature = _signature;
             this.doInitiateSpellCheck(document);
         }
     };
@@ -1050,12 +1066,12 @@ var SpellRight = (function () {
         var _this = this;
         var _length = this.spellingContext.length;
 
-        settings._commands.syntax = 0;
-        settings._commands.signature = '';
-        settings._commands.ignore = false;
-        settings._commands.force = false;
-        settings._commands.languages = [ settings.language ];
-        settings._commands.nlanguages = [];
+        helpers._commands.syntax = 0;
+        helpers._commands.signature = '';
+        helpers._commands.ignore = false;
+        helpers._commands.force = false;
+        helpers._commands.languages = [ settings.language ];
+        helpers._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
 
@@ -1067,36 +1083,36 @@ var SpellRight = (function () {
                 console.log('In-Document Command: ' + command + ' [' + parameters + ']');
             }
             if (command === 'off') {
-                settings._commands.ignore = true;
+                helpers._commands.ignore = true;
             }
             if (command === 'on') {
-                settings._commands.force = true;
+                helpers._commands.force = true;
             }
             if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
                 if (_this.checkDictionary(parameters)) {
-                    settings._commands.languages.pushIfNotExist(parameters, function (e) {
+                    helpers._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
                     });
                 } else {
-                    settings._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                    helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
                     });
                 }
             }
         });
 
-        settings._commands.syntax = _return.syntax;
-        settings._commands.signature = _signature;
+        helpers._commands.syntax = _return.syntax;
+        helpers._commands.signature = _signature;
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
         if (this.testIgnoreFile(document.uri)) {
-            settings._commands.ignore = true;
+            helpers._commands.ignore = true;
         }
 
         indicator.updateStatusBarIndicator();
 
         // Ignore spelling forced
-        if (settings._commands.ignore && !settings._commands.force) {
+        if (helpers._commands.ignore && !helpers._commands.force) {
             if (typeof this.diagnosticMap[document.uri.toString()] !== 'undefined') {
                 this.diagnosticCollection.delete(document.uri);
                 this.diagnosticMap[document.uri.toString()] = undefined;
@@ -1202,7 +1218,7 @@ var SpellRight = (function () {
 
         if (!diagnostic) return null;
 
-        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (settings._commands.ignore && !settings._commands.force) || settings.language == '') {
+        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force) || settings.language == '') {
             return null;
         }
 
@@ -1389,8 +1405,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.addWordToWorkspaceDictionary = function (word, save) {
         // Only add if it's not already in the list
-        if (settings._WorkspaceDictionary.indexOf(word) < 0) {
-            settings._WorkspaceDictionary.push(word);
+        if (helpers._WorkspaceDictionary.indexOf(word) < 0) {
+            helpers._WorkspaceDictionary.push(word);
             if (save) {
                 this.addWordToDictionary(word, this.getWorkspaceDictionaryFilename());
             }
@@ -1401,8 +1417,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.addWordToUserDictionary = function (word) {
         // Only add if it's not already in the list
-        if (settings._UserDictionary.indexOf(word) < 0) {
-            settings._UserDictionary.push(word);
+        if (helpers._UserDictionary.indexOf(word) < 0) {
+            helpers._UserDictionary.push(word);
             if (settings.addToSystemDictionary) {
                 bindings.add(word);
             } else {
@@ -1547,23 +1563,6 @@ var SpellRight = (function () {
             notificationClass: '',
             spellContext: '',
             spellContextByClass: {},
-
-            _currentDictionary: '',
-            _currentPath: '',
-
-            // These are saved in spellright.dict in User/Workspace
-            _UserDictionary: [],
-            _WorkspaceDictionary: [],
-
-            _ignoreFiles: {},
-            _commands: {
-                signature: '',
-                syntax: 0,
-                ignore: false, // spellcheck-off or .spellignore
-                force: false, // spellcheck-on
-                languages: [],
-                nlanguages: []
-            }
         };
 
         // Get user settings
@@ -1622,13 +1621,12 @@ var SpellRight = (function () {
             }
         }
 
-        returnSettings._WorkspaceDictionary = this.readDictionaryFiles(this.getWorkspaceDictionaryPath());
-        returnSettings._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
+        helpers._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
+        helpers._WorkspaceDictionary = this.readDictionaryFiles(this.getWorkspaceDictionaryPath());
 
-        returnSettings._ignoreFiles = ignore();
-
+        helpers._ignoreFiles = ignore();
         returnSettings.ignoreFiles.forEach(function (key) {
-            returnSettings._ignoreFiles.add(key);
+            helpers._ignoreFiles.add(key);
         });
 
         return returnSettings;
@@ -1712,9 +1710,9 @@ var SpellRightIndicator = (function () {
             }
         });
 
-        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (settings._commands.ignore && !settings._commands.force)) {
+        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force)) {
             message = '[off]';
-            if (settings._commands.ignore && !settings._commands.force) {
+            if (helpers._commands.ignore && !helpers._commands.force) {
                 color = '#ff5858';
                 tooltip = tooltip + 'Forced OFF';
             } else {
@@ -1724,13 +1722,13 @@ var SpellRightIndicator = (function () {
             if (settings.language == '') {
                 message = '[none]';
                 tooltip = tooltip + 'No Language Selected';
-            } else if (settings._commands.languages.length > 1 || settings._commands.nlanguages.length > 0) {
+            } else if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
                 message = '[multi]';
                 tooltip = tooltip + 'Multiple Languages';
-                if (settings._commands.nlanguages.length > 0) {
+                if (helpers._commands.nlanguages.length > 0) {
                     color = '#ff5858';
                     tooltip = tooltip + ' (missing: ';
-                    settings._commands.nlanguages.forEach(function (entry, i, a) {
+                    helpers._commands.nlanguages.forEach(function (entry, i, a) {
                         tooltip = tooltip + entry;
                         if (i !== a.length - 1) tooltip = tooltip + ', ';
                     });
