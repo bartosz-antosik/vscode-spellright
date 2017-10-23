@@ -590,6 +590,10 @@ var SpellRight = (function () {
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('[' + context +  ']: \"' + word + '\"');
+        }
+
         // Check if current context not disabled by syntatic control
 
         if (settings.spellContextByClass[document.languageId]) {
@@ -1533,16 +1537,16 @@ var SpellRight = (function () {
     SpellRight.prototype.getSettings = function () {
         var returnSettings = {
             language: '',
-            documentTypes: ['markdown', 'latex', 'plaintext'],
-            groupDictionaries: true,
-            statusBarIndicator: true,
-            suggestionsInHints: true,
+            documentTypes: [ ],
+            groupDictionaries: false,
+            statusBarIndicator: false,
+            suggestionsInHints: false,
             addToSystemDictionary: false,
             ignoreRegExps: [],
-            ignoreFiles: ['**/.gitignore', '**/.spellignore'],
-            notificationClass: 'error',
-            spellContext: "body comments strings", // "body comments strings"
-            spellContextByClass: {}, // { "latex": "body comments", "cpp": "comments strings" }
+            ignoreFiles: [ ],
+            notificationClass: '',
+            spellContext: '',
+            spellContextByClass: {},
 
             _currentDictionary: '',
             _currentPath: '',
