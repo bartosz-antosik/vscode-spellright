@@ -1488,11 +1488,6 @@ var SpellRight = (function () {
         return this.getUserSettingsFilename('spellright.dict');
     };
 
-    SpellRight.prototype.getUserSettings = function () {
-        // Get user settings
-        return vscode.workspace.getConfiguration('spellright');
-    };
-
     SpellRight.prototype.readDictionaryFile = function (fileName) {
         if (fileName.length > 0) {
             if (fs.existsSync(fileName)) {
@@ -1566,7 +1561,7 @@ var SpellRight = (function () {
         };
 
         // Get user settings
-        var userSettingsData = this.getUserSettings();
+        var userSettingsData = vscode.workspace.getConfiguration('spellright');
         if (userSettingsData) {
             Object.keys(returnSettings).forEach(function (key) {
                 if (key in userSettingsData) {
