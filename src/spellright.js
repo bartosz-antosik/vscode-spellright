@@ -24,7 +24,6 @@ var doctype = require('../lib/doctype');
 const parsers = require('../lib/parser');
 
 var settings = null;
-var spellignore = null;
 var dictionaries = [];
 
 var helpers = {
@@ -32,7 +31,8 @@ var helpers = {
     _currentPath: '',
     _UserDictionary: [],
     _WorkspaceDictionary: [],
-    _ignoreFiles: {},
+    _ignoreFilesSettings: {},
+    _ignoreFilesSpellignore: {},
     _commands: {
         signature: '',
         syntax: 0,
@@ -74,7 +74,8 @@ var SpellRight = (function () {
         this.extensionRoot = context.extensionPath;
 
         settings = this.getSettings();
-        spellignore = this.readIgnoreFile();
+
+        this.prepareIgnoreRegExps();
 
         var _this = this;
 
@@ -99,8 +100,6 @@ var SpellRight = (function () {
         if (_workspaceDictionaryTransferCount > 0) {
             vscode.window.showInformationMessage('SpellRight: ' + _workspaceDictionaryTransferCount + ' words transferred from workspace settings to dictionary file.');
         }
-
-        this.prepareIgnoreRegExps();
 
         // Force HUNSPELL - seems it does not work.
         //process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
@@ -161,7 +160,7 @@ var SpellRight = (function () {
         });
 
         fs.watchFile(SpellRight.IGNOREFILE, function (curr, prev) {
-            spellignore = _this.readIgnoreFile();
+            helpers._ignoreFilesSpellignore = _this.readIgnoreFile();
         });
 
         this.diagnosticCollection = vscode.languages.createDiagnosticCollection('spellright');
@@ -187,13 +186,7 @@ var SpellRight = (function () {
 
         vscode.window.onDidChangeActiveTextEditor(function (editor) {
             if (editor) {
-                var _document = editor._documentData._document;
-                if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                    _this.doInitiateSpellCheck(_document);
-                } else {
-                    _this.diagnosticCollection.delete(_document.uri);
-                    _this.diagnosticMap[_document.uri.toString()] = undefined;
-                }
+                _this.doInitiateSpellCheck(editor._documentData._document);
             }
         }, null);
 
@@ -447,7 +440,6 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.checkDictionary = function (dictionary) {
-
         var result = false;
 
         dictionaries.forEach(function (entry) {
@@ -459,13 +451,10 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.SpellCheckAll = function () {
-
         var _this = this;
+
         vscode.window.visibleTextEditors.forEach((editor, index, array) => {
-            var _document = editor._documentData._document;
-            if (settings.documentTypes.indexOf(_document.languageId) != (-1)) {
-                _this.doInitiateSpellCheck(_document);
-            }
+            _this.doInitiateSpellCheck(editor._documentData._document);
         });
     }
 
@@ -573,7 +562,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.testIgnoreFile = function (uri) {
 
-        // if (vscode.workspace.rootPath && helpers._ignoreFiles.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
+        // if (vscode.workspace.rootPath && helpers._ignoreFilesSettings.ignores(path.relative(vscode.workspace.rootPath, document.uri._fsPath))) { ... }
 
         // No workspace folder in this context
         if (!vscode.workspace.getWorkspaceFolder(uri)) {
@@ -583,7 +572,7 @@ var SpellRight = (function () {
         var rootPath = vscode.workspace.getWorkspaceFolder(uri).uri._fsPath;
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (helpers._ignoreFiles.ignores(path.relative(rootPath, uri._fsPath)) || spellignore.ignores(path.relative(rootPath, uri._fsPath))) {
+        if (helpers._ignoreFilesSettings.ignores(path.relative(rootPath, uri._fsPath)) || helpers._ignoreFilesSpellignore.ignores(path.relative(rootPath, uri._fsPath))) {
             return true;
         }
         return false;
@@ -846,8 +835,16 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
+        helpers._commands.ignore = false;
+        helpers._commands.force = false;
+        helpers._commands.languages = [settings.language];
+        helpers._commands.nlanguages = [];
+
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
+            indicator.updateStatusBarIndicator();
+            _this.diagnosticCollection.delete(_document.uri);
+            _this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
 
@@ -864,20 +861,15 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (this.testIgnoreFile(document.uri)) {
-            return;
-        }
+        // if (this.testIgnoreFile(document.uri)) {
+        //     return;
+        // }
 
         var _this = this;
 
         var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
         var _local_context = false;
-
-        helpers._commands.ignore = false;
-        helpers._commands.force = false;
-        helpers._commands.languages = [ settings.language ];
-        helpers._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
 
@@ -1017,8 +1009,18 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doInitiateSpellCheck = function (document) {
 
+        helpers._commands.syntax = 0;
+        helpers._commands.signature = '';
+        helpers._commands.ignore = false;
+        helpers._commands.force = false;
+        helpers._commands.languages = [settings.language];
+        helpers._commands.nlanguages = [];
+
         // Is off for this document type?
         if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
+            indicator.updateStatusBarIndicator();
+            _this.diagnosticCollection.delete(_document.uri);
+            _this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
 
@@ -1056,22 +1058,15 @@ var SpellRight = (function () {
         };
 
         // Silently ignore files defined by spellright.ignoreFiles
-        if (this.testIgnoreFile(document.uri)) {
-            return;
-        }
+        // if (this.testIgnoreFile(document.uri)) {
+        //     return;
+        // }
 
         var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
 
         var _this = this;
         var _length = this.spellingContext.length;
-
-        helpers._commands.syntax = 0;
-        helpers._commands.signature = '';
-        helpers._commands.ignore = false;
-        helpers._commands.force = false;
-        helpers._commands.languages = [ settings.language ];
-        helpers._commands.nlanguages = [];
 
         this.setDictionary(settings.language);
 
@@ -1522,20 +1517,10 @@ var SpellRight = (function () {
         return result;
     }
 
-    SpellRight.prototype.replacer = function (key, value) {
-        if (key == '_currentDictionary') return undefined;
-        else if (key == '_currentPath') return undefined;
-        else if (key == '_UserDictionary') return undefined;
-        else if (key == '_WorkspaceDictionary') return undefined;
-        else if (key == '_ignoreFiles') return undefined;
-        else if (key == '_commands') return undefined;
-        else return value;
-    }
-
     SpellRight.prototype.saveWorkspaceSettings = function (settings) {
         if (SpellRight.CONFIGFILE.length > 0) {
             try {
-                var data = JSON.stringify(settings, this.replacer, 4);
+                var data = JSON.stringify(settings, null, 4);
                 mkdirp.sync(path.dirname(SpellRight.CONFIGFILE));
                 fs.writeFileSync(SpellRight.CONFIGFILE, data);
             }
@@ -1605,9 +1590,11 @@ var SpellRight = (function () {
         helpers._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
         helpers._WorkspaceDictionary = this.readDictionaryFiles(this.getWorkspaceDictionaryPath());
 
-        helpers._ignoreFiles = ignore();
+        helpers._ignoreFilesSpellignore = this.readIgnoreFile();
+
+        helpers._ignoreFilesSettings = ignore();
         returnSettings.ignoreFiles.forEach(function (key) {
-            helpers._ignoreFiles.add(key);
+            helpers._ignoreFilesSettings.add(key);
         });
 
         return returnSettings;
