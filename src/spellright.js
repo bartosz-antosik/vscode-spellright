@@ -101,8 +101,9 @@ var SpellRight = (function () {
             vscode.window.showInformationMessage('SpellRight: ' + _workspaceDictionaryTransferCount + ' words transferred from workspace settings to dictionary file.');
         }
 
-        // Force HUNSPELL - seems it does not work.
-        //process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
+        // Force HUNSPELL - seems it does not work when setting the environment
+        // variable from within VSCode. Works when it is set outside.
+        // process.env['SPELLCHECKER_PREFER_HUNSPELL'] = 'true';
 
         // Detect HUNSPELL: Windows 7 & other that use Hunspell do not report
         // dictionaries available. Same if the environment variable
@@ -823,6 +824,7 @@ var SpellRight = (function () {
             settings.groupDictionaries = _settings.groupDictionaries;
 
             this.collectDictionaries();
+
             this.selectDefaultLanguage();
         }
 
@@ -1531,20 +1533,22 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getSettings = function () {
+
         var returnSettings = {
             language: '',
-            documentTypes: [ ],
-            groupDictionaries: false,
-            statusBarIndicator: false,
-            suggestionsInHints: false,
+            documentTypes: [],
+            groupDictionaries: true,
+            statusBarIndicator: true,
+            suggestionsInHints: true,
             addToSystemDictionary: false,
             ignoreRegExps: [],
-            ignoreFiles: [ ],
+            ignoreFiles: [],
             notificationClass: '',
-            spellContext: '',
+            spellContext: "",
             spellContextByClass: {},
         };
 
+        // Get user settings
         var userSettingsData = vscode.workspace.getConfiguration('spellright', '');
 
         if (userSettingsData) {
