@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "1.2.24",
+    "version": "2.0.0",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -27,6 +27,7 @@
                 "spellright.language": {
                     "type": "string",
                     "default": "",
+                    "scope": "resource",
                     "description": "Default language (dictionary/culture name) used for spelling."
                 },
                 "spellright.documentTypes": {
@@ -36,32 +37,38 @@
                         "latex",
                         "plaintext"
                     ],
+                    "scope": "resource",
                     "description": "Document types for which spelling will be turned ON by default."
                 },
                 "spellright.groupDictionaries": {
                     "type": "boolean",
                     "default": true,
+                    "scope": "resource",
                     "description": "Enable/disable grouping of dictionaries by language."
                 },
                 "spellright.statusBarIndicator": {
                     "type": "boolean",
                     "default": true,
+                    "scope": "resource",
                     "description": "Enable/disable language & status indicator switch in status bar."
                 },
                 "spellright.suggestionsInHints": {
                     "type": "boolean",
                     "default": true,
+                    "scope": "resource",
                     "description": "Enable/disable including suggested corrections in hints."
                 },
                 "spellright.addToSystemDictionary": {
                     "type": "boolean",
                     "default": false,
+                    "scope": "resource",
                     "description": "Enable/disable adding words to system custom spelling dictionary instead of user dictionary."
                 },
                 "spellright.ignoreRegExps": {
                     "type": "array",
                     "default": [],
-                    "description": "Regular expressions considered correct (ignored) in spelling."
+                    "scope": "resource",
+                    "description": "Regular expressions to eliminate from spelling."
                 },
                 "spellright.ignoreFiles": {
                     "type": "array",
@@ -69,6 +76,7 @@
                         "**/.gitignore",
                         "**/.spellignore"
                     ],
+                    "scope": "resource",
                     "description": "List of file patterns ignored during spelling."
                 },
                 "spellright.notificationClass": {
@@ -80,25 +88,24 @@
                         "hint"
                     ],
                     "default": "error",
+                    "scope": "resource",
                     "description": "Assign class of diagnostic messages produced by SpellRight."
                 },
                 "spellright.spellContext": {
                     "type": "string",
                     "default": "body comments strings",
+                    "scope": "resource",
                     "description": "Decide which syntactic parts of documents are spelled by default."
                 },
                 "spellright.spellContextByClass": {
                     "type": "object",
                     "default": {},
+                    "scope": "resource",
                     "description": "Decide which syntactic parts of documents are spelled per document type."
                 }
             }
         },
         "commands": [
-            {
-                "command": "spellright.createUpdateSettings",
-                "title": "SpellRight: Create/Update Workspace Settings"
-            },
             {
                 "command": "spellright.selectDictionary",
                 "title": "SpellRight: Select Dictionary (Language)"
