@@ -117,10 +117,6 @@ And when at least one language spelled is missing dictionary:
 
 This extension contributes the following commands:
 
-`SpellRight: Create/Update Workspace Settings`
-
-Creates or updates workspace settings file `spellright.json`.
-
 `SpellRight: Select Dictionary (Language)`
 
 Pops dictionary selection list. Selecting language also turns spelling ON. The list also allows to turn spelling OFF for currently open document type. Can also be reached by clicking indicator field in status bar.
@@ -135,11 +131,11 @@ Open in editor `spellright.dict` file from user settings folder.
 
 `SpellRight: Open Workspace Dictionary File`
 
-Open in editor `spellright.dict` file from workspace settings folder.
+Open in editor `spellright.dict` file from workspace settings folder (`.vscode`) appropriate for currently open document in (multi root) workspace.
 
 `SpellRight: Add Selection to Workspace Dictionary`
 
-Add text selected in editor to main workspace dictionary.
+Add text selected in editor to main workspace dictionary appropriate for currently open document in (multi root) workspace.
 
 `SpellRight: Add Selection to User Dictionary`
 
@@ -177,6 +173,21 @@ Document types for which spelling will be turned ON by default.
 
 Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works on raw document **before** separating words to spell which allows to ignore larger parts of the document. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
 
+`spellright.ignoreRegExpsByClass: {}`
+
+Extends setting of `ignoreRegExps` per document type. Accepts object of key-multi-value pairs. For example following settings:
+
+```JSON
+spellright.ignoreRegExpsByClass: {
+    "markdown": [ "/<[^>]+>/g", "/&nbsp;/g" ],
+    "cpp": [ "/#include\\\\s\\\".+\\\"/g" ]
+}
+```
+
+* avoid spelling of HTML tags in markdown documents;
+* avoid spelling of `&nbsp;` literals in markdown documents;
+* avoid spelling of strings in `#include "file"` construct in CPP documents.
+
 `spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
@@ -205,9 +216,9 @@ spellright.spellContextByClass: {
 }
 ```
 
-* disables spelling of comments in LaTeX documents;
-* disables spelling of strings in CPP documents;
-* disables spelling of comments in Python documents.
+* disable spelling of comments in LaTeX documents;
+* disable spelling of strings in CPP documents;
+* disable spelling of comments in Python documents.
 
 ## In-Document Commands
 
@@ -227,7 +238,7 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 ## Ignore file
 
-`.spellignore` file located in workspace root directory can be used to disable spelling for documents described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
+`.spellignore` file located in workspace root directory, appropriate to currently open file in (multi root) workspace, can be used to disable spelling for files described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
 ## Known Issues
 

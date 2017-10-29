@@ -70,6 +70,12 @@
                     "scope": "resource",
                     "description": "Regular expressions to eliminate from spelling."
                 },
+                "spellright.ignoreRegExpsByClass": {
+                    "type": "object",
+                    "default": {},
+                    "scope": "resource",
+                    "description": "Regular expressions to eliminate from spelling per document type."
+                },
                 "spellright.ignoreFiles": {
                     "type": "array",
                     "default": [

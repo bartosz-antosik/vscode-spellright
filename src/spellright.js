@@ -163,7 +163,7 @@ var SpellRight = (function () {
                 if (_i == (-1)) {
                     settings.documentTypes.push(_documenttype);
                 }
-                settings.update("documentTypes", settings.documentTypes, false);
+                settings.update("documentTypes", settings.documentTypes, null);
                 indicator.updateStatusBarIndicator();
 
                 // Spell check current document
@@ -182,7 +182,7 @@ var SpellRight = (function () {
             settings.documentTypes.splice(_i);
             this.diagnosticCollection.delete(_document._uri);
         }
-        settings.update("documentTypes", settings.documentTypes, false);
+        settings.update("documentTypes", settings.documentTypes, null);
         indicator.updateStatusBarIndicator();
 
         if (SPELLRIGHT_DEBUG_OUTPUT)
@@ -283,7 +283,7 @@ var SpellRight = (function () {
             }
             dictionaries.forEach(function (entry) {
                 if (entry.label == _locale_c) {
-                    settings.update("language", entry.id, false);
+                    settings.update("language", entry.id, null);
                     return;
                 }
             });
@@ -348,7 +348,7 @@ var SpellRight = (function () {
             _this.doCancelSpellCheck();
 
             if (!off) {
-                settings.update("language", dict, false);
+                settings.update("language", dict, null);
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
             } else {
@@ -478,7 +478,7 @@ var SpellRight = (function () {
         return parts;
     }
 
-    SpellRight.prototype.prepareIgnoreRegExps = function () {
+    SpellRight.prototype.prepareIgnoreRegExps = function (languageid) {
 
         this.ignoreRegExpsMap = [];
 
@@ -497,6 +497,27 @@ var SpellRight = (function () {
                 vscode.window.showErrorMessage('SpellRight: Ignore RexExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     console.log('Ignore RegExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
+                }
+            }
+        }
+
+        if (settings.ignoreRegExpsByClass[languageid]) {
+            for (var i = 0; i < settings.ignoreRegExpsByClass[languageid].length; i++) {
+                try {
+                    // Convert the JSON of RegExp Strings into a real RegExp
+                    var flags = settings.ignoreRegExpsByClass[languageid][i].replace(/.*\/([gimy]*)$/, '$1');
+                    var pattern = settings.ignoreRegExpsByClass[languageid][i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+                    pattern = pattern.replace(/\\\\/g, '\\');
+                    if (SPELLRIGHT_DEBUG_OUTPUT) {
+                        console.log('RegExp prepare: by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + ' = /' + pattern + '/' + flags);
+                    }
+                    this.ignoreRegExpsMap.push(new RegExp(pattern, flags));
+                }
+                catch (e) {
+                    vscode.window.showErrorMessage('SpellRight: Ignore RexExp by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + '\" malformed. Ignoring.');
+                    if (SPELLRIGHT_DEBUG_OUTPUT) {
+                        console.log('Ignore RegExp: \"' + settings.ignoreRegExpsByClass[languageid][i] + '\" malformed. Ignoring.');
+                    }
                 }
             }
         }
@@ -772,7 +793,7 @@ var SpellRight = (function () {
         helpers._commands.languages = [settings.language];
         helpers._commands.nlanguages = [];
 
-        this.getSettings(event.document.uri);
+        this.getSettings(event.document);
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
@@ -945,7 +966,7 @@ var SpellRight = (function () {
         helpers._commands.languages = [settings.language];
         helpers._commands.nlanguages = [];
 
-        this.getSettings(document.uri);
+        this.getSettings(document);
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
@@ -1451,13 +1472,21 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.getSettings = function (uri = undefined, force = false) {
-        settings = vscode.workspace.getConfiguration('spellright');
+    SpellRight.prototype.getSettings = function (document = undefined) {
+        var uri = undefined;
+        var languageid = undefined;
+
+        if (document !== undefined) {
+            uri = document.uri;
+            languageid = document.languageId;
+        }
+
+        settings = vscode.workspace.getConfiguration('spellright', uri);
 
         this.collectDictionaries();
         this.selectDefaultLanguage();
 
-        this.prepareIgnoreRegExps();
+        this.prepareIgnoreRegExps(languageid);
 
         helpers._ignoreFilesSettings = ignore();
         settings.ignoreFiles.forEach(function (key) {
