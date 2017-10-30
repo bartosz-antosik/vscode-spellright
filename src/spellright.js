@@ -1438,7 +1438,7 @@ var SpellRight = (function () {
                         .filter(Boolean);
 
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('SpellRight read ' + result.length + ' words from \"' + fileName + '\" dictionary file.');
+                        console.log('SpellRight read ' + result.length + ' word(s) from \"' + fileName + '\" dictionary file.');
                     }
 
                     return result;
@@ -1450,7 +1450,7 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.readDictionaryFiles = function (pathName) {
-        const dictionaryFiles = glob(path.join(pathName, '*.dict', ''), { sync: true });
+        const dictionaryFiles = glob(path.join(pathName, '.vscode', '*.dict', ''), { sync: true });
         var result = [];
 
         dictionaryFiles.forEach((file) => {
@@ -1464,12 +1464,18 @@ var SpellRight = (function () {
 
     SpellRight.prototype.readIgnoreFile = function (ipath) {
         var ifile = path.join(ipath, '.spellignore');
+        var result = ignore();
+        var count = 0;
 
         if (fs.existsSync(ifile)) {
-            return ignore().add(fs.readFileSync(ifile, 'utf-8'));
-        } else {
-            return ignore();
+            result.add(fs.readFileSync(ifile, 'utf-8'));
+            count++;
         }
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('SpellRight read ' + count + ' pattern(s) from \"' + ifile + '\" file.');
+        }
+        return result;
     }
 
     SpellRight.prototype.getSettings = function (document = undefined) {
