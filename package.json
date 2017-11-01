@@ -13,7 +13,8 @@
     "keywords": [
         "multi-language",
         "offline",
-        "spell-checker"
+        "spell-checker",
+        "multi-root ready"
     ],
     "activationEvents": [
         "*"
@@ -28,7 +29,7 @@
                     "type": "string",
                     "default": "",
                     "scope": "resource",
-                    "description": "Default language (dictionary/culture name) used for spelling."
+                    "description": "Default language (dictionary/region) used for spelling."
                 },
                 "spellright.documentTypes": {
                     "type": "array",

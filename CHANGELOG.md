@@ -1,5 +1,14 @@
 # Change Log
 
+## **2.0.0** released on 1st November 2017
+
+- **New:** Multi Root Workspace ready with all the settings and custom workspace dictionaries having "resource" scope (that is per component root folder). It allows to e.g. have root folders with various languages, document types or custom dictionaries considered for spelling. Users of single root workspaces should not feel any difference to the way it was working so far with the exception of the point below.
+- **New:** All the workspace settings are now stored in workspace settings file (`settings.json`) managed by VSCode. It is more in line with recommendations and seems bit more future proof. Current settings can be manually transferred from currently used dedicated workspace settings files (`spellright.json`) remembering that each setting has to be preceded by  `spellright.` prefix.
+- **New:** Selecting dictionary (language) or switching document class ON/OFF is now persistent and automatically stored in workspace settings.
+- **New:** New setting `spellright.ignoreRegExpsByClass` allow to add regular expressions that will be ignored in spelling of a document of particular document class. Created extending the request from ([#78](https://github.com/bartosz-antosik/vscode-spellright/pull/78)).
+- **Change:** Heavily refactored & simplified code. Although tested, may bring annoyances for which I am sorry. Please report on issues page.
+- **Change:** Added `madoko` to list of file types using markdown parser ([#85](https://github.com/bartosz-antosik/vscode-spellright/pull/85)).
+
 ## **1.2.24** released on 20th October 2017
 
 - **Change:** Added `ink` scripting language to list of file types using plaintext parser ([#81](https://github.com/bartosz-antosik/vscode-spellright/pull/81)). Thanks to [@segphault](https://github.com/segphault).

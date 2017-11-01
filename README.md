@@ -180,7 +180,7 @@ Extends setting of `ignoreRegExps` per document type. Accepts object of key-mult
 ```JSON
 spellright.ignoreRegExpsByClass: {
     "markdown": [ "/<[^>]+>/g", "/&nbsp;/g" ],
-    "cpp": [ "/#include\\\\s\\\".+\\\"/g" ]
+    "cpp": [ "/#include\\\\s+\\\".+\\\"/g" ]
 }
 ```
 
