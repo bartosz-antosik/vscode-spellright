@@ -163,7 +163,7 @@ var SpellRight = (function () {
                 if (_i == (-1)) {
                     settings.documentTypes.push(_documenttype);
                 }
-                settings.update("documentTypes", settings.documentTypes, null);
+                settings.update("documentTypes", settings.documentTypes, _this.getSettingsScope());
                 indicator.updateStatusBarIndicator();
 
                 // Spell check current document
@@ -182,7 +182,7 @@ var SpellRight = (function () {
             settings.documentTypes.splice(_i);
             this.diagnosticCollection.delete(_document._uri);
         }
-        settings.update("documentTypes", settings.documentTypes, null);
+        settings.update("documentTypes", settings.documentTypes, this.getSettingsScope());
         indicator.updateStatusBarIndicator();
 
         if (SPELLRIGHT_DEBUG_OUTPUT)
@@ -281,9 +281,12 @@ var SpellRight = (function () {
             } else {
                 _locale_c = langcode.code2LanguageCulture(_locale);
             }
+
+            var _this = this;
+
             dictionaries.forEach(function (entry) {
                 if (entry.label == _locale_c) {
-                    settings.update("language", entry.id, null);
+                    settings.update("language", entry.id, _this.getSettingsScope());
                     return;
                 }
             });
@@ -348,7 +351,7 @@ var SpellRight = (function () {
             _this.doCancelSpellCheck();
 
             if (!off) {
-                settings.update("language", dict, null);
+                settings.update("language", dict, _this.getSettingsScope());
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
             } else {
@@ -1382,6 +1385,19 @@ var SpellRight = (function () {
         return a;
     };
 
+    SpellRight.prototype.getSettingsScope = function () {
+        var editor = vscode.window.activeTextEditor;
+        if (editor) {
+            if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
+                return vscode.ConfigurationTarget.WorkspaceFolder;
+            } else {
+                return vscode.ConfigurationTarget.Global;
+            }
+        } else {
+            return vscode.ConfigurationTarget.Global;
+        }
+    };
+
     SpellRight.prototype.getDictionariesPath = function () {
         var codeFolder = 'Code';
         if (vscode.version.indexOf('insider') >= 0)
@@ -1399,7 +1415,11 @@ var SpellRight = (function () {
     SpellRight.prototype.getWorkspaceDictionaryPath = function () {
         var editor = vscode.window.activeTextEditor;
         if (editor) {
-            return vscode.workspace.getWorkspaceFolder(editor.document.uri).uri._fsPath;
+            if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
+                return path.join(vscode.workspace.getWorkspaceFolder(editor.document.uri).uri._fsPath, '.vscode');
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
@@ -1407,7 +1427,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getWorkspaceDictionaryFilename = function () {
         if (this.getWorkspaceDictionaryPath()) {
-            return path.join(this.getWorkspaceDictionaryPath(), '.vscode', CDICTIONARY);
+            return path.join(this.getWorkspaceDictionaryPath(), CDICTIONARY);
         } else {
             return '';
         }
