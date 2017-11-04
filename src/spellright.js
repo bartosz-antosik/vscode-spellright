@@ -29,6 +29,7 @@ var dictionaries = [];
 const CDICTIONARY = 'spellright.dict';
 
 var helpers = {
+    _settings: [],
     _currentDictionary: '',
     _currentPath: '',
     _UserDictionary: [],
@@ -98,6 +99,7 @@ var SpellRight = (function () {
         context.subscriptions.push(controller);
         context.subscriptions.push(indicator);
 
+        vscode.commands.registerCommand('spellright.updateConfiguration', this.updateConfiguration, this);
         vscode.commands.registerCommand('spellright.selectDictionary', this.selectDictionary, this);
         vscode.commands.registerCommand('spellright.setCurrentTypeOFF', this.setCurrentTypeOFF, this);
         vscode.commands.registerCommand('spellright.addFromSelectionToWorkspaceDictionary', this.addFromSelectionToWorkspaceDictionary, this);
@@ -163,11 +165,8 @@ var SpellRight = (function () {
                 if (_i == (-1)) {
                     settings.documentTypes.push(_documenttype);
                 }
-                settings.update("documentTypes", settings.documentTypes, _this.getSettingsScope());
+                _this.updateConfiguration();
                 indicator.updateStatusBarIndicator();
-
-                // Spell check current document
-                _this.doInitiateSpellCheck(_document._document);
             }
         });
     }
@@ -179,14 +178,15 @@ var SpellRight = (function () {
 
         var _i = settings.documentTypes.indexOf(_documenttype);
         if (_i != (-1)) {
-            settings.documentTypes.splice(_i);
+            settings.documentTypes.splice(_i, 1);
             this.diagnosticCollection.delete(_document._uri);
         }
-        settings.update("documentTypes", settings.documentTypes, this.getSettingsScope());
+        this.updateConfiguration();
         indicator.updateStatusBarIndicator();
 
-        if (SPELLRIGHT_DEBUG_OUTPUT)
-            console.log('Spell check has been turned OFF for \"' + _documenttype + '\"" document type.');
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('SpellRight turned OFF for \"' + _documenttype + '\"" document type.');
+        }
     }
 
     SpellRight.prototype.collectDictionaries = function () {
@@ -286,16 +286,31 @@ var SpellRight = (function () {
 
             dictionaries.forEach(function (entry) {
                 if (entry.label == _locale_c) {
-                    settings.update("language", entry.id, _this.getSettingsScope());
+                    settings.language = entry.id;
                     return;
                 }
             });
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('System locale: \"' + _locale + ', set locale: ' + settings.language + '\".');
+                console.log('SpellRight system locale: \"' + _locale + '\", set locale: \"' + settings.language + '\".');
             }
         }
     }
 
+    SpellRight.prototype.updateConfiguration = function () {
+        var _language = settings.language;
+        var _documentTypes = settings.documentTypes;
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('SpellRight update configuration: \"' + _language + '\", ' + _documentTypes + '\".');
+        }
+
+        if (settings.updateConfiguration) {
+            helpers._settings.update("language", _language, this.getSettingsScope());
+            helpers._settings.update("documentTypes", _documentTypes, this.getSettingsScope());
+        } else {
+            this.doRefreshConfiguration();
+        }
+    }
 
     SpellRight.prototype.selectDictionary = function() {
 
@@ -351,7 +366,8 @@ var SpellRight = (function () {
             _this.doCancelSpellCheck();
 
             if (!off) {
-                settings.update("language", dict, _this.getSettingsScope());
+                settings.language = dict;
+                _this.updateConfiguration();
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
             } else {
@@ -1507,7 +1523,14 @@ var SpellRight = (function () {
             languageid = document.languageId;
         }
 
-        settings = vscode.workspace.getConfiguration('spellright', uri);
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('SpellRight get settings for \"' + uri + '\".');
+        }
+
+        helpers._settings = vscode.workspace.getConfiguration('spellright', uri);
+
+        // Shadow settings
+        for (var p in helpers._settings) settings[p] = helpers._settings[p];
 
         this.collectDictionaries();
         this.selectDefaultLanguage();

@@ -41,6 +41,12 @@
                     "scope": "resource",
                     "description": "Document types for which spelling will be turned ON by default."
                 },
+                "spellright.updateConfiguration": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable/disable automatic update of configuration from GUI operations."
+                },
                 "spellright.groupDictionaries": {
                     "type": "boolean",
                     "default": true,
@@ -113,6 +119,10 @@
             }
         },
         "commands": [
+            {
+                "command": "spellright.updateConfiguration",
+                "title": "SpellRight: Update Configuration"
+            },
             {
                 "command": "spellright.selectDictionary",
                 "title": "SpellRight: Select Dictionary (Language)"
