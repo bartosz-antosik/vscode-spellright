@@ -47,7 +47,7 @@ Dictionaries from the folder will be listed in the language selection list and u
 
 ### **User Dictionaries**
 
-Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. There are two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). All the extension's commands add words to these main dictionaries. Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
+Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. All the extension's commands add words to two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
 
 ## Screenshots
 
@@ -141,6 +141,10 @@ Add text selected in editor to main workspace dictionary appropriate for current
 
 Add text selected in editor to main user dictionary.
 
+`SpellRight: Update Configuration`
+
+Saves current state of GUI (that is language and map of documents classes spell checked) to appropriate configuration file. Works only if `spellright.updateConfiguration` is set to `false`.
+
 ## Settings
 
 This extension contributes the following settings (with default values):
@@ -219,6 +223,10 @@ spellright.spellContextByClass: {
 * disable spelling of comments in LaTeX documents;
 * disable spelling of strings in CPP documents;
 * disable spelling of comments in Python documents.
+
+`spellright.updateConfiguration: true`
+
+If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.updateConfiguration` command to save the changes performed in GUI.
 
 ## In-Document Commands
 

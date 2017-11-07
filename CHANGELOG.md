@@ -1,5 +1,13 @@
 # Change Log
 
+## **2.0.2** released on 2nd November 2017
+
+- **New:** Settings do not have to be persistent (see `spellright.updateConfiguration` configuration setting & `SpellRight: Update Configuration` command) ([#87](https://github.com/bartosz-antosik/vscode-spellright/pull/87)).
+- **Change:** No `Add (...) to workspace dictionary` in suggestions menu when no workspace opened.
+- **Fix:** Adding to user/workspace dictionary did not work immediately as it did before version 2.0 and as it should ([#88](https://github.com/bartosz-antosik/vscode-spellright/pull/88)).
+- **Fix:** Removing spelling document type from status bar switch caused removal of all document types added later.
+- **Fix:** Incorrectly adjusted diagnostics (in differential edit notifications, the algorithm that spells only what has changed during normal editing of the document) when document contains not OS default new line characters.
+
 ## **2.0.0** released on 2nd November 2017
 
 - **New:** Multi Root Workspace ready with all the settings and custom workspace dictionaries having "resource" scope (that is per component root folder). It allows to e.g. have root folders with various languages, document types or custom dictionaries considered for spelling. Users of single root workspaces should not feel any difference to the way it was working so far with the exception of the point below.
