@@ -11,9 +11,11 @@
         "Other"
     ],
     "keywords": [
+        "spell",
+        "checker",
+        "spellchecker",
         "multi-language",
         "offline",
-        "spell-checker",
         "multi-root ready"
     ],
     "activationEvents": [
