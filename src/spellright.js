@@ -5,22 +5,22 @@
 
 'use strict';
 
-var vscode = require('vscode');
+const vscode = require('vscode');
 
-var path = require('path');
-var glob = require('glob');
-var fs = require('fs');
-var mkdirp = require('mkdirp');
-var jsonMinify = require('jsonminify');
-var XRegExp = require('xregexp');
-var ignore = require('ignore');
-var os = require('os');
-var osLocale = require('os-locale');
+const path = require('path');
+const glob = require('glob');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const jsonMinify = require('jsonminify');
+const XRegExp = require('xregexp');
+const ignore = require('ignore');
+const os = require('os');
+const osLocale = require('os-locale');
 
-var bindings = require('../lib/bindings');
+const bindings = require('../lib/bindings');
 
-var langcode = require('../lib/langcode')
-var doctype = require('../lib/doctype');
+const langcode = require('../lib/langcode')
+const doctype = require('../lib/doctype');
 const parsers = require('../lib/parser');
 
 var settings = {};
