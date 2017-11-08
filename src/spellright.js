@@ -1225,7 +1225,7 @@ var SpellRight = (function () {
         this.setDictionary(language);
 
         var commands = [];
-        if (word && word.length >= 2) {
+        if (word && word.length >= 1) {
             var suggestions = bindings.getCorrectionsForMisspelling(word);
 
             // Add suggestions to command list
