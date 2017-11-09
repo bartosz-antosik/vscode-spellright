@@ -1,6 +1,10 @@
 # Change Log
 
-## **2.0.2** released on 2nd November 2017
+## **2.0.4** released on 9th November 2017
+
+- **Fix:** No light bulb and menu with suggestions for single character misspellings ([#89](https://github.com/bartosz-antosik/vscode-spellright/pull/89)).
+
+## **2.0.2** released on 6th November 2017
 
 - **New:** Settings do not have to be persistent (see `spellright.updateConfiguration` configuration setting & `SpellRight: Update Configuration` command) ([#87](https://github.com/bartosz-antosik/vscode-spellright/pull/87)).
 - **Change:** No `Add (...) to workspace dictionary` in suggestions menu when no workspace opened.
