@@ -166,8 +166,9 @@ var SpellRight = (function () {
                 if (_i == (-1)) {
                     settings.documentTypes.push(_documenttype);
                 }
-                _this.updateConfiguration(settings.updateConfiguration);
-                indicator.updateStatusBarIndicator();
+                // Intentionally do not update configuration here because
+                // setCurrentTypeON is only used when language is set
+                // so configuration is updated later and only once.
             }
         });
     }
@@ -369,9 +370,9 @@ var SpellRight = (function () {
 
             if (!off) {
                 settings.language = dict;
-                _this.updateConfiguration(settings.updateConfiguration);
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
+                _this.updateConfiguration(settings.updateConfiguration);
             } else {
                 _this.setCurrentTypeOFF();
             }
@@ -425,6 +426,7 @@ var SpellRight = (function () {
     SpellRight.prototype.SpellCheckAll = function () {
         var _this = this;
 
+        _this.doCancelSpellCheck();
         vscode.window.visibleTextEditors.forEach((editor, index, array) => {
             _this.doInitiateSpellCheck(editor._documentData._document);
         });

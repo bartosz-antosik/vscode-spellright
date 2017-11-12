@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.0.5** released on 13th November 2017
+
+- **Fix:** Sometimes not entire document spelled with correct language after switching (configuration updated too many times during switch process).
+
 ## **2.0.4** released on 9th November 2017
 
 - **Fix:** No light bulb and menu with suggestions for single character misspellings ([#89](https://github.com/bartosz-antosik/vscode-spellright/pull/89)).
