@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.0.6** released on 15th November 2017
+
+- **New:** New setting `spellright.latexSpellParameters` to point LaTeX commands (e.g. \title, \author, \section etc.) that should have parameters spelled. Created extending the request from issue ([#84](https://github.com/bartosz-antosik/vscode-spellright/pull/84)).
+- **Change:** Regular expression for filtering LaTeX commands corrected to include unnumbered versions of document section heading command (`\section*{}`).
+
 ## **2.0.5** released on 13th November 2017
 
 - **Fix:** Sometimes not entire document spelled with correct language after switching (configuration updated too many times during switch process).

@@ -848,7 +848,7 @@ var SpellRight = (function () {
 
         this.setDictionary(settings.language);
 
-        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap }, function (command, parameters, range) {
+        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
 
@@ -935,7 +935,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -958,7 +958,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1041,7 +1041,8 @@ var SpellRight = (function () {
 
         this.setDictionary(settings.language);
 
-        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap }, function (command, parameters, range) {
+        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
+            latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
 
@@ -1121,7 +1122,7 @@ var SpellRight = (function () {
 
         if (line <= document.lineCount) {
 
-            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -1210,7 +1211,7 @@ var SpellRight = (function () {
         var _this = this;
 
         if (parser) {
-            parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap }, function (command, parameters, crange) {
+            parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, crange) {
                 if (crange._start._line <= range._start._line) {
                     if (command === 'language') {
                         if (_this.checkDictionary(parameters)) {

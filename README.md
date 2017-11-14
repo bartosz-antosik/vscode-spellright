@@ -228,6 +228,10 @@ spellright.spellContextByClass: {
 
 If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.updateConfiguration` command to save the changes performed in GUI.
 
+`spellright.latexSpellParameters: [ "title", "date", "author", "section" ]`
+
+Defines LaTeX commands that should have parameters spelled. Other commands are skipped with from checking with following parameters both mandatory (`[]`) and optional (`{}`).
+
 ## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
