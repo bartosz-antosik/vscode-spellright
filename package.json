@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -117,6 +117,17 @@
                     "default": {},
                     "scope": "resource",
                     "description": "Decide which syntactic parts of documents are spelled per document type."
+                },
+                "spellright.latexSpellParameters": {
+                    "type": "array",
+                    "default": [
+                        "title",
+                        "date",
+                        "author",
+                        "section"
+                    ],
+                    "scope": "resource",
+                    "description": "List of LaTeX commands that will have the parameter list spell checked."
                 }
             }
         },
