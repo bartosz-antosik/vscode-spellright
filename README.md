@@ -230,7 +230,7 @@ If set to true then each operation on the GUI (change of language, turning spell
 
 `spellright.latexSpellParameters: [ "title", "date", "author", "section" ]`
 
-Defines LaTeX commands that should have parameters spelled. Other commands are skipped with from checking with following parameters both mandatory (`[]`) and optional (`{}`).
+Defines LaTeX commands that should have parameters spelled. Other commands are skipped from spelling with following parameters both mandatory (`[]`) and optional (`{}`).
 
 ## In-Document Commands
 
