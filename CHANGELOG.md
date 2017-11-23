@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.0.8** released on 23rd November 2017
+
+- **Change:** Better formatting of key shortcuts in README.md ([#92](https://github.com/bartosz-antosik/vscode-spellright/pull/92)). Thanks to [@janpio](https://github.com/janpio).
+
 ## **2.0.7** released on 23rd November 2017
 
 - **Fix:** Word separation rules updated with apostrophe - adding `word` to dictionary doesn't make Spell Right recognize `word's` ([#90](https://github.com/bartosz-antosik/vscode-spellright/issues/90)).
