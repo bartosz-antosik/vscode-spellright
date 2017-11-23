@@ -71,7 +71,7 @@ It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*
 
 ## Installation
 
-Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (**F1** or **Ctrl+Shift+P**):
+Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>):
 
 ```PowerShell
 ext install spellright
@@ -81,7 +81,7 @@ ext install spellright
 
 ### Correcting Spelling Errors
 
-Press **Ctrl+.** (Windows, Linux) **⌘+.** or **Cmd+.** (macOS) or click *Lightbulb* to show a context **menu with suggestions**. Use **F8** or **Shift-F8** to jump to **next**/**previous** spelling error.
+Press **<kbd>Ctrl</kbd>+<kbd>.</kbd>** (Windows, Linux) **<kbd>⌘</kbd>+<kbd>.</kbd>** or **<kbd>Cmd</kbd>+<kbd>.</kbd>** (macOS) or click *Lightbulb* to show a context **menu with suggestions**. Use **<kbd>F8</kbd>** or **<kbd>Shift</kbd>+<kbd>F8</kbd>** to jump to **next**/**previous** spelling error.
 
 ### Changing Language and Turning OFF
 
@@ -93,7 +93,7 @@ It can be reached by clicking on indicator field with an "eye" symbol in status 
 
 ![switch](media/screenshot-switch-on.png)
 
-Alternatively same result can be achieved selecting command `SpellRight: Select Dictionary (Language)` or `SpellRight: Turn OFF for Current Document Type` from the **command palette** (**F1**/**Ctrl+Shift+P**).
+Alternatively same result can be achieved selecting command `SpellRight: Select Dictionary (Language)` or `SpellRight: Turn OFF for Current Document Type` from the **command palette** (**<kbd>F1</kbd>**/**<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>**).
 
 Status bar indicator also shows when spelling for particular document class has been turned OFF:
 
