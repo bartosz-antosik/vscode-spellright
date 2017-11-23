@@ -1,8 +1,12 @@
 # Change Log
 
+## **2.0.7** released on 23rd November 2017
+
+- **Fix:** Word separation rules updated with apostrophe - adding `word` to dictionary doesn't make Spell Right recognize `word's` ([#90](https://github.com/bartosz-antosik/vscode-spellright/issues/90)).
+
 ## **2.0.6** released on 17th November 2017
 
-- **New:** New setting `spellright.latexSpellParameters` to point LaTeX commands (e.g. `\title`, `\author`, `\date`, `\section` etc.) that should have parameters spelled. Created extending the request from issue ([#84](https://github.com/bartosz-antosik/vscode-spellright/pull/84)).
+- **New:** New setting `spellright.latexSpellParameters` to point LaTeX commands (e.g. `\title`, `\author`, `\date`, `\section` etc.) that should have parameters spelled. Created extending the request from issue ([#84](https://github.com/bartosz-antosik/vscode-spellright/issues/84)).
 - **Change:** Regular expression for filtering LaTeX commands corrected to include unnumbered versions of some outline commands (like `\section*{}`).
 
 ## **2.0.5** released on 13th November 2017
@@ -11,13 +15,13 @@
 
 ## **2.0.4** released on 9th November 2017
 
-- **Fix:** No light bulb and menu with suggestions for single character misspellings ([#89](https://github.com/bartosz-antosik/vscode-spellright/pull/89)).
+- **Fix:** No light bulb and menu with suggestions for single character misspellings ([#89](https://github.com/bartosz-antosik/vscode-spellright/issues/89)).
 
 ## **2.0.2** released on 6th November 2017
 
-- **New:** Settings do not have to be persistent (see `spellright.updateConfiguration` configuration setting & `SpellRight: Update Configuration` command) ([#87](https://github.com/bartosz-antosik/vscode-spellright/pull/87)).
+- **New:** Settings do not have to be persistent (see `spellright.updateConfiguration` configuration setting & `SpellRight: Update Configuration` command) ([#87](https://github.com/bartosz-antosik/vscode-spellright/issues/87)).
 - **Change:** No `Add (...) to workspace dictionary` in suggestions menu when no workspace opened.
-- **Fix:** Adding to user/workspace dictionary did not work immediately as it did before version 2.0 and as it should ([#88](https://github.com/bartosz-antosik/vscode-spellright/pull/88)).
+- **Fix:** Adding to user/workspace dictionary did not work immediately as it did before version 2.0 and as it should ([#88](https://github.com/bartosz-antosik/vscode-spellright/issues/88)).
 - **Fix:** Removing spelling document type from status bar switch caused removal of all document types added later.
 - **Fix:** Incorrectly adjusted diagnostics (in differential edit notifications, the algorithm that spells only what has changed during normal editing of the document) when document contains not OS default new line characters.
 
@@ -26,23 +30,23 @@
 - **New:** Multi Root Workspace ready with all the settings and custom workspace dictionaries having "resource" scope (that is per component root folder). It allows to e.g. have root folders with various languages, document types or custom dictionaries considered for spelling. Users of single root workspaces should not feel any difference to the way it was working so far with the exception of the point below.
 - **New:** All the workspace settings are now stored in workspace settings file (`settings.json`) managed by VSCode. It is more in line with recommendations and seems bit more future proof. Current settings can be manually transferred from currently used dedicated workspace settings files (`spellright.json`) remembering that each setting has to be preceded by  `spellright.` prefix.
 - **New:** Selecting dictionary (language) or switching document class ON/OFF is now persistent and automatically stored in workspace settings if workspace is open or user settings if not.
-- **New:** New setting `spellright.ignoreRegExpsByClass` allow to add regular expressions that will be ignored in spelling of a document of particular document class. Created extending the request from ([#78](https://github.com/bartosz-antosik/vscode-spellright/pull/78)).
+- **New:** New setting `spellright.ignoreRegExpsByClass` allow to add regular expressions that will be ignored in spelling of a document of particular document class. Created extending the request from ([#78](https://github.com/bartosz-antosik/vscode-spellright/issues/78)).
 - **Change:** Heavily refactored & simplified code. Although tested, may bring annoyances for which I am sorry. Please report on issues page.
-- **Change:** Added `madoko` to list of file types using markdown parser ([#85](https://github.com/bartosz-antosik/vscode-spellright/pull/85)).
+- **Change:** Added `madoko` to list of file types using markdown parser ([#85](https://github.com/bartosz-antosik/vscode-spellright/issues/85)).
 
 ## **1.2.24** released on 20th October 2017
 
 - **Change:** Added `ink` scripting language to list of file types using plaintext parser ([#81](https://github.com/bartosz-antosik/vscode-spellright/pull/81)). Thanks to [@segphault](https://github.com/segphault).
-- **Fix:** Bad recognition of syntax elements in some conditions while spelling source code files ([#80](https://github.com/bartosz-antosik/vscode-spellright/pull/80)).
+- **Fix:** Bad recognition of syntax elements in some conditions while spelling source code files ([#80](https://github.com/bartosz-antosik/vscode-spellright/issues/80)).
 
 ## **1.2.22** released on 18th October 2017
 
 - **Change:** Screenshots updated.
-- **Fix:** Code refactoring caused regression: Extension not working at all when used without folder (workspace) open ([#79](https://github.com/bartosz-antosik/vscode-spellright/pull/79)).
+- **Fix:** Code refactoring caused regression: Extension not working at all when used without folder (workspace) open ([#79](https://github.com/bartosz-antosik/vscode-spellright/issues/79)).
 
 ## **1.2.20** released on 16th October 2017
 
-- **Fix:** Regression ([#77](https://github.com/bartosz-antosik/vscode-spellright/pull/77)) introduced in 2.17: Failure when spelling programming languages which do not contain multiline string definition.
+- **Fix:** Regression ([#77](https://github.com/bartosz-antosik/vscode-spellright/issues/77)) introduced in 2.17: Failure when spelling programming languages which do not contain multiline string definition.
 
 ## **1.2.18** released on 11th October 2017
 
