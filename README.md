@@ -11,7 +11,7 @@
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages e.g. German.
-* Spells **short words** and **abbreviations** (*I*, *I'm*, *I'll*, *i.e.*, *etc.*)
+* Spells **short words**, **abbreviations** and **contractions** (*I*, *I'm*, *I'll*, *i.e.*, *doesn't*, *etc.*)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
@@ -252,10 +252,17 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 `.spellignore` file located in workspace root directory, appropriate to currently open file in (multi root) workspace, can be used to disable spelling for files described by [gitignore](https://git-scm.com/docs/gitignore) syntax file patterns.
 
+## Unknown document type
+
+Spell Right can not be used to spell a document type it does not understand. Spell Right uses hierarchical parsers which require configuration and VSCode does not give any way for extensions to understand syntax elements (e.g. line & block comment delimiters, string delimiters & quoting rules, code blocks in markdown genre of documents etc.) of particular document types registered either internally or by extensions.
+
+Please report the fact that some particular document type is not spelled as an [issue](https://github.com/bartosz-antosik/vscode-spellright/issues) and I will try to add it.
+
 ## Known Issues
 
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as the above, this is probably more of a VSCode's issue).
+* There is a limit, imposed by VSCode, on the number of diagnostics that an extension (Spell Right among) can provide for one file. The number is 251 and Spell Right cannot display more spelling errors. Once the spelling errors from the head of the file are corrected or added to the dictionaries more issues will appear at the end.
 
 ## Notice
 

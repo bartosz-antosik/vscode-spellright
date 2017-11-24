@@ -16,6 +16,7 @@ const XRegExp = require('xregexp');
 const ignore = require('ignore');
 const os = require('os');
 const osLocale = require('os-locale');
+const opn = require("opn");
 
 const bindings = require('../lib/bindings');
 
@@ -368,13 +369,25 @@ var SpellRight = (function () {
 
             _this.doCancelSpellCheck();
 
-            if (!off) {
+            if (!off && doctype.fromDocument(_document) !== null) {
                 settings.language = dict;
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
                 _this.updateConfiguration(settings.updateConfiguration);
             } else {
                 _this.setCurrentTypeOFF();
+
+                if (doctype.fromDocument(_document) == null) {
+                    vscode.window.showInformationMessage(`This document type [${_document._languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
+                        switch (option) {
+                            case 'Ask to add':
+                                opn('https://github.com/bartosz-antosik/vscode-spellright/issues');
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
             }
         });
     };
