@@ -479,7 +479,7 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\.0-9\-]+)');
+        var rother = XRegExp('([^\.0-9\-\']+)');
         var rsep = /[\.0-9\-]/;
         var parts = [];
 
