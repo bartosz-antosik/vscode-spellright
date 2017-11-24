@@ -1,8 +1,9 @@
 # Change Log
 
-## **2.0.8** released on 23rd November 2017
+## **2.0.8** released on 24th November 2017
 
 - **Change:** Better formatting of key shortcuts in README.md ([#92](https://github.com/bartosz-antosik/vscode-spellright/pull/92)). Thanks to [@janpio](https://github.com/janpio).
+- **Fix:** Regression introduced with ([#90](https://github.com/bartosz-antosik/vscode-spellright/issues/90)) fixed ([#93](https://github.com/bartosz-antosik/vscode-spellright/issues/93)).
 
 ## **2.0.7** released on 23rd November 2017
 
