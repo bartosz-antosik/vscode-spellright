@@ -81,7 +81,9 @@ ext install spellright
 
 ### Correcting Spelling Errors
 
-Press **<kbd>Ctrl</kbd>+<kbd>.</kbd>** (Windows, Linux) **<kbd>⌘</kbd>+<kbd>.</kbd>** or **<kbd>Cmd</kbd>+<kbd>.</kbd>** (macOS) or click *Lightbulb* to show a context **menu with suggestions**. Use **<kbd>F8</kbd>** or **<kbd>Shift</kbd>+<kbd>F8</kbd>** to jump to **next**/**previous** spelling error.
+Press **<kbd>Ctrl</kbd>+<kbd>.</kbd>** (Windows, Linux) **<kbd>⌘</kbd>+<kbd>.</kbd>** or **<kbd>Cmd</kbd>+<kbd>.</kbd>** (macOS) or click *Lightbulb* to show a context **menu with suggestions**.
+
+Use **<kbd>F8</kbd>** or **<kbd>Shift</kbd>+<kbd>F8</kbd>** to jump to **next**/**previous** spelling error.
 
 ### Changing Language and Turning OFF
 
