@@ -11,7 +11,7 @@
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages e.g. German.
-* Spells **short words** and **abbreviations** (*I*, *I'm*, *i.e.*, *etc.*)
+* Spells **short words** and **abbreviations** (*I*, *I'm*, *I'll*, *i.e.*, *etc.*)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
 * **In-Document commands** allow to switch spelling **ON** or **OFF** despite global settings and **change spelling language** multiple times within the document.
