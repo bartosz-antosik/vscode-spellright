@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.0.10** released on 27th November 2017
+
+- **Change:** Added `rmarkdown` to list of file types using markdown parser ([#94](https://github.com/bartosz-antosik/vscode-spellright/issues/94)).
+- **Change:** Information added about document type not being yet supported by the Spell Right as an extension to ([#94](https://github.com/bartosz-antosik/vscode-spellright/issues/94)).
+
 ## **2.0.8** released on 24th November 2017
 
 - **Change:** Better formatting of key shortcuts in README.md ([#92](https://github.com/bartosz-antosik/vscode-spellright/pull/92)). Thanks to [@janpio](https://github.com/janpio).

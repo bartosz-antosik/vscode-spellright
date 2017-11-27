@@ -140,7 +140,7 @@ var SpellRight = (function () {
 
         vscode.window.onDidChangeActiveTextEditor(function (editor) {
             if (editor) {
-                _this.doInitiateSpellCheck(editor._documentData._document);
+                _this.doInitiateSpellCheck(editor.document);
             }
         }, null);
 
@@ -156,9 +156,8 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.setCurrentTypeON = function () {
-        // NOTE: This is strange: activeTextEditor.document is undefined.
-        var _document = vscode.window.activeTextEditor._documentData;
-        var _documenttype = _document._languageId;
+        var _document = vscode.window.activeTextEditor.document;
+        var _documenttype = _document.languageId;
 
         var _this = this;
         vscode.languages.getLanguages().then(function (_languages) {
@@ -175,14 +174,13 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.setCurrentTypeOFF = function () {
-        // NOTE: This is strange: activeTextEditor.document is undefined.
-        var _document = vscode.window.activeTextEditor._documentData;
-        var _documenttype = _document._languageId;
+        var _document = vscode.window.activeTextEditor.document;
+        var _documenttype = _document.languageId;
 
         var _i = settings.documentTypes.indexOf(_documenttype);
         if (_i != (-1)) {
             settings.documentTypes.splice(_i, 1);
-            this.diagnosticCollection.delete(_document._uri);
+            this.diagnosticCollection.delete(_document.uri);
         }
         this.updateConfiguration(settings.updateConfiguration);
         indicator.updateStatusBarIndicator();
@@ -320,8 +318,8 @@ var SpellRight = (function () {
 
         var items = [];
 
-        var _document = vscode.window.activeTextEditor._documentData;
-        var _documenttype = _document._languageId;
+        var _document = vscode.window.activeTextEditor.document;
+        var _documenttype = _document.languageId;
 
         var _this = this;
 
@@ -378,7 +376,7 @@ var SpellRight = (function () {
                 _this.setCurrentTypeOFF();
 
                 if (doctype.fromDocument(_document) == null) {
-                    vscode.window.showInformationMessage(`This document type [${_document._languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
+                    vscode.window.showInformationMessage(`This document type [${_document.languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
                         switch (option) {
                             case 'Ask to add':
                                 opn('https://github.com/bartosz-antosik/vscode-spellright/issues');
@@ -441,7 +439,7 @@ var SpellRight = (function () {
 
         _this.doCancelSpellCheck();
         vscode.window.visibleTextEditors.forEach((editor, index, array) => {
-            _this.doInitiateSpellCheck(editor._documentData._document);
+            _this.doInitiateSpellCheck(editor.document);
         });
     }
 
