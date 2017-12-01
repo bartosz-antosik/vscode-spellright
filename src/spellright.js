@@ -76,11 +76,8 @@ var SpellRight = (function () {
     SpellRight.prototype.activate = function (context) {
 
         var subscriptions = context.subscriptions;
+        this.context = context;
         this.extensionRoot = context.extensionPath;
-
-        this.getSettings();
-
-        var _this = this;
 
         // Force HUNSPELL - seems it does not work when setting the environment
         // variable from within VSCode. Works when it is set outside.
@@ -93,6 +90,10 @@ var SpellRight = (function () {
         // the list of available dictionaries.
         var _dictionaries = bindings.getAvailableDictionaries();
         this.hunspell = (_dictionaries.length === 0 || (typeof process.env.SPELLCHECKER_PREFER_HUNSPELL !== 'undefined'));
+
+        this.getSettings();
+
+        var _this = this;
 
         indicator = new SpellRightIndicator();
         controller = new SpellRightIndicatorController(indicator);
@@ -1438,17 +1439,31 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getDictionariesPath = function () {
-        var codeFolder = 'Code';
-        if (vscode.version.indexOf('insider') >= 0)
-            codeFolder = 'Code - Insiders';
+
+
+        if (this.context.storagePath !== undefined) {
+            // Regular version
+            var sourcePath = path.join(this.context.storagePath, '..', '..', '..', '..');
+        } else {
+            // Portable version
+            var sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
+        }
+        var userRoot = path.normalize(sourcePath);
+
+        var dpath;
         if (process.platform == 'win32')
-            return path.join(process.env.APPDATA, codeFolder, 'Dictionaries');
+            dpath = path.join(userRoot, 'Dictionaries');
         else if (process.platform == 'darwin')
-            return path.join(process.env.HOME, 'Library', 'Application Support', codeFolder, 'Dictionaries');
+            dpath = path.join(userRoot, 'Dictionaries');
         else if (process.platform == 'linux')
-            return path.join(process.env.HOME, '.config', codeFolder, 'Dictionaries');
+            dpath = path.join(userRoot, 'Dictionaries');
         else
-            return '';
+            dpath = '';
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('SpellRight dictionaries path: \"' + dpath + '\"');
+        }
+        return dpath;
     };
 
     SpellRight.prototype.getWorkspaceDictionaryPath = function () {

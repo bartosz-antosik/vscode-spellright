@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.0.12** released on 2nd December 2017
+
+- **Change:** Dictionaries path adjusted to work with [portable](https://github.com/garethflowers/vscode-portable) version of VSCode. Extension of ([#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53)).
+
 ## **2.0.10** released on 27th November 2017
 
 - **Change:** Added `rmarkdown` to list of file types using markdown parser ([#94](https://github.com/bartosz-antosik/vscode-spellright/issues/94)).
