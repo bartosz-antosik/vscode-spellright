@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.0.13** released on 5th December 2017
+
+- **Fix:** Regression introduced for Linux platform by version 2.0.12 fixed ([#98](https://github.com/bartosz-antosik/vscode-spellright/issues/98)).
+
 ## **2.0.12** released on 2nd December 2017
 
 - **Change:** Dictionaries path adjusted to work with [portable](https://github.com/garethflowers/vscode-portable) version of VSCode. Extension of ([#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53)).

@@ -1441,12 +1441,21 @@ var SpellRight = (function () {
     SpellRight.prototype.getDictionariesPath = function () {
 
 
-        if (this.context.storagePath !== undefined) {
-            // Regular version
-            var sourcePath = path.join(this.context.storagePath, '..', '..', '..', '..');
-        } else {
-            // Portable version
-            var sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
+        var codeFolder = 'Code';
+        if (vscode.version.indexOf('insider') >= 0) codeFolder = 'Code - Insiders';
+
+        if (process.platform == 'win32') {
+            if (this.context.storagePath !== undefined) {
+                // Regular version
+                var sourcePath = path.join(process.env.APPDATA, codeFolder);
+            } else {
+                // Portable version
+                var sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
+            }
+        } else if (process.platform == 'darwin') {
+            var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
+        } else if (process.platform == 'linux') {
+            var sourcePath = path.join(process.env.HOME, '.config', codeFolder);
         }
         var userRoot = path.normalize(sourcePath);
 
