@@ -207,6 +207,7 @@ Allows to change class of diagnostic messages produced by Spell Right which chan
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
 * `body` - body of document (e.g. LaTeX, Plaintext, Markdown etc.);
+* `code` - code blocks in Markdown type documents (spelled as whole, not syntactically);
 * `comments` - comment (block & line) sections in programming languages, also LaTeX;
 * `strings` - strings in programming languages.
 
