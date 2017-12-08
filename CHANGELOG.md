@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.0.14** released on 8th December 2017
+
+- **New:** Refrain from spelling on tabbed code sections in `markdown` class documents and added new 'code' context to `spellright.spellContext` ([#100](https://github.com/bartosz-antosik/vscode-spellright/issues/100)).
+- **New:** Added block (pod) comments when spelling `perl` class of documents ([#96](https://github.com/bartosz-antosik/vscode-spellright/issues/96)).
+
 ## **2.0.13** released on 5th December 2017
 
 - **Fix:** Regression introduced for Linux platform by version 2.0.12 fixed ([#98](https://github.com/bartosz-antosik/vscode-spellright/issues/98)).
