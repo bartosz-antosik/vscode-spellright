@@ -1479,7 +1479,15 @@ var SpellRight = (function () {
         var editor = vscode.window.activeTextEditor;
         if (editor) {
             if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
-                return path.join(vscode.workspace.getWorkspaceFolder(editor.document.uri).uri.fsPath, '.vscode');
+                var wpath = path.join(vscode.workspace.getWorkspaceFolder(editor.document.uri).uri.fsPath, '.vscode');
+                if (!fs.existsSync(wpath)) {
+                    try {
+                        fs.mkdirSync(wpath);
+                    } catch (err) {
+                        return null;
+                    }
+                }
+                return wpath;
             } else {
                 return null;
             }

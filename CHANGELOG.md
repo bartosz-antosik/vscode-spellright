@@ -1,8 +1,12 @@
 # Change Log
 
+## **2.0.15** released on 11th December 2017
+
+- **Change:** Spell Right will create workspace configuration directory (`.vscode`) if it does not exists ([#99](https://github.com/bartosz-antosik/vscode-spellright/issues/99)).
+
 ## **2.0.14** released on 8th December 2017
 
-- **New:** Refrain from spelling on tabbed code sections in `markdown` class documents and added new 'code' context to `spellright.spellContext` ([#100](https://github.com/bartosz-antosik/vscode-spellright/issues/100)).
+- **New:** Refrain from spelling of tabbed code sections in `markdown` class documents and added new 'code' context to `spellright.spellContext` ([#100](https://github.com/bartosz-antosik/vscode-spellright/issues/100)).
 - **New:** Added block (pod) comments when spelling `perl` class of documents ([#96](https://github.com/bartosz-antosik/vscode-spellright/issues/96)).
 
 ## **2.0.13** released on 5th December 2017
@@ -11,7 +15,7 @@
 
 ## **2.0.12** released on 2nd December 2017
 
-- **Change:** Dictionaries path adjusted to work with [portable](https://github.com/garethflowers/vscode-portable) version of VSCode. Extension of ([#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53)).
+- **Change:** Dictionaries path adjusted to work with [portable](https://github.com/garethflowers/vscode-portable) version of VSCode (Windows only). Extension of ([#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53)).
 
 ## **2.0.10** released on 27th November 2017
 
@@ -181,7 +185,7 @@
 ## **1.1.6** released on 11th August 2017
 
 - **New:** Support for **macOS** and **Linux**.
-- **Fix:** Turning off SpellRight leaves it stuck in enabled mode in other Editors ([#37](https://github.com/bartosz-antosik/vscode-spellright/issues/37)) and quick fix to quick fix ([#38](https://github.com/bartosz-antosik/vscode-spellright/issues/38)).
+- **Fix:** Turning off Spell Right leaves it stuck in enabled mode in other Editors ([#37](https://github.com/bartosz-antosik/vscode-spellright/issues/37)) and quick fix to quick fix ([#38](https://github.com/bartosz-antosik/vscode-spellright/issues/38)).
 
 ## **1.0.42** released on 6th August 2017
 
