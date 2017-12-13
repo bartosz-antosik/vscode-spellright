@@ -160,18 +160,13 @@ var SpellRight = (function () {
         var _document = vscode.window.activeTextEditor.document;
         var _documenttype = _document.languageId;
 
-        var _this = this;
-        vscode.languages.getLanguages().then(function (_languages) {
-            if (_languages.indexOf(_documenttype) != (-1)) {
-                var _i = settings.documentTypes.indexOf(_documenttype);
-                if (_i == (-1)) {
-                    settings.documentTypes.push(_documenttype);
-                }
-                // Intentionally do not update configuration here because
-                // setCurrentTypeON is only used when language is set
-                // so configuration is updated later and only once.
-            }
-        });
+        var _i = settings.documentTypes.indexOf(_documenttype);
+        if (_i == (-1)) {
+            settings.documentTypes.push(_documenttype);
+        }
+        // Intentionally do not update configuration here because
+        // setCurrentTypeON is only used when language is set
+        // so configuration is updated later and only once.
     }
 
     SpellRight.prototype.setCurrentTypeOFF = function () {
