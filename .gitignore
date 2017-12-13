@@ -21,4 +21,4 @@ $RECYCLE.BIN/
 /temp/
 lib/bin/node-spellchecker/build/
 lib/bin/node-spellchecker/vendor/hunspell_dictionaries/
-/NOTES.md
+/TODO*
