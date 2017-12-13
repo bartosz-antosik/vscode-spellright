@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.0.16** released on 13th December 2017
+
+- **Change:** Added `todo` to list of file types using markdown parser ([#101](https://github.com/bartosz-antosik/vscode-spellright/issues/#101)).
+- **Fix:** Regression in markdown parser causing 'asciidoc' document type not being spelled.
+
 ## **2.0.15** released on 11th December 2017
 
 - **Change:** Spell Right will create workspace configuration directory (`.vscode`) if it does not exists ([#99](https://github.com/bartosz-antosik/vscode-spellright/issues/99)).
