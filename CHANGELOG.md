@@ -2,7 +2,7 @@
 
 ## **2.0.18** released on 15th December 2017
 
-- **Fix:** Strings in 'makefile', 'r' and few other  document classes were not spelled.
+- **Fix:** Strings in 'makefile', 'r' and few other document classes were not spelled.
 
 ## **2.0.16** released on 13th December 2017
 
