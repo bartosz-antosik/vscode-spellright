@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.0.18** released on 15th December 2017
+
+- **Fix:** Strings in 'makefile', 'r' and few other  document classes were not spelled.
+
 ## **2.0.16** released on 13th December 2017
 
 - **Change:** Added `todo` to list of file types using markdown parser ([#101](https://github.com/bartosz-antosik/vscode-spellright/issues/#101)).
