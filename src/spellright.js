@@ -1657,8 +1657,10 @@ var SpellRightIndicator = (function () {
     };
     SpellRightIndicator.prototype.updateStatusBarIndicator = function () {
         var location = vscode.StatusBarAlignment.Right;
+        var priority = SPELLRIGHT_STATUSBAR_ITEM_PRIORITY;
+
         if (!this.statusBarItem) {
-            this.statusBarItem = vscode.window.createStatusBarItem(location);
+            this.statusBarItem = vscode.window.createStatusBarItem(location, priority);
             this.statusBarItem.command = 'spellright.selectDictionary';
         }
         // Get the current text editor

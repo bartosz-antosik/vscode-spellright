@@ -9,6 +9,8 @@ global.SPELLRIGHT_DEBUG_OUTPUT = false;
 global.SPELLRIGHT_LINES_BATCH = 10;
 global.SPELLRIGHT_MILLISECS_BATCH = 100;
 
+global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
+
 const spellright = require('./spellright');
 const vscode = require('vscode');
 
