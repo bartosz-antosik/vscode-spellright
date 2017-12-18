@@ -1,7 +1,8 @@
 # Change Log
 
-## **2.0.18** released on 15th December 2017
+## **2.0.18** released on 18th December 2017
 
+- **New:** Links to information on adding languages and languages available in Windows added to README.md ([#103](https://github.com/bartosz-antosik/vscode-spellright/issues/#103)).
 - **Fix:** Strings in 'makefile', 'r' and few other document classes were not spelled.
 
 ## **2.0.16** released on 13th December 2017

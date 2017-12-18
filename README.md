@@ -7,7 +7,7 @@
 ## Features
 
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, C, Python, JavaScript, Batch, ..., D, Julia etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
-* Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, **multiple languages** in Windows Single Language editions etc.)
+* Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, see [here](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows), **multiple languages** in Windows Single Language editions, like [here](https://github.com/bartosz-antosik/vscode-spellright/issues/23#issuecomment-314038083) etc.)
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling **multiple languages in one document** using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages e.g. German.
@@ -22,7 +22,7 @@
 
 ### **Windows 8+**
 
-On Microsoft Windows from version 8 on Spell Right uses system spelling API. Follow system guidelines on how to install additional system spelling dictionaries.
+On Microsoft Windows from version 8 on Spell Right uses system spelling API. Follow system guidelines, like [here](http://www.tech-recipes.com/rx/56333/windows-10-change-or-add-another-language/) or [here](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-language-packs-to-windows), on how to install additional system spelling dictionaries.
 
 ### **macOS**
 
