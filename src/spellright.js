@@ -363,7 +363,7 @@ var SpellRight = (function () {
 
             _this.doCancelSpellCheck();
 
-            if (!off && doctype.fromDocument(_document) !== null) {
+            if (!off && doctype.fromDocument(settings, _document) !== null) {
                 settings.language = dict;
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
@@ -371,7 +371,7 @@ var SpellRight = (function () {
             } else {
                 _this.setCurrentTypeOFF();
 
-                if (doctype.fromDocument(_document) == null) {
+                if (doctype.fromDocument(settings, _document) == null) {
                     vscode.window.showInformationMessage(`This document type [${_document.languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
                         switch (option) {
                             case 'Ask to add':
@@ -841,7 +841,7 @@ var SpellRight = (function () {
         }
 
         var document = event.document;
-        var parser = doctype.fromDocument(document);
+        var parser = doctype.fromDocument(settings, document);
 
         if (parser == null) {
             return
@@ -1022,7 +1022,7 @@ var SpellRight = (function () {
         var initiate = (this.spellingContext.length == 0);
 
         // Select appropriate parser
-        const parser = doctype.fromDocument(document);
+        const parser = doctype.fromDocument(settings, document);
 
         // No parser for this type of document
         if (parser == null) {
@@ -1214,7 +1214,7 @@ var SpellRight = (function () {
         var language = settings.language;
 
         // Parse to identify language which should be used for suggestions
-        var parser = doctype.fromDocument(document);
+        var parser = doctype.fromDocument(settings, document);
         var _this = this;
 
         if (parser) {
