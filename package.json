@@ -128,6 +128,12 @@
                     "scope": "resource",
                     "description": "Decide which syntactic parts of documents are spelled per document type."
                 },
+                "spellright.parserByClass": {
+                    "type": "object",
+                    "default": {},
+                    "scope": "resource",
+                    "description": "Decide which parser and its configuration to use per document type."
+                },
                 "spellright.latexSpellParameters": {
                     "type": "array",
                     "default": [

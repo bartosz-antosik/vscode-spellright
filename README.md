@@ -184,7 +184,7 @@ Regular expressions ignored in spelling. Allows to ignore/consider as spelled co
 Extends setting of `ignoreRegExps` per document type. Accepts object of key-multi-value pairs. For example following settings:
 
 ```JSON
-spellright.ignoreRegExpsByClass: {
+"spellright.ignoreRegExpsByClass": {
     "markdown": [ "/<[^>]+>/g", "/&nbsp;/g" ],
     "cpp": [ "/#include\\\\s+\\\".+\\\"/g" ]
 }
@@ -216,7 +216,7 @@ Allows to enable (present in string) or disable (absent in string) spelling of s
 Overrides setting of `spellContext` per document type. Accepts object of key-value pairs. For example following settings:
 
 ```JSON
-spellright.spellContextByClass: {
+"spellright.spellContextByClass": {
     "latex": "body",
     "cpp": "comments",
     "python": "strings"
@@ -238,6 +238,20 @@ Allows to decide which configuration gets updated when `spellright.configuration
 `spellright.latexSpellParameters: [ "title", "date", "author", "section" ]`
 
 Defines LaTeX commands that should have parameters spelled. Other commands are skipped from spelling with following parameters both mandatory (`[]`) and optional (`{}`).
+
+`spellright.parserByClass: {}`
+
+Allows to assign or override generic parser for particular document class. For example following settings:
+
+```JSON
+"spellright.parserByClass": {
+    "perl": {
+        "parser": "code"
+    }
+}
+```
+
+assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) document class.
 
 ## In-Document Commands
 

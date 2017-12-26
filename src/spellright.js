@@ -102,7 +102,7 @@ var SpellRight = (function () {
         context.subscriptions.push(controller);
         context.subscriptions.push(indicator);
 
-        vscode.commands.registerCommand('spellright.updateConfiguration', this.updateConfiguration, this);
+        vscode.commands.registerCommand('spellright.configurationUpdate', this.configurationUpdate, this);
         vscode.commands.registerCommand('spellright.selectDictionary', this.selectDictionary, this);
         vscode.commands.registerCommand('spellright.setCurrentTypeOFF', this.setCurrentTypeOFF, this);
         vscode.commands.registerCommand('spellright.addFromSelectionToWorkspaceDictionary', this.addFromSelectionToWorkspaceDictionary, this);
@@ -178,7 +178,7 @@ var SpellRight = (function () {
             settings.documentTypes.splice(_i, 1);
             this.diagnosticCollection.delete(_document.uri);
         }
-        this.updateConfiguration(settings.configurationUpdate);
+        this.configurationUpdate(settings.configurationUpdate);
         indicator.updateStatusBarIndicator();
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -293,9 +293,10 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.updateConfiguration = function (persistent = true) {
+    SpellRight.prototype.configurationUpdate = function (persistent = true) {
         var _language = settings.language;
         var _documentTypes = settings.documentTypes;
+        var _parserByClass = settings.parserByClass;
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('SpellRight update configuration: \"' + _language + '\", \"' + _documentTypes + '\".');
@@ -305,6 +306,8 @@ var SpellRight = (function () {
             var _settings = vscode.workspace.getConfiguration('spellright', helpers._uri);
             _settings.update("language", _language, this.getSettingsScope());
             _settings.update("documentTypes", _documentTypes, this.getSettingsScope());
+            if (Object.keys(_parserByClass).length !== 0)
+                _settings.update("parserByClass", _parserByClass, this.getSettingsScope());
         } else {
             this.refreshSettings();
         }
@@ -367,20 +370,70 @@ var SpellRight = (function () {
                 settings.language = dict;
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
-                _this.updateConfiguration(settings.configurationUpdate);
+                _this.configurationUpdate(settings.configurationUpdate);
             } else {
-                _this.setCurrentTypeOFF();
+                if (doctype.fromDocument(settings, _document) === null) {
 
-                if (doctype.fromDocument(settings, _document) == null) {
-                     vscode.window.showInformationMessage(`This document type [${_document.languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
-                         switch (option) {
-                             case 'Ask to add':
-                                 opn('https://github.com/bartosz-antosik/vscode-spellright/issues');
-                                 break;
-                             default:
-                                 break;
-                         }
+                    var items = [];
+
+                    items.push({
+                        label: 'Plain Text',
+                        description: 'Spells entire content of the document'
                     });
+                    items.push({
+                        label: 'Markdown',
+                        description: 'Spells everything except code blocks'
+                    });
+                    items.push({
+                        label: 'Code',
+                        description: 'Spells comments and strings'
+                    });
+                    items.push({
+                        label: 'LaTeX',
+                        description: 'Spells everything except LaTeX commands'
+                    });
+                    items.push({
+                        label: 'XML',
+                        description: 'Spells everything outside markup and comments'
+                    });
+
+                    var options = {
+                        placeHolder: 'Select generic parser to use with unrecognized document type [' + _document.languageId + ']'
+                    };
+
+                    vscode.window.showQuickPick(items, options).then(function (selection) {
+                        if (typeof selection === 'undefined') {
+                            return;
+                        } else {
+                            var _parser = '';
+                            switch(selection.label) {
+                                case 'Plain Text':
+                                    _parser = 'plain';
+                                    break;
+                                case 'Markdown':
+                                    _parser = 'markdown';
+                                    break;
+                                case 'Code':
+                                    _parser = 'code';
+                                    break;
+                                case 'LaTeX':
+                                    _parser = 'latex';
+                                    break;
+                                case 'XML':
+                                    _parser = 'xml';
+                                    break;
+                            }
+
+                            settings.parserByClass[_document.languageId] = {
+                                "parser": _parser
+                            }
+
+                            _this.setCurrentTypeON();
+                            _this.configurationUpdate(settings.configurationUpdate);
+                        }
+                    });
+                } else {
+                    _this.setCurrentTypeOFF();
                 }
             }
         });
@@ -1424,7 +1477,7 @@ var SpellRight = (function () {
         var editor = vscode.window.activeTextEditor;
         if (editor) {
             if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
-                if (settings.configurationScope == "global") {
+                if (settings.configurationScope == "user") {
                     return vscode.ConfigurationTarget.Global;
                 } else {
                     return vscode.ConfigurationTarget.WorkspaceFolder;
