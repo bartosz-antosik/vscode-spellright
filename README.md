@@ -227,9 +227,13 @@ spellright.spellContextByClass: {
 * disable spelling of strings in CPP documents;
 * disable spelling of comments in Python documents.
 
-`spellright.updateConfiguration: true`
+`spellright.configurationUpdate: true`
 
-If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.updateConfiguration` command to save the changes performed in GUI.
+If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.configurationUpdate` command to save the changes performed in GUI.
+
+`spellright.configurationScope: user`
+
+Allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true. Possible values are `user` and `workspace`.
 
 `spellright.latexSpellParameters: [ "title", "date", "author", "section" ]`
 

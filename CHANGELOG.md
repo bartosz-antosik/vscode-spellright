@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.1.0** released on 28th December 2017
+
+- **New:** New configuration item `spellright.configurationScope` allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true.
+- **Change:** Configuration item `spellright.updateConfiguration` and command are renamed to `spellright.configurationUpdate` for consistency with new setting `spellright.configurationScope`.
+
 ## **2.0.18** released on 18th December 2017
 
 - **New:** Links to information on adding languages and languages available in Windows added to README.md ([#103](https://github.com/bartosz-antosik/vscode-spellright/issues/#103)).

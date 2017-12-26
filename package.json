@@ -43,11 +43,21 @@
                     "scope": "resource",
                     "description": "Document types for which spelling will be turned ON by default."
                 },
-                "spellright.updateConfiguration": {
+                "spellright.configurationUpdate": {
                     "type": "boolean",
                     "default": true,
                     "scope": "resource",
                     "description": "Enable/disable automatic update of configuration from GUI operations."
+                },
+                "spellright.configurationScope": {
+                    "type": "string",
+                    "enum": [
+                        "user",
+                        "workspace"
+                    ],
+                    "default": "user",
+                    "scope": "resource",
+                    "description": "Scope for automatic configuration update."
                 },
                 "spellright.groupDictionaries": {
                     "type": "boolean",
@@ -133,8 +143,8 @@
         },
         "commands": [
             {
-                "command": "spellright.updateConfiguration",
-                "title": "SpellRight: Update Configuration"
+                "command": "spellright.configurationUpdate",
+                "title": "SpellRight: Configuration Update"
             },
             {
                 "command": "spellright.selectDictionary",

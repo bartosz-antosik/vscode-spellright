@@ -178,7 +178,7 @@ var SpellRight = (function () {
             settings.documentTypes.splice(_i, 1);
             this.diagnosticCollection.delete(_document.uri);
         }
-        this.updateConfiguration(settings.updateConfiguration);
+        this.updateConfiguration(settings.configurationUpdate);
         indicator.updateStatusBarIndicator();
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -367,19 +367,19 @@ var SpellRight = (function () {
                 settings.language = dict;
                 _this.setDictionary(dict);
                 _this.setCurrentTypeON();
-                _this.updateConfiguration(settings.updateConfiguration);
+                _this.updateConfiguration(settings.configurationUpdate);
             } else {
                 _this.setCurrentTypeOFF();
 
                 if (doctype.fromDocument(settings, _document) == null) {
-                    vscode.window.showInformationMessage(`This document type [${_document.languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
-                        switch (option) {
-                            case 'Ask to add':
-                                opn('https://github.com/bartosz-antosik/vscode-spellright/issues');
-                                break;
-                            default:
-                                break;
-                        }
+                     vscode.window.showInformationMessage(`This document type [${_document.languageId}] is not currently supported by Spell Right.`, 'Ask to add').then(option => {
+                         switch (option) {
+                             case 'Ask to add':
+                                 opn('https://github.com/bartosz-antosik/vscode-spellright/issues');
+                                 break;
+                             default:
+                                 break;
+                         }
                     });
                 }
             }
@@ -1424,7 +1424,11 @@ var SpellRight = (function () {
         var editor = vscode.window.activeTextEditor;
         if (editor) {
             if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
-                return vscode.ConfigurationTarget.WorkspaceFolder;
+                if (settings.configurationScope == "global") {
+                    return vscode.ConfigurationTarget.Global;
+                } else {
+                    return vscode.ConfigurationTarget.WorkspaceFolder;
+                }
             } else {
                 return vscode.ConfigurationTarget.Global;
             }
