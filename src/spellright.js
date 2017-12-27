@@ -378,27 +378,32 @@ var SpellRight = (function () {
 
                     items.push({
                         label: 'Plain Text',
-                        description: 'Spells entire content of the document'
+                        description: 'spells entire content of the document',
+                        detail: ''
                     });
                     items.push({
                         label: 'Markdown',
-                        description: 'Spells everything except code blocks'
+                        description: 'spells everything except code blocks',
+                        detail: ''
                     });
                     items.push({
                         label: 'Code',
-                        description: 'Spells comments and strings'
+                        description: 'spells comments and strings',
+                        detail: ''
                     });
                     items.push({
                         label: 'LaTeX',
-                        description: 'Spells everything except LaTeX commands'
+                        description: 'spells everything except LaTeX commands',
+                        detail: ''
                     });
                     items.push({
                         label: 'XML',
-                        description: 'Spells everything outside markup and comments'
+                        description: 'spells comments and everything outside markup',
+                        detail: ''
                     });
 
                     var options = {
-                        placeHolder: 'Select generic parser to use with unrecognized document type [' + _document.languageId + ']'
+                        placeHolder: 'Select generic parser for this document type [' + _document.languageId + ']'
                     };
 
                     vscode.window.showQuickPick(items, options).then(function (selection) {

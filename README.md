@@ -275,14 +275,15 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 ## Unknown document type
 
-Spell Right can not be used to spell a document type it does not understand. Spell Right uses hierarchical parsers which require configuration and VSCode does not give any way for extensions to understand syntax elements (e.g. line & block comment delimiters, string delimiters & quoting rules, code blocks in markdown genre of documents etc.) of particular document types registered either internally or by extensions.
+Spell Right must have an idea of the document structure in order to be able to spell the document skipping parts that do not need to be spelled (e.g. code blocks in Markdown, commands in LaTeX documents etc.) When an unregistered document type is encountered then Spell Right proposes a list of generic parsers to choose from:
 
-Please report the fact that some particular document type is not spelled as an [issue](https://github.com/bartosz-antosik/vscode-spellright/issues) and I will try to add it.
+![dictionary](media/screenshot-parser.png)
+
+Select appropriate class to be able to spell the document.
 
 ## Known Issues
 
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
-* Status bar indicator is not always in the same place - other extensions that add items to status bar "compete" for the place and it jumps from the last to one before last position in some cases (as the above, this is probably more of a VSCode's issue).
 * There is a limit, imposed by VSCode, on the number of diagnostics that an extension (Spell Right among) can provide for one file. The number is 251 and Spell Right cannot display more spelling errors. Once the spelling errors from the head of the file are corrected or added to the dictionaries more issues will appear at the end.
 
 ## Notice
