@@ -55,7 +55,7 @@
                         "user",
                         "workspace"
                     ],
-                    "default": "user",
+                    "default": "workspace",
                     "scope": "resource",
                     "description": "Scope for automatic configuration update."
                 },
