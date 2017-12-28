@@ -231,7 +231,7 @@ Overrides setting of `spellContext` per document type. Accepts object of key-val
 
 If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.configurationUpdate` command to save the changes performed in GUI.
 
-`spellright.configurationScope: user`
+`spellright.configurationScope: workspace`
 
 Allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true. Possible values are `user` and `workspace`.
 
@@ -253,13 +253,13 @@ Allows to assign or override generic parser for particular document class. For e
 
 assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) document class. Possible values are:
 
-| Parser   | Description                                     |
-| -------- | ----------------------------------------------- |
-| plain    | Spells entire content of the document.          |
-| markdown | Spells everything except code blocks.           |
-| code     | Spells comments and strings.                    |
-| latex    | Spells everything except LaTeX commands.        |
-| xml      | Spells comments and everything outside markup.  |
+| Parser     | Description                                     |
+| ---------- | ----------------------------------------------- |
+| `plain`    | Spells entire content of the document.          |
+| `markdown` | Spells everything except code blocks.           |
+| `code`     | Spells comments and strings.                    |
+| `latex`    | Spells everything except LaTeX commands.        |
+| `xml`      | Spells comments and everything outside markup.  |
 
 ## In-Document Commands
 
@@ -287,7 +287,7 @@ Spell Right must have an idea of the document structure in order to be able to s
 
 ![dictionary](media/screenshot-parser.png)
 
-Select appropriate class to be able to be able to spell the document.
+Select appropriate class to be able to be able to spell the document. If `spellright.configurationUpdate` is set to `true` assignment will be written to the configuration settings either user or workspace according to the value of `spellright.configurationScope` setting.
 
 ## Known Issues
 
