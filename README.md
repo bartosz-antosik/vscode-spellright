@@ -251,7 +251,15 @@ Allows to assign or override generic parser for particular document class. For e
 }
 ```
 
-assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) document class.
+assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) document class. Possible values are:
+
+| Parser   | Description                                     |
+| -------- | ----------------------------------------------- |
+| plain    | Spells entire content of the document.          |
+| markdown | Spells everything except code blocks.           |
+| code     | Spells comments and strings.                    |
+| latex    | Spells everything except LaTeX commands.        |
+| xml      | Spells comments and everything outside markup.  |
 
 ## In-Document Commands
 
