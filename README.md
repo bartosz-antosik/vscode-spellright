@@ -275,11 +275,11 @@ Forces spelling **ON** for the entire document despite global settings. Has high
 
 ## Unknown document type
 
-Spell Right must have an idea of the document structure in order to be able to spell the document skipping parts that do not need to be spelled (e.g. code blocks in Markdown, commands in LaTeX documents etc.) When an unregistered document type is encountered then Spell Right proposes a list of generic parsers to choose from:
+Spell Right must have an idea of the document structure in order to be able to spell it. Most document types have parts that do not need to be spelled (e.g. code blocks in Markdown, commands in LaTeX documents etc.) When an unregistered document type is encountered then Spell Right proposes a list of generic parsers to choose from:
 
 ![dictionary](media/screenshot-parser.png)
 
-Select appropriate class to be able to spell the document.
+Select appropriate class to be able to be able to spell the document.
 
 ## Known Issues
 
