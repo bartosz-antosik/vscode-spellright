@@ -3,9 +3,9 @@
 ## **2.1.0** released on 28th December 2017
 
 - **New:** Handling of unknown document type added via GUI and `spellright.parserByClass` configuration item ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102), [#104](https://github.com/bartosz-antosik/vscode-spellright/issues/#104)).
-- **New:** New configuration item `spellright.configurationScope` allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true.
+- **New:** New configuration item `spellright.configurationScope` allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to `true`.
 - **Change:** Configuration item `spellright.updateConfiguration` and command are renamed to `spellright.configurationUpdate` for consistency with new setting `spellright.configurationScope`.
-- **Fix:** Better handling of distinction between tab introduced inline code/indented bullet list ([#105](https://github.com/bartosz-antosik/vscode-spellright/issues/105)).
+- **Fix:** Better handling of distinction between inline code/bullet list ([#105](https://github.com/bartosz-antosik/vscode-spellright/issues/105)).
 
 ## **2.0.18** released on 18th December 2017
 
