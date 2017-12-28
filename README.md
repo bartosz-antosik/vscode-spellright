@@ -145,7 +145,7 @@ Add text selected in editor to main user dictionary.
 
 `SpellRight: Update Configuration`
 
-Saves current state of GUI (that is language and map of documents classes spell checked) to appropriate configuration file. Works only if `spellright.updateConfiguration` is set to `false`.
+Saves current state of GUI (that is language and map of documents classes spell checked) to appropriate configuration file. Works only if `spellright.configurationUpdate` is set to `false`.
 
 ## Settings
 
