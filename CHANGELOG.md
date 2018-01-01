@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.2** released on 30th December 2017
+
+- **Change:** Added `vue` to list of file types using XML parser ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102)).
+
 ## **2.1.0** released on 28th December 2017
 
 - **New:** Handling of unknown document type added via GUI and `spellright.parserByClass` configuration item ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102), [#104](https://github.com/bartosz-antosik/vscode-spellright/issues/#104)).
