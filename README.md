@@ -287,7 +287,7 @@ Spell Right must have an idea of the document structure in order to be able to s
 
 ![dictionary](media/screenshot-parser.png)
 
-Select appropriate class to be able to be able to spell the document. If `spellright.configurationUpdate` is set to `true` assignment will be written to the configuration settings either user or workspace according to the value of `spellright.configurationScope` setting.
+Select appropriate class to be able to spell the document. If `spellright.configurationUpdate` is set to `true` assignment will be written to the configuration settings either user or workspace according to the value of `spellright.configurationScope` setting.
 
 ## Known Issues
 
