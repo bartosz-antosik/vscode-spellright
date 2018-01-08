@@ -182,7 +182,7 @@ var SpellRight = (function () {
         indicator.updateStatusBarIndicator();
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('SpellRight turned OFF for \"' + _documenttype + '\"" document type.');
+            console.log('[spellright] Turned OFF for \"' + _documenttype + '\"" document type.');
         }
     }
 
@@ -210,13 +210,13 @@ var SpellRight = (function () {
             _dictionaries = bindings.getAvailableDictionaries();
         }
 
-        if (SPELLRIGHT_DEBUG_OUTPUT)
-            console.log(_dictionaries);
-
         dictionaries = [];
 
         var _this = this;
         _dictionaries.forEach(function (entry) {
+
+            console.log('[spellright] Adding dictionary [' + entry + '].');
+
             if (!_this.hunspell) {
                 // Native spellcheckers - operate on ISO language codes
                 var languageShort = langcode.code2Language(entry);
@@ -288,7 +288,7 @@ var SpellRight = (function () {
                 }
             });
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('SpellRight system locale: \"' + _locale + '\", set locale: \"' + settings.language + '\".');
+                console.log('[spellright] System locale: \"' + _locale + '\", set locale: \"' + settings.language + '\".');
             }
         }
     }
@@ -299,7 +299,7 @@ var SpellRight = (function () {
         var _parserByClass = settings.parserByClass;
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('SpellRight update configuration: \"' + _language + '\", \"' + _documentTypes + '\".');
+            console.log('[spellright] Update configuration: \"' + _language + '\", \"' + _documentTypes + '\".');
         }
 
         if (persistent && helpers._uri) {
@@ -469,7 +469,7 @@ var SpellRight = (function () {
             return;
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
+            console.log('[spellright] Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
         }
         bindings.setDictionary(_dict, _path);
 
@@ -577,14 +577,14 @@ var SpellRight = (function () {
                 var pattern = settings.ignoreRegExps[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
                 pattern = pattern.replace(/\\\\/g, '\\');
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    console.log('RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
+                    console.log('[spellright] RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
                 }
                 this.ignoreRegExpsMap.push(new RegExp(pattern, flags));
             }
             catch (e) {
                 vscode.window.showErrorMessage('SpellRight: Ignore RexExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    console.log('Ignore RegExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
+                    console.log('[spellright] Ignore RegExp: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
                 }
             }
         }
@@ -597,14 +597,14 @@ var SpellRight = (function () {
                     var pattern = settings.ignoreRegExpsByClass[languageid][i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
                     pattern = pattern.replace(/\\\\/g, '\\');
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('RegExp prepare: by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + ' = /' + pattern + '/' + flags);
+                        console.log('[spellright] RegExp prepare: by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + ' = /' + pattern + '/' + flags);
                     }
                     this.ignoreRegExpsMap.push(new RegExp(pattern, flags));
                 }
                 catch (e) {
                     vscode.window.showErrorMessage('SpellRight: Ignore RexExp by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + '\" malformed. Ignoring.');
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('Ignore RegExp: \"' + settings.ignoreRegExpsByClass[languageid][i] + '\" malformed. Ignoring.');
+                        console.log('[spellright] Ignore RegExp: \"' + settings.ignoreRegExpsByClass[languageid][i] + '\" malformed. Ignoring.');
                     }
                 }
             }
@@ -654,8 +654,8 @@ var SpellRight = (function () {
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
-        if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('[' + context +  ']: \"' + word + '\"');
+        if (SPELLRIGHT_DEBUG_OUTPUT && false) {
+            console.log('[spellright] Spell [' + context +  ']: \"' + word + '\"');
         }
 
         // Check if current context not disabled by syntatic control
@@ -918,7 +918,7 @@ var SpellRight = (function () {
             _signature = _signature + command + '-' + parameters;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('In-Document Command: ' + command + ' [' + parameters + ']');
+                console.log('[spellright] In-Document Command: ' + command + ' [' + parameters + ']');
             }
             if (command === 'off') {
                 helpers._commands.ignore = true;
@@ -1112,7 +1112,7 @@ var SpellRight = (function () {
             _signature = _signature + command + '-' + parameters;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('In-Document Command: ' + command + ' [' + parameters + ']');
+                console.log('[spellright] In-Document Command: ' + command + ' [' + parameters + ']');
             }
             if (command === 'off') {
                 helpers._commands.ignore = true;
@@ -1163,7 +1163,7 @@ var SpellRight = (function () {
 
         if (_length != this.spellingContext.length) {
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+                console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
             }
         }
     }
@@ -1210,7 +1210,7 @@ var SpellRight = (function () {
                 var end = Date.now();
                 var secs = (end - start) / 1000;
 
-                console.log('Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + diagnostics.length + ' errors.');
+                console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + diagnostics.length + ' errors.');
             }
 
             // NULL document that has been finished
@@ -1230,7 +1230,7 @@ var SpellRight = (function () {
                 _this.diagnosticMap[context._document.uri.toString()] = undefined;
 
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    console.log('Spelling of \"' + context._document.fileName + '\" [' + context._document.languageId + '] CANCELLED.');
+                    console.log('[spellright] Spelling of \"' + context._document.fileName + '\" [' + context._document.languageId + '] CANCELLED.');
                 }
 
                 _this.spellingContext.shift();
@@ -1243,7 +1243,7 @@ var SpellRight = (function () {
         var diagnostic = undefined;
 
         context.diagnostics.forEach(function (_diagnostics) {
-            if (_diagnostics.range._start._character >= range._start._character && _diagnostics.range._end._character <= range._end._character) {
+            if (_diagnostics.source == 'spelling' && _diagnostics.range._start._character >= range._start._character && _diagnostics.range._end._character <= range._end._character) {
                 diagnostic = _diagnostics;
             }
         });
@@ -1266,7 +1266,7 @@ var SpellRight = (function () {
         var cword = word.replace(/[.,]/g, '');
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('Providing code action for \"' + word + '\".');
+            console.log('[spellright] Providing code action for \"' + word + '\".');
         }
 
         var language = settings.language;
@@ -1527,7 +1527,7 @@ var SpellRight = (function () {
             dpath = '';
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('SpellRight dictionaries path: \"' + dpath + '\"');
+            console.log('[spellright] Dictionaries path: \"' + dpath + '\"');
         }
         return dpath;
     };
@@ -1586,7 +1586,7 @@ var SpellRight = (function () {
                         .filter(Boolean);
 
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('SpellRight read ' + result.length + ' word(s) from \"' + fileName + '\" dictionary file.');
+                        console.log('[spellright] Read ' + result.length + ' word(s) from \"' + fileName + '\" dictionary file.');
                     }
 
                     return result;
@@ -1621,7 +1621,7 @@ var SpellRight = (function () {
         }
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('SpellRight read ' + count + ' pattern(s) from \"' + ifile + '\" file.');
+            console.log('[spellright] Read ' + count + ' pattern(s) from \"' + ifile + '\" file.');
         }
         return result;
     }
@@ -1647,7 +1647,7 @@ var SpellRight = (function () {
             for (var p in _settings) settings[p] = _settings[p];
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('SpellRight get LIVE settings for \"' + urifspath + '\".');
+                console.log('[spellright] Get LIVE settings for \"' + urifspath + '\".');
             }
 
             helpers._cache[urifspath] = Object.assign({}, settings);
@@ -1665,7 +1665,7 @@ var SpellRight = (function () {
             settings = Object.assign({}, helpers._cache[urifspath]);
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('SpellRight get CACHED settings for \"' + urifspath + '\".');
+                console.log('[spellright] Get CACHED settings for \"' + urifspath + '\".');
             }
         }
         helpers._uri = uri;

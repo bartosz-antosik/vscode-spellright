@@ -17,7 +17,7 @@ const vscode = require('vscode');
 function activate(context) {
 
     if (SPELLRIGHT_DEBUG_OUTPUT) {
-        console.log('SpellRight activated (' + process.platform + ', ' + process.arch + ').');
+        console.log('[spellright] Activated (' + process.platform + ', ' + process.arch + ').');
 
         // I would love if there would be a chance to get access to
         // languageId to LanguageName conversion. Similarly would be great to
@@ -40,6 +40,6 @@ function deactivate() {
     SpellRight.deactivate();
 
     if (SPELLRIGHT_DEBUG_OUTPUT)
-        console.log('SpellRight deactivated.');
+        console.log('[spellright] Deactivated.');
 }
 exports.deactivate = deactivate;
