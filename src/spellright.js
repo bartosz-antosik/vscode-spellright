@@ -215,7 +215,9 @@ var SpellRight = (function () {
         var _this = this;
         _dictionaries.forEach(function (entry) {
 
-            console.log('[spellright] Adding dictionary [' + entry + '].');
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('[spellright] Adding dictionary [' + entry + '].');
+            }
 
             if (!_this.hunspell) {
                 // Native spellcheckers - operate on ISO language codes
@@ -675,11 +677,16 @@ var SpellRight = (function () {
         cword = word;
 
         // Special case of words ending with period - abbreviations, etc.
+        // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
         var _endsWithPeriod = cword.endsWith('.');
         var _endsWithApostrophe = cword.endsWith('\'');
-        if (_endsWithPeriod || _endsWithApostrophe) {
+        while (cword.endsWith('.') || cword.endsWith('\'')) {
+            _endsWithPeriod = cword.endsWith('.');
+            _endsWithApostrophe = cword.endsWith('\'');
+
             var cword = cword.slice(0, -1);
         }
+
         while (cword.startsWith('.') || cword.startsWith('\'')) {
             var cword = cword.slice(1);
             _colnumber++;

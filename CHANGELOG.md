@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.8** released on 11th January 2018
+
+- **Fix:** LaTeX double quotes not spelled correctly ([#108](https://github.com/bartosz-antosik/vscode-spellright/issues/#108)).
+
 ## **2.1.2** released on 6th January 2018
 
 - **Change:** Added `vue` to list of file types using XML parser ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102)).
