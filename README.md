@@ -26,7 +26,7 @@ On Microsoft Windows from version 8 on Spell Right uses system spelling API. Fol
 
 ### **macOS**
 
-On macOS Spell Right uses system spelling API. Due to [bug](https://stackoverflow.com/questions/31214926/how-to-add-language-to-nsspellcheckers-available-languages) in `NSSpellChecker` layer of macOS Spell Right cannot currently use dictionaries installed in `~/Library/Spelling` folder, just those that came with the system.
+On macOS Spell Right uses system spelling API.
 
 ### **Linux and Windows 7**
 
@@ -291,6 +291,7 @@ Select appropriate class to be able to spell the document. If `spellright.config
 
 * Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * There is a limit, imposed by VSCode, on the number of diagnostics that an extension (Spell Right among) can provide for one file. The number is 251 and Spell Right cannot display more spelling errors. Once the spelling errors from the head of the file are corrected or added to the dictionaries more issues will appear at the end.
+* Due to [bug](https://stackoverflow.com/questions/31214926/how-to-add-language-to-nsspellcheckers-available-languages) in `NSSpellChecker` layer of macOS Spell Right cannot currently use dictionaries installed in `~/Library/Spelling` folder, just those that came with the system.
 * There are rare situations when dictionaries are not reported correctly on Windows using Windows Spelling API (Windows 8+). They can result in no dictionary or only some dictionaries available. So far the reason for this is unknown but seems to be outside of the extension (see [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/#106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/#53) for details).
 
 ## Notice
