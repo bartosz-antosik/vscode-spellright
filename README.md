@@ -51,7 +51,7 @@ Spell Right stores words considered as spelled correctly and not existing in the
 
 ## Screenshots
 
-### Plain Documents
+### Documents
 
 Spelling of **plain text**/**markdown**/**LaTeX** documents:
 
