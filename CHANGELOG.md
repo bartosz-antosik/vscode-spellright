@@ -2,27 +2,27 @@
 
 ## **2.1.8** released on 11th January 2018
 
-- **Fix:** LaTeX double quotes not spelled correctly ([#108](https://github.com/bartosz-antosik/vscode-spellright/issues/#108)).
+- **Fix:** LaTeX double quotes not spelled correctly ([#108](https://github.com/bartosz-antosik/vscode-spellright/issues/108)).
 
 ## **2.1.2** released on 6th January 2018
 
-- **Change:** Added `vue` to list of file types using XML parser ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102)).
+- **Change:** Added `vue` to list of file types using XML parser ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/102)).
 
 ## **2.1.0** released on 28th December 2017
 
-- **New:** Handling of unknown document type added via GUI and `spellright.parserByClass` configuration item ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/#102), [#104](https://github.com/bartosz-antosik/vscode-spellright/issues/#104)).
+- **New:** Handling of unknown document type added via GUI and `spellright.parserByClass` configuration item ([#102](https://github.com/bartosz-antosik/vscode-spellright/issues/102), [#104](https://github.com/bartosz-antosik/vscode-spellright/issues/104)).
 - **New:** New configuration item `spellright.configurationScope` allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to `true`.
 - **Change:** Configuration item `spellright.updateConfiguration` and command are renamed to `spellright.configurationUpdate` for consistency with new setting `spellright.configurationScope`.
 - **Fix:** Better handling of distinction between inline code/bullet list in `markdown` document class ([#105](https://github.com/bartosz-antosik/vscode-spellright/issues/105)).
 
 ## **2.0.18** released on 18th December 2017
 
-- **New:** Links to information on adding languages and languages available in Windows added to README.md ([#103](https://github.com/bartosz-antosik/vscode-spellright/issues/#103)).
+- **New:** Links to information on adding languages and languages available in Windows added to README.md ([#103](https://github.com/bartosz-antosik/vscode-spellright/issues/103)).
 - **Fix:** Strings in 'makefile', 'r' and few other document classes were not spelled.
 
 ## **2.0.16** released on 13th December 2017
 
-- **Change:** Added `todo` to list of file types using markdown parser ([#101](https://github.com/bartosz-antosik/vscode-spellright/issues/#101)).
+- **Change:** Added `todo` to list of file types using markdown parser ([#101](https://github.com/bartosz-antosik/vscode-spellright/issues/101)).
 - **Fix:** Regression in markdown parser causing 'asciidoc' document type not being spelled.
 
 ## **2.0.15** released on 11th December 2017
