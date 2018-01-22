@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
 // Spell Right extension for Visual Studio Code (VSCode)
-// Copyright (c) 2017 Bartosz Antosik. MIT License.
+// Copyright (c) 2017-2018 Bartosz Antosik. MIT License.
 // -----------------------------------------------------------------------------
 
 'use strict';
