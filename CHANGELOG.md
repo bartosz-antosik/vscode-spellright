@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.1.9** released on 22nd January 2018
+## **2.1.10** released on 22nd January 2018
 
 - **Change:** Added `mediawiki` to list of file types using plaintext parser ([#109](https://github.com/bartosz-antosik/vscode-spellright/issues/109)).
 
