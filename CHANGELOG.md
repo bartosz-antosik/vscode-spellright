@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.12** released on 29th January 2018
+
+- **Fix:** Regression interfering with some markdown parser based documents ([#111](https://github.com/bartosz-antosik/vscode-spellright/issues/111)).
+
 ## **2.1.10** released on 22nd January 2018
 
 - **Change:** Added `mediawiki` to list of file types using plaintext parser ([#109](https://github.com/bartosz-antosik/vscode-spellright/issues/109)).
