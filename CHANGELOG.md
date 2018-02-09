@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.14** released on 9th February 2018
+
+- **Fix:** URLs & email addresses removed from spelling in XML parser ([#113](https://github.com/bartosz-antosik/vscode-spellright/issues/113)).
+
 ## **2.1.12** released on 29th January 2018
 
 - **Fix:** Regression interfering with some markdown parser based documents ([#111](https://github.com/bartosz-antosik/vscode-spellright/issues/111)).
