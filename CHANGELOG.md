@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.16** released on 12th February 2018
+
+- **Change:** Configuration settings read/update for out of workspace files read from workspace ([#110](https://github.com/bartosz-antosik/vscode-spellright/issues/110)).
+
 ## **2.1.14** released on 9th February 2018
 
 - **Fix:** URLs & email addresses removed from spelling in XML parser ([#113](https://github.com/bartosz-antosik/vscode-spellright/issues/113)).

@@ -306,10 +306,12 @@ var SpellRight = (function () {
 
         if (persistent && helpers._uri) {
             var _settings = vscode.workspace.getConfiguration('spellright', helpers._uri);
-            _settings.update("language", _language, this.getSettingsScope());
-            _settings.update("documentTypes", _documentTypes, this.getSettingsScope());
+            var _scope = this.getSettingsScope(helpers._uri);
+
+            _settings.update("language", _language, _scope);
+            _settings.update("documentTypes", _documentTypes, _scope);
             if (Object.keys(_parserByClass).length !== 0)
-                _settings.update("parserByClass", _parserByClass, this.getSettingsScope());
+                _settings.update("parserByClass", _parserByClass, _scope);
         } else {
             this.refreshSettings();
         }
@@ -1485,7 +1487,7 @@ var SpellRight = (function () {
         return a;
     };
 
-    SpellRight.prototype.getSettingsScope = function () {
+    SpellRight.prototype.getSettingsScope = function (uri) {
         var editor = vscode.window.activeTextEditor;
         if (editor) {
             if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
@@ -1495,7 +1497,13 @@ var SpellRight = (function () {
                     return vscode.ConfigurationTarget.WorkspaceFolder;
                 }
             } else {
-                return vscode.ConfigurationTarget.Global;
+                if (vscode.workspace.workspaceFolders) {
+                    // Out of workspace document opened IN WORKSPACE
+                    return vscode.ConfigurationTarget.Workspace;
+                } else {
+                    // Out of workspace document opened STANDALONE
+                    return vscode.ConfigurationTarget.Global;
+                }
             }
         } else {
             return vscode.ConfigurationTarget.Global;
