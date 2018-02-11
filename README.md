@@ -185,14 +185,13 @@ Extends setting of `ignoreRegExps` per document type. Accepts object of key-mult
 
 ```JSON
 "spellright.ignoreRegExpsByClass": {
-    "markdown": [ "/<[^>]+>/g", "/&nbsp;/g" ],
+    "markdown": [ "/&amp;/g", "/&nbsp;/g" ],
     "cpp": [ "/#include\\\\s+\\\".+\\\"/g" ],
     "html": [ "/<script>[^]*?</script>/gm" ]
 }
 ```
 
-* avoid spelling of HTML tags in markdown documents;
-* avoid spelling of `&nbsp;` literals in markdown documents;
+* avoid spelling of `&amp;` and `&nbsp;` literals in markdown documents;
 * avoid spelling of strings in `#include "file"` construct in CPP documents;
 * avoid spelling of multiline `<script></script>` tag content in HTML documents.
 

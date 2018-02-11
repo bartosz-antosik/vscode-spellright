@@ -2,7 +2,8 @@
 
 ## **2.1.16** released on 12th February 2018
 
-- **Change:** Configuration settings read/update for out of workspace files read from workspace ([#110](https://github.com/bartosz-antosik/vscode-spellright/issues/110)).
+- **Change:** XML/HTML tags removed from spelling in markdown parser.
+- **Change:** Configuration settings read/update for out of workspace files ([#110](https://github.com/bartosz-antosik/vscode-spellright/issues/110)).
 
 ## **2.1.14** released on 9th February 2018
 
