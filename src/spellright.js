@@ -696,11 +696,26 @@ var SpellRight = (function () {
         var _containsPeriod = /[.]/.test(cword);
         var _containsApostrophe = /[\'']/.test(cword);
         var _containsDash = /[-]/.test(cword);
+        var _containsDigit = /[\d]/.test(cword);
 
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
         if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
-            return;
+
+            var _digitInsideOnWindows = false;
+
+            // Some special cases are held here
+
+            // Somehow Windows Spelling API considers anything with digit
+            // inside a correctly spelled entity. Has to be corrected.
+            if (_containsDigit && !this.hunspell && process.platform == 'win32') {
+                _digitInsideOnWindows = true;
+            }
+
+            // Do not exit if one of special cases
+            if (!_digitInsideOnWindows) {
+                return;
+            }
         }
 
         // Split words containing period inside. Period does not break words

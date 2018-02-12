@@ -5,6 +5,7 @@
 - **Change:** XML/HTML tags removed from spelling in markdown parser.
 - **Change:** Word separation rules updated with ampersand.
 - **Change:** Configuration settings read/update for out of workspace files ([#110](https://github.com/bartosz-antosik/vscode-spellright/issues/110)).
+- **Fix:** Checking of words with digit inside not working properly with Windows Spelling API.
 
 ## **2.1.14** released on 9th February 2018
 
