@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.1.14",
+    "version": "2.1.15",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -140,7 +140,9 @@
                         "title",
                         "date",
                         "author",
-                        "section"
+                        "chapter",
+                        "section",
+                        "subsection"
                     ],
                     "scope": "resource",
                     "description": "List of LaTeX commands that will have the parameter list spell checked."
