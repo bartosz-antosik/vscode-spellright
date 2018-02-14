@@ -693,10 +693,10 @@ var SpellRight = (function () {
             var cword = cword.slice(1);
             _colnumber++;
         }
-        var _containsPeriod = /[.]/.test(cword);
+        var _containsPeriod = /[\.]/.test(cword);
         var _containsApostrophe = /[\'']/.test(cword);
         var _containsDash = /[-]/.test(cword);
-        var _containsDigit = /[\d]/.test(cword);
+        var _containsDigitInside = /\D\d\D/.test(cword);
 
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
@@ -708,7 +708,7 @@ var SpellRight = (function () {
 
             // Somehow Windows Spelling API considers anything with digit
             // inside a correctly spelled entity. Has to be corrected.
-            if (_containsDigit && !this.hunspell && process.platform == 'win32') {
+            if (_containsDigitInside && !this.hunspell && process.platform == 'win32') {
                 _digitInsideOnWindows = true;
             }
 
