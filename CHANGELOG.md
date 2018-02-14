@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.1.16** released on 12th February 2018
+## **2.1.16** released on 14th February 2018
 
 - **Change:** XML/HTML tags removed from spelling in markdown parser.
 - **Change:** Word separation rules updated with ampersand.
