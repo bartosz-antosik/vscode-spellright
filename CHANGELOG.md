@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.1.20** released on 19th February 2018
+
+- **Change:** `spellright.latexSpellParameters` extended with default values: "subsubsection", "textbf", "textit", "underline" and "emph".
+- **Fix:** Commands spanning on multiple lines in LaTeX incorrectly removed from spelling.
+
 ## **2.1.18** released on 14th February 2018
 
 - **Change:** XML/HTML tags removed from spelling in markdown parser.

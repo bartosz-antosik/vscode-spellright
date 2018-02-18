@@ -142,7 +142,12 @@
                         "author",
                         "chapter",
                         "section",
-                        "subsection"
+                        "subsection",
+                        "subsubsection",
+                        "textbf",
+                        "textit",
+                        "underline",
+                        "emph"
                     ],
                     "scope": "resource",
                     "description": "List of LaTeX commands that will have the parameter list spell checked."
