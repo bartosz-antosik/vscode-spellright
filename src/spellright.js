@@ -1532,12 +1532,14 @@ var SpellRight = (function () {
         if (vscode.version.indexOf('insider') >= 0) codeFolder = 'Code - Insiders';
 
         if (process.platform == 'win32') {
-            if (this.context.storagePath !== undefined) {
-                // Regular version
-                var sourcePath = path.join(process.env.APPDATA, codeFolder);
-            } else {
-                // Portable version
-                var sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
+            // Regular version, workspace opened
+            var sourcePath = path.join(process.env.APPDATA, codeFolder);
+            if (this.context.storagePath == undefined) {
+                // Regular version, workspace NOT opened
+                if (!fs.existsSync(sourcePath)) {
+                    // Portable version
+                    sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
+                }
             }
         } else if (process.platform == 'darwin') {
             var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
@@ -1546,20 +1548,20 @@ var SpellRight = (function () {
         }
         var userRoot = path.normalize(sourcePath);
 
-        var dpath;
+        var dictionaryPath;
         if (process.platform == 'win32')
-            dpath = path.join(userRoot, 'Dictionaries');
+            dictionaryPath = path.join(userRoot, 'Dictionaries');
         else if (process.platform == 'darwin')
-            dpath = path.join(userRoot, 'Dictionaries');
+            dictionaryPath = path.join(userRoot, 'Dictionaries');
         else if (process.platform == 'linux')
-            dpath = path.join(userRoot, 'Dictionaries');
+            dictionaryPath = path.join(userRoot, 'Dictionaries');
         else
-            dpath = '';
+            dictionaryPath = '';
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('[spellright] Dictionaries path: \"' + dpath + '\"');
+            console.log('[spellright] Dictionaries path: \"' + dictionaryPath + '\"');
         }
-        return dpath;
+        return dictionaryPath;
     };
 
     SpellRight.prototype.getWorkspaceDictionaryPath = function () {

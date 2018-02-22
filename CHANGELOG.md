@@ -1,9 +1,10 @@
 # Change Log
 
-## **2.1.20** released on 19th February 2018
+## **2.1.20** released on 22nd February 2018
 
 - **Change:** `spellright.latexSpellParameters` extended with default values: "subsubsection", "textbf", "textit", "underline" and "emph".
 - **Fix:** Commands spanning on multiple lines in LaTeX incorrectly removed from spelling.
+- **Fix:** Dictionaries not loaded properly in Windows 7 when no workspace opened ([#115](https://github.com/bartosz-antosik/vscode-spellright/issues/115)). Thanks to [@dozius](https://github.com/dozius).
 
 ## **2.1.18** released on 14th February 2018
 
