@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.22** released on 26nd February 2018
+
+- **Change:** `spellright.latexSpellParameters` extended with further commands that should have parameters spelled (e.g. chapter, paragraph, subparagraph, footnote, item etc.)
+
 ## **2.1.20** released on 22nd February 2018
 
 - **Change:** `spellright.latexSpellParameters` extended with default values: "subsubsection", "textbf", "textit", "underline" and "emph".
