@@ -236,9 +236,33 @@ If set to true then each operation on the GUI (change of language, turning spell
 
 Allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true. Possible values are `user` and `workspace`.
 
-`spellright.latexSpellParameters: [ "title", "date", "author", "chapter", "section", "subsection" ]`
+`spellright.latexSpellParameters: (see below for default)`
 
-Defines LaTeX commands that should have parameters spelled. Other commands are skipped from spelling with following parameters both mandatory (`[]`) and optional (`{}`).
+Defines LaTeX commands that should have both mandatory (`[]`) and optional (`{}`) parameters spelled. Other commands are removed from spelling. Default value:
+
+```JSON
+"spellright.latexSpellParameters": [ 
+    "author",
+    "title",
+    "date",
+    "chapter",
+    "section\\*?",
+    "subsection\\*?",
+    "subsubsection\\*?",
+    "part",
+    "paragraph",
+    "subparagraph",
+    "text(rm|sf|tt|md|bf|up|it|sl|sc|normal)",
+    "underline",
+    "emph",
+    "item",
+    "footnote(text)?",
+    "caption",
+    "multicolumn",
+    "href",
+    "hyperref"
+]
+```
 
 `spellright.parserByClass: {}`
 
