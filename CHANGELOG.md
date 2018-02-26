@@ -1,8 +1,8 @@
 # Change Log
 
-## **2.1.22** released on 26nd February 2018
+## **2.1.22** released on 26th February 2018
 
-- **Change:** `spellright.latexSpellParameters` extended with further commands that should have parameters spelled (e.g. chapter, paragraph, subparagraph, footnote, item etc.)
+- **Change:** LaTeX enhancement: `spellright.latexSpellParameters` extended with further commands that should have parameters spelled (32 in total, e.g. footnote, caption, multicolumn, href, hyperref, ..., author, title, section, subsection etc.)
 
 ## **2.1.20** released on 22nd February 2018
 
