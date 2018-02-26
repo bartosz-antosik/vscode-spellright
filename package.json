@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.1.20",
+    "version": "2.1.22",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -137,9 +137,9 @@
                 "spellright.latexSpellParameters": {
                     "type": "array",
                     "default": [
+                        "author",
                         "title",
                         "date",
-                        "author",
                         "chapter",
                         "section\\*?",
                         "subsection\\*?",
