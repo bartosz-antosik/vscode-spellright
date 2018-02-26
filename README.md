@@ -236,12 +236,12 @@ If set to true then each operation on the GUI (change of language, turning spell
 
 Allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true. Possible values are `user` and `workspace`.
 
-`spellright.latexSpellParameters: (see below for default)`
+`spellright.latexSpellParameters: (see below for default value)`
 
 Defines LaTeX commands that should have both mandatory (`[]`) and optional (`{}`) parameters spelled. Other commands are removed from spelling. Default value:
 
 ```JSON
-"spellright.latexSpellParameters": [ 
+"spellright.latexSpellParameters": [
     "author",
     "title",
     "date",
