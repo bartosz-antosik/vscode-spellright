@@ -2,8 +2,9 @@
 
 ## **2.1.24** released on 28th February 2018
 
-- **New:** LaTeX magic comments (`!TEX`) removed from spelling.
+- **New:** LaTeX magic comments (`!TEX`) removed from spelling ([#120](https://github.com/bartosz-antosik/vscode-spellright/issues/120)).
 - **New:** Added spelling parser settings for LISP (comments & strings) source code files.
+- **Change:** LaTeX commands with nested curly braces improperly removed from spelling ([#120](https://github.com/bartosz-antosik/vscode-spellright/issues/120)).
 
 ## **2.1.22** released on 26th February 2018
 
