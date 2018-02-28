@@ -2,6 +2,7 @@
 
 ## **2.1.24** released on 28th February 2018
 
+- **New:** LaTeX magic comments (`!TEX`) removed from spelling.
 - **New:** Added spelling parser settings for LISP (comments & strings) source code files.
 
 ## **2.1.22** released on 26th February 2018
