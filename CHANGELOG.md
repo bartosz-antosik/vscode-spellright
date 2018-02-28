@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.24** released on 28th February 2018
+
+- **New:** Added spelling parser settings for LISP (comments & strings) source code files.
+
 ## **2.1.22** released on 26th February 2018
 
 - **Change:** LaTeX enhancement: `spellright.latexSpellParameters` extended with further commands that should have parameters spelled (32 in total, e.g. footnote, caption, multicolumn, href, hyperref, ..., author, title, section, subsection etc.)
