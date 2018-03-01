@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.25** released on 28th February 2018
+
+- **Fix:** Regression in removing LaTeX markup from spelling ([#121](https://github.com/bartosz-antosik/vscode-spellright/issues/121)).
+
 ## **2.1.24** released on 28th February 2018
 
 - **New:** LaTeX magic comments (`!TEX`) removed from spelling ([#120](https://github.com/bartosz-antosik/vscode-spellright/issues/120)).
