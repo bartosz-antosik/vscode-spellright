@@ -18,6 +18,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+.testindent.log
 /temp/
 lib/bin/node-spellchecker/build/
 lib/bin/node-spellchecker/vendor/hunspell_dictionaries/
