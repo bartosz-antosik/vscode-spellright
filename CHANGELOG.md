@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.28** released on 5th March 2018
+
+- **New:** Prefix `mailto:` removed from spelling if in front of an e-mail address.
+
 ## **2.1.26** released on 1st March 2018
 
 - **Fix:** Small fix for `spellright.latexSpellParameters` spelling, spin-off of ([#121](https://github.com/bartosz-antosik/vscode-spellright/issues/121)).
