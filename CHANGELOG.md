@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.30** released on 9th March 2018
+
+- **New:** HTML comments spell checked in markdown parser (were removed 'en masse' in version 2.1.18) which originates from ([#122](https://github.com/bartosz-antosik/vscode-spellright/issues/122)).
+
 ## **2.1.28** released on 5th March 2018
 
 - **New:** Prefix `mailto:` removed from spelling if in front of an e-mail address.
