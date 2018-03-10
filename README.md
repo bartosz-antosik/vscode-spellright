@@ -187,13 +187,15 @@ Extends setting of `ignoreRegExps` per document type. Accepts object of key-mult
 "spellright.ignoreRegExpsByClass": {
     "markdown": [ "/&amp;/g", "/&nbsp;/g" ],
     "cpp": [ "/#include\\\\s+\\\".+\\\"/g" ],
-    "html": [ "/<script>[^]*?</script>/gm" ]
+    "html": [ "/<script>[^]*?</script>/gm" ],
+    "latex": [ "/\\\\\\begin{minted}[^$]*\\\\\\end{minted}/gm" ]
 }
 ```
 
 * avoid spelling of `&amp;` and `&nbsp;` literals in markdown documents;
 * avoid spelling of strings in `#include "file"` construct in CPP documents;
-* avoid spelling of multiline `<script></script>` tag content in HTML documents.
+* avoid spelling of multiline `<script></script>` tag content in HTML documents;
+* avoid spelling of "minted" code blocks in LaTeX documents.
 
 `spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
 
