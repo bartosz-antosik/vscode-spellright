@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.1.32** released on 19th March 2018
+
+- **Changed:** In-Document `spellcheck-language` command's parameter may contain spaces now (e.g. dictionary names like `English (British)` are set correctly).
+
 ## **2.1.30** released on 9th March 2018
 
 - **New:** HTML comments spell checked in markdown parser (were removed 'en masse' in version 2.1.18) which originates from ([#122](https://github.com/bartosz-antosik/vscode-spellright/issues/122)).
