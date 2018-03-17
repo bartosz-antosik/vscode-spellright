@@ -472,11 +472,11 @@ var SpellRight = (function () {
         if (helpers._currentDictionary === _dict && helpers._currentPath === _path)
             return;
 
+        bindings.setDictionary(_dict, _path);
+
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('[spellright] Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
         }
-        bindings.setDictionary(_dict, _path);
-
         helpers._currentDictionary = _dict;
         helpers._currentPath = _path
     };
@@ -1231,8 +1231,7 @@ var SpellRight = (function () {
             _this.diagnosticMap[document.uri.toString()] = diagnostics;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                var end = Date.now();
-                var secs = (end - start) / 1000;
+                var secs = (Date.now() - start) / 1000;
 
                 console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] COMPLETED in ' + String(secs) + 's, ' + diagnostics.length + ' errors.');
             }
