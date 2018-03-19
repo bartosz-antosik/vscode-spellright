@@ -3,6 +3,7 @@
 ## **2.1.32** released on 19th March 2018
 
 - **Changed:** In-Document `spellcheck-language` command's parameter may contain spaces now (e.g. dictionary names like `English (British)` are set correctly).
+- **Change:** Added `jsonc` (JSON with Comments) to list of file types using code parser ([#127](https://github.com/bartosz-antosik/vscode-spellright/issues/127)).
 
 ## **2.1.30** released on 9th March 2018
 
