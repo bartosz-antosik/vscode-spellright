@@ -697,6 +697,12 @@ var SpellRight = (function () {
         var _containsApostrophe = /[\'']/.test(cword);
         var _containsDash = /[-]/.test(cword);
         var _containsDigitInside = /\D\d\D/.test(cword);
+        var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\uddff]/.test(cword);
+
+        // Emojis crash Hunspell both on Linux and Windows
+        if (_containsEmoji && this.hunspell) {
+            return;
+        }
 
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
