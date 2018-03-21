@@ -2,6 +2,7 @@
 
 ## **2.1.34** released on 21st March 2018
 
+- **Fix:** Indented fenced code blocks break markdown parser ([#128](https://github.com/bartosz-antosik/vscode-spellright/issues/128)).
 - **Fix:** Emojis removed from spelling as they crash Hunspell both on Linux and Windows ([#127](https://github.com/bartosz-antosik/vscode-spellright/issues/127)).
 
 ## **2.1.32** released on 19th March 2018
