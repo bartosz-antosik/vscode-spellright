@@ -786,7 +786,7 @@ var SpellRight = (function () {
             return;
         }
 
-        var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
+        var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
         var message = '\"' + cword + '\"';
         if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -821,8 +821,13 @@ var SpellRight = (function () {
             diagnosticsType = vscode.DiagnosticSeverity.Hint;
         }
 
-        var diag = new vscode.Diagnostic(lineRange, message, diagnosticsType);
+        var diag = new vscode.Diagnostic(range, message, diagnosticsType);
         diag.source = 'spelling';
+
+        // Extend with context for actions provided in suggestions menu
+        diag['language'] = context;
+        diag['context'] = context;
+        diag['range'] = range;
 
         // Now insert diagnostics at the right place
         var append = false;
