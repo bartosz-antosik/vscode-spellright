@@ -654,7 +654,14 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getEffectiveLanguage = function () {
-        return this.spellingContext[0]._language;
+        // The hierarchy should be from topmost to lowest: In-Document Command,
+        // Context, Default language chosen for spelling of the current word.
+
+        if (this.spellingContext[0]._languageCommand) {
+            return this.spellingContext[0]._languageCommand;
+        } else {
+            return this.spellingContext[0]._languageDefault;
+        }
     };
 
     SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, linenumber, colnumber) {
@@ -877,9 +884,9 @@ var SpellRight = (function () {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
                 if (this.checkDictionary(parameters)) {
-                    this.spellingContext[0]._language = parameters;
+                    this.spellingContext[0]._languageCommand = parameters;
                 } else {
-                    this.spellingContext[0]._language = settings.language;
+                    this.spellingContext[0]._languageCommand = undefined;
                 }
             }
         }
@@ -1013,7 +1020,9 @@ var SpellRight = (function () {
                 _line: 0,
                 _start: Date.now(),
                 _update: Date.now(),
-                _language: settings.language,
+                _languageDefault: settings.language,
+                _languageContext: undefined,
+                _languageCommand: undefined,
                 _enabled: true
             };
             this.spellingContext.push(_context);
@@ -1131,7 +1140,9 @@ var SpellRight = (function () {
             _line: 0,
             _start: Date.now(),
             _update: Date.now(),
-            _language: settings.language,
+            _languageDefault: settings.language,
+            _languageContext: undefined,
+            _languageCommand: undefined,
             _enabled: true
         };
 
