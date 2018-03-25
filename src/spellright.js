@@ -653,6 +653,10 @@ var SpellRight = (function () {
          return false;
     };
 
+    SpellRight.prototype.getEffectiveLanguage = function () {
+        return this.spellingContext[0]._language;
+    };
+
     SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
@@ -703,6 +707,8 @@ var SpellRight = (function () {
         if (_containsEmoji && this.hunspell) {
             return;
         }
+
+        this.setDictionary(this.getEffectiveLanguage());
 
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
@@ -797,7 +803,7 @@ var SpellRight = (function () {
             if (suggestions.length > 0) {
                 message += ': suggestions';
                 if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
-                    message += ' [' + this.spellingContext[0]._language + ']: ';
+                    message += ' [' + this.getEffectiveLanguage() + ']: ';
                 } else {
                     message += ': ';
                 }
@@ -825,7 +831,7 @@ var SpellRight = (function () {
         diag.source = 'spelling';
 
         // Extend with context for actions provided in suggestions menu
-        diag['language'] = context;
+        diag['language'] = this.getEffectiveLanguage();
         diag['context'] = context;
         diag['range'] = range;
 
@@ -871,10 +877,8 @@ var SpellRight = (function () {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
                 if (this.checkDictionary(parameters)) {
-                    this.setDictionary(parameters);
                     this.spellingContext[0]._language = parameters;
                 } else {
-                    this.setDictionary(settings.language);
                     this.spellingContext[0]._language = settings.language;
                 }
             }
@@ -945,8 +949,6 @@ var SpellRight = (function () {
         var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
         var _local_context = false;
-
-        this.setDictionary(settings.language);
 
         _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
@@ -1139,8 +1141,6 @@ var SpellRight = (function () {
         var _this = this;
         var _length = this.spellingContext.length;
 
-        this.setDictionary(settings.language);
-
         _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
             latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
@@ -1324,7 +1324,7 @@ var SpellRight = (function () {
         };
 
         // Get suggestions
-        this.setDictionary(language);
+        this.setDictionary(diagnostic['language']);
 
         var commands = [];
         if (word && word.length >= 1) {
