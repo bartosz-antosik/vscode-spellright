@@ -231,7 +231,7 @@ Same as `spellContext` but per document type. Accepts object of key-value pairs.
 * disable spelling of strings in CPP documents;
 * disable spelling of comments in Python documents.
 
-`settings.languageContext: {}`
+`spellright.languageContext: {}`
 
 Allows to decide on which language is used to spell syntactical parts of the documents. For example following settings:
 
@@ -246,7 +246,7 @@ will spell strings in *American English* and comments in *British English* of co
 
 Configuration item `settings.languageContext` is more important than `settings.language` but less important than In-Document commands.
 
-`settings.languageContextByClass: {}`
+`spellright.languageContextByClass: {}`
 
 Same as `languageContext` but per document type. For example following settings:
 
