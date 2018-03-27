@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.2.0** released on 26th March 2018
+
+- **New:** Spelling documents' syntactic elements e.g. **comments** and **strings** in different languages ([#125](https://github.com/bartosz-antosik/vscode-spellright/issues/125)).
+
 ## **2.1.34** released on 21st March 2018
 
 - **Fix:** Indented fenced code blocks break markdown parser ([#128](https://github.com/bartosz-antosik/vscode-spellright/issues/128)).

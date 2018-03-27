@@ -659,6 +659,8 @@ var SpellRight = (function () {
 
         if (this.spellingContext[0]._languageCommand) {
             return this.spellingContext[0]._languageCommand;
+        } else if (this.spellingContext[0]._languageContext) {
+            return this.spellingContext[0]._languageContext;
         } else {
             return this.spellingContext[0]._languageDefault;
         }
@@ -674,13 +676,21 @@ var SpellRight = (function () {
         }
 
         // Check if current context not disabled by syntatic control
-
         if (settings.spellContextByClass[document.languageId]) {
             if (settings.spellContextByClass[document.languageId].indexOf(context) == (-1)) {
                 return;
             }
         } else if (settings.spellContext.indexOf(context) == (-1)) {
             return;
+        }
+
+        // Set language for the current syntactical context
+        if (settings.languageContextByClass[document.languageId]) {
+            this.spellingContext[0]._languageContext = settings.languageContextByClass[document.languageId][context];
+        } else if (settings.languageContext[context]) {
+            this.spellingContext[0]._languageContext = settings.languageContext[context];
+        } else {
+            this.spellingContext[0]._languageContext = undefined;
         }
 
         // Words are selected by language specific parsers but from here on

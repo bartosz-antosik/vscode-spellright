@@ -9,6 +9,7 @@
 * Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, C, Python, JavaScript, Batch, ..., D, Julia etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, see [here](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows), **multiple languages** in Windows Single Language editions, like [here](https://github.com/bartosz-antosik/vscode-spellright/issues/23#issuecomment-314038083) etc.)
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
+* Spelling documents' syntactic elements e.g. **comments** and **strings** in **multiple languages**.
 * Spelling of **multiple languages in one document** (using In-Document commands to switch between languages).
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages like e.g. German.
 * Spells **short words**, **abbreviations** and **contractions** (*I*, *I'm*, *I'll*, *i.e.*, *doesn't*, *etc.*)
@@ -216,7 +217,7 @@ Allows to enable (present in string) or disable (absent in string) spelling of s
 
 `spellright.spellContextByClass: {}`
 
-Overrides setting of `spellContext` per document type. Accepts object of key-value pairs. For example following settings:
+Same as `spellContext` but per document type. Accepts object of key-value pairs. For example following settings:
 
 ```JSON
 "spellright.spellContextByClass": {
@@ -229,6 +230,38 @@ Overrides setting of `spellContext` per document type. Accepts object of key-val
 * disable spelling of comments in LaTeX documents;
 * disable spelling of strings in CPP documents;
 * disable spelling of comments in Python documents.
+
+`settings.languageContext: {}`
+
+Allows to decide on which language is used to spell syntactical parts of the documents. For example following settings:
+
+```JSON
+"spellright.languageContext": {
+    "strings": "en-US",
+    "comments": "en-GB"
+}
+```
+
+will spell strings in *American English* and comments in *British English* of course if the `groupDictionaries` flag is set to `false`.
+
+Configuration item `settings.languageContext` is more important than `settings.language` but less important than In-Document commands.
+
+`settings.languageContextByClass: {}`
+
+Same as `languageContext` but per document type. For example following settings:
+
+```JSON
+"spellright.languageContext": {
+    "latex": {
+        "body": "fr",
+        "comments": "en"
+    }
+}
+```
+
+will spell body of `latex` documents in *French* and comments in *English*.
+
+Configuration item `settings.languageContextByClass` is more important than `settings.language` and `settings.languageContext` but less important than In-Document commands.
 
 `spellright.configurationUpdate: true`
 
@@ -293,6 +326,8 @@ Beside global settings following commands can be embedded inside spelled parts o
 <code>spellcheck&#x2d;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code> and `!TEX spellcheck = CODE` in comment areas of `latex` document class only)
 
 Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
+
+In-Document commands for switching spelling language have highest priority over `settings.languageContextByClass` and `settings.languageContext` and `settings.language` configuration items.
 
 `spellcheck-off` (alternative syntax: `spellcheck: off`)
 
