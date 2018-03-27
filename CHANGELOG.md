@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.2.2** released on 29th March 2018
+
+- **Fix:** Multiline XML/HTML tags & tags inside XML/HTML comments in markdown break spelling  ([#131](https://github.com/bartosz-antosik/vscode-spellright/issues/131)).
+
 ## **2.2.0** released on 27th March 2018
 
 - **New:** Spelling documents' syntactic elements e.g. **comments** and **strings** in different languages ([#125](https://github.com/bartosz-antosik/vscode-spellright/issues/125)).
