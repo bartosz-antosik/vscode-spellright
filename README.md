@@ -6,10 +6,10 @@
 
 ## Features
 
-* Spells **plain text**/**markdown**/**LaTeX** documents, *strings*/*comments* parts of most **source code** (C++, C, Python, JavaScript, Batch, ..., D, Julia etc.) documents and *text*/*comment* nodes on **XML**/**HTML** class documents.
+* Spells **plain text**/**markdown**/**LaTeX** documents, **comments**/**strings** parts of most **source code** (C++, C, Python, JavaScript, Batch, ..., D, Julia etc.) documents and **text**/**comment** nodes on **XML**/**HTML** class documents.
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, see [here](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows), **multiple languages** in Windows Single Language editions, like [here](https://github.com/bartosz-antosik/vscode-spellright/issues/23#issuecomment-314038083) etc.)
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
-* Spelling documents' syntactic elements e.g. **comments** and **strings** in **different languages** (e.g. strings in English and comments in French).
+* Spelling documents' syntactic elements e.g. **comments**/**strings** in **different languages** (e.g. strings spelled in English and comments spelled in French).
 * Spelling of **multiple languages in one document** (using In-Document commands to switch between languages).
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages like e.g. German.
 * Spells **short words**, **abbreviations** and **contractions** (*I*, *I'm*, *I'll*, *i.e.*, *doesn't*, *etc.*)
