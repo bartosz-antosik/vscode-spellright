@@ -11,7 +11,7 @@
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling documents' syntactic elements e.g. **comments**/**strings** in **different languages** (e.g. strings spelled in English and comments spelled in French).
 * Spelling of **multiple languages in one document** (using In-Document commands to switch between languages).
-* **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and is critical in some languages like e.g. German.
+* **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and which is critical in some western languages like e.g. German.
 * Spells **short words**, **abbreviations** and **contractions** (*I*, *I'm*, *I'll*, *i.e.*, *doesn't*, *etc.*)
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
 * Unobtrusive **GUI**/**command** interface for switching spelling dictionary (language) and turning spelling ON/OFF for particular document class.
@@ -108,7 +108,7 @@ Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule
 
 ### Multiple languages in one document
 
-When there is multiple languages selected by In-Document command <code>spellcheck&#x2d;language</code> placed within document:
+When language is switched e.g. by In-Document command <code>spellcheck&#x2d;language</code> placed within document:
 
 ![switch](media/screenshot-switch-multiple.png)
 
