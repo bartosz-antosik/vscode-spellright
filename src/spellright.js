@@ -744,6 +744,8 @@ var SpellRight = (function () {
             // Do not exit if one of special cases
             if (!_digitInsideOnWindows) {
                 return;
+            } else if (this.testWordInDictionaries(cword)) {
+                return;
             }
         }
 

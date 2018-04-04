@@ -1,8 +1,12 @@
 # Change Log
 
+## **2.2.3** released on 4th April 2018
+
+- **Fix:** Words with digits inside not checked correctly in local user dictionaries ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
+
 ## **2.2.2** released on 29th March 2018
 
-- **Fix:** Multiline XML/HTML tags & tags inside XML/HTML comments in markdown break spelling  ([#131](https://github.com/bartosz-antosik/vscode-spellright/issues/131)).
+- **Fix:** Multiline XML/HTML tags & tags inside XML/HTML comments in markdown break spelling ([#131](https://github.com/bartosz-antosik/vscode-spellright/issues/131)).
 
 ## **2.2.0** released on 27th March 2018
 
