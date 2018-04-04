@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.1.34",
+    "version": "2.2.6",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.13.0"
@@ -127,6 +127,18 @@
                     "default": {},
                     "scope": "resource",
                     "description": "Decide which syntactic parts of documents are spelled per document type."
+                },
+                "spellright.languageContext": {
+                    "type": "object",
+                    "default": {},
+                    "scope": "resource",
+                    "description": "Decide which language is used to spell syntactic parts of documents."
+                },
+                "spellright.languageContextByClass": {
+                    "type": "object",
+                    "default": {},
+                    "scope": "resource",
+                    "description": "Decide which language is used to spell syntactic parts of documents per document type."
                 },
                 "spellright.parserByClass": {
                     "type": "object",

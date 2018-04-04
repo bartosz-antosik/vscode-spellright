@@ -1,5 +1,18 @@
 # Change Log
 
+## **2.2.6** released on 4th April 2018
+
+- **Fix:** Words with digits inside not checked correctly in local user dictionaries ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
+
+## **2.2.2** released on 29th March 2018
+
+- **Fix:** Multiline XML/HTML tags & tags inside XML/HTML comments in markdown break spelling ([#131](https://github.com/bartosz-antosik/vscode-spellright/issues/131)).
+
+## **2.2.0** released on 27th March 2018
+
+- **New:** Spelling documents' syntactic elements e.g. **comments** and **strings** in different languages ([#125](https://github.com/bartosz-antosik/vscode-spellright/issues/125)).
+- **Fix:** Regression caused by fenced code blocks breaking markdown parser ([#131](https://github.com/bartosz-antosik/vscode-spellright/issues/131)).
+
 ## **2.1.34** released on 21st March 2018
 
 - **Fix:** Indented fenced code blocks break markdown parser ([#128](https://github.com/bartosz-antosik/vscode-spellright/issues/128)).

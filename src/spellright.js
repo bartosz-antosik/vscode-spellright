@@ -653,6 +653,19 @@ var SpellRight = (function () {
          return false;
     };
 
+    SpellRight.prototype.getEffectiveLanguage = function () {
+        // The hierarchy should be from topmost to lowest: In-Document Command,
+        // Context, Default language chosen for spelling of the current word.
+
+        if (this.spellingContext[0]._languageCommand) {
+            return this.spellingContext[0]._languageCommand;
+        } else if (this.spellingContext[0]._languageContext) {
+            return this.spellingContext[0]._languageContext;
+        } else {
+            return this.spellingContext[0]._languageDefault;
+        }
+    };
+
     SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, linenumber, colnumber) {
 
         var _linenumber = linenumber;
@@ -663,13 +676,21 @@ var SpellRight = (function () {
         }
 
         // Check if current context not disabled by syntatic control
-
         if (settings.spellContextByClass[document.languageId]) {
             if (settings.spellContextByClass[document.languageId].indexOf(context) == (-1)) {
                 return;
             }
         } else if (settings.spellContext.indexOf(context) == (-1)) {
             return;
+        }
+
+        // Set language for the current syntactical context
+        if (settings.languageContextByClass[document.languageId]) {
+            this.spellingContext[0]._languageContext = settings.languageContextByClass[document.languageId][context];
+        } else if (settings.languageContext[context]) {
+            this.spellingContext[0]._languageContext = settings.languageContext[context];
+        } else {
+            this.spellingContext[0]._languageContext = undefined;
         }
 
         // Words are selected by language specific parsers but from here on
@@ -704,6 +725,8 @@ var SpellRight = (function () {
             return;
         }
 
+        this.setDictionary(this.getEffectiveLanguage());
+
         // Before splitting make sure word is not spelled correctly or on the
         // ignore list or regular expressions to ignore as a whole.
         if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
@@ -720,6 +743,8 @@ var SpellRight = (function () {
 
             // Do not exit if one of special cases
             if (!_digitInsideOnWindows) {
+                return;
+            } else if (this.testWordInDictionaries(cword)) {
                 return;
             }
         }
@@ -786,7 +811,7 @@ var SpellRight = (function () {
             return;
         }
 
-        var lineRange = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
+        var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
 
         var message = '\"' + cword + '\"';
         if (SPELLRIGHT_DEBUG_OUTPUT) {
@@ -797,7 +822,7 @@ var SpellRight = (function () {
             if (suggestions.length > 0) {
                 message += ': suggestions';
                 if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
-                    message += ' [' + this.spellingContext[0]._language + ']: ';
+                    message += ' [' + this.getEffectiveLanguage() + ']: ';
                 } else {
                     message += ': ';
                 }
@@ -821,8 +846,13 @@ var SpellRight = (function () {
             diagnosticsType = vscode.DiagnosticSeverity.Hint;
         }
 
-        var diag = new vscode.Diagnostic(lineRange, message, diagnosticsType);
+        var diag = new vscode.Diagnostic(range, message, diagnosticsType);
         diag.source = 'spelling';
+
+        // Extend with context for actions provided in suggestions menu
+        diag['language'] = this.getEffectiveLanguage();
+        diag['context'] = context;
+        diag['range'] = range;
 
         // Now insert diagnostics at the right place
         var append = false;
@@ -866,11 +896,9 @@ var SpellRight = (function () {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
                 if (this.checkDictionary(parameters)) {
-                    this.setDictionary(parameters);
-                    this.spellingContext[0]._language = parameters;
+                    this.spellingContext[0]._languageCommand = parameters;
                 } else {
-                    this.setDictionary(settings.language);
-                    this.spellingContext[0]._language = settings.language;
+                    this.spellingContext[0]._languageCommand = undefined;
                 }
             }
         }
@@ -941,8 +969,6 @@ var SpellRight = (function () {
         var _signature = '';
         var _local_context = false;
 
-        this.setDictionary(settings.language);
-
         _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
@@ -1006,7 +1032,9 @@ var SpellRight = (function () {
                 _line: 0,
                 _start: Date.now(),
                 _update: Date.now(),
-                _language: settings.language,
+                _languageDefault: settings.language,
+                _languageContext: undefined,
+                _languageCommand: undefined,
                 _enabled: true
             };
             this.spellingContext.push(_context);
@@ -1124,7 +1152,9 @@ var SpellRight = (function () {
             _line: 0,
             _start: Date.now(),
             _update: Date.now(),
-            _language: settings.language,
+            _languageDefault: settings.language,
+            _languageContext: undefined,
+            _languageCommand: undefined,
             _enabled: true
         };
 
@@ -1133,8 +1163,6 @@ var SpellRight = (function () {
 
         var _this = this;
         var _length = this.spellingContext.length;
-
-        this.setDictionary(settings.language);
 
         _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
             latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
@@ -1319,7 +1347,7 @@ var SpellRight = (function () {
         };
 
         // Get suggestions
-        this.setDictionary(language);
+        this.setDictionary(diagnostic['language']);
 
         var commands = [];
         if (word && word.length >= 1) {
