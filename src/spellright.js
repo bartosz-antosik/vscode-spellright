@@ -666,7 +666,7 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, exword, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
@@ -731,6 +731,9 @@ var SpellRight = (function () {
         // ignore list or regular expressions to ignore as a whole.
         if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
 
+            // Here word is spelled correctly or on the ignore list but there
+            // are some special cases, like flaws in spelling engines.
+
             var _digitInsideOnWindows = false;
 
             // Some special cases are held here
@@ -759,7 +762,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -771,7 +774,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -783,7 +786,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -1058,7 +1061,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, extoken, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, extoken, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1081,7 +1084,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, extoken, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, extoken, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1245,7 +1248,7 @@ var SpellRight = (function () {
 
         if (line <= document.lineCount) {
 
-            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, extoken, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, extoken, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
