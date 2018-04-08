@@ -453,8 +453,11 @@ var SpellRight = (function () {
         // dictionaries. If not then set as [none], that is ''.
         var _dict = '';
         dictionaries.forEach(function (entry) {
-            if (entry.id == dictionary) {
-                _dict = dictionary;
+            // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
+            var _dictionary = dictionary.replace(/_/g, "-");
+            var _entry_id = entry.id.replace(/_/g, "-");
+            if (_entry_id == _dictionary) {
+                _dict = entry.id;
                 return;
             }
         });
@@ -485,7 +488,10 @@ var SpellRight = (function () {
         var result = false;
 
         dictionaries.forEach(function (entry) {
-            if (entry.id == dictionary) {
+            // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
+            var _dictionary = dictionary.replace(/_/g, "-");
+            var _entry_id = entry.id.replace(/_/g, "-");
+            if (_entry_id == _dictionary) {
                 result = true;
             }
         });
@@ -1806,7 +1812,10 @@ var SpellRightIndicator = (function () {
         var tooltip = 'Spell Checking - ';
 
         dictionaries.forEach(function (entry) {
-            if (entry.id == settings.language) {
+            // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
+            var _dictionary = settings.language.replace(/_/g, "-");
+            var _entry_id = entry.id.replace(/_/g, "-");
+            if (entry.id == _dictionary) {
                 message = entry.label;
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     message = message + ' [' + settings.language + ']';

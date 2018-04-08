@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.2.8** released on 9th April 2018
+
+- **New:** LANGUAGE-REGION separator characters can be mixed (e.g. en_GB & en-GB will be effectively treated same way) ([#136](https://github.com/bartosz-antosik/vscode-spellright/issues/136)).
+
 ## **2.2.6** released on 4th April 2018
 
 - **Fix:** Words with digits inside not checked correctly in local user dictionaries ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
