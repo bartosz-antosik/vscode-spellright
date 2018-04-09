@@ -768,7 +768,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -780,7 +780,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -792,7 +792,7 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, e.word, _linenumber, _colnumber + e.offset);
+                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
                 }
             });
             return;
@@ -859,6 +859,8 @@ var SpellRight = (function () {
         diag.source = 'spelling';
 
         // Extend with context for actions provided in suggestions menu
+        diag['word'] = word;
+        diag['exword'] = exword;
         diag['language'] = this.getEffectiveLanguage();
         diag['context'] = context;
         diag['range'] = range;
@@ -1377,11 +1379,31 @@ var SpellRight = (function () {
                     arguments: [document, cword]
                 });
             }
+            if (diagnostic['word'] != diagnostic['exword']) {
+                // Here propose to add compound word to the dictionary when
+                // only a part of it spells incorectly
+                if (vscode.workspace.getWorkspaceFolder(helpers._uri)) {
+                    commands.push({
+                        title: 'Add \"' + diagnostic['exword'] + '\" to workspace dictionary',
+                        command: SpellRight.addToWorkspaceDictionaryCommandId,
+                        arguments: [document, diagnostic['exword']]
+                    });
+                }
+            }
             commands.push({
                 title: 'Add \"' + cword + '\" to user dictionary',
                 command: SpellRight.addToUserDictionaryCommandId,
                 arguments: [document, cword]
             });
+            if (diagnostic['word'] != diagnostic['exword']) {
+                // Here propose to add compound word to the dictionary when
+                // only a part of it spells incorectly
+                commands.push({
+                    title: 'Add \"' + diagnostic['exword'] + '\" to user dictionary',
+                    command: SpellRight.addToUserDictionaryCommandId,
+                    arguments: [document, diagnostic['exword']]
+                });
+            }
         }
         return commands;
     };
