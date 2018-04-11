@@ -140,8 +140,8 @@ var SpellRight = (function () {
         }, null);
 
         vscode.window.onDidChangeActiveTextEditor(function (editor) {
-            if (editor) {
-                _this.doInitiateSpellCheck(editor.document);
+            if (vscode.window.activeTextEditor.document) {
+                _this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
             }
         }, null);
 
@@ -506,7 +506,7 @@ var SpellRight = (function () {
 
         _this.doCancelSpellCheck();
         vscode.window.visibleTextEditors.forEach((editor, index, array) => {
-            _this.doInitiateSpellCheck(editor.document);
+            _this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
         });
     }
 
