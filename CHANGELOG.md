@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.2.10** released on 12th April 2018
+
+- **Fix:** Wrong document type identified when output console activated ([#139](https://github.com/bartosz-antosik/vscode-spellright/issues/139)).
+- **Fix:** Error when unknown dictionary encountered ([#138](https://github.com/bartosz-antosik/vscode-spellright/issues/138)).
+
 ## **2.2.8** released on 9th April 2018
 
 - **New:** LANGUAGE-REGION separator characters can be mixed (e.g. en_GB & en-GB will be effectively treated same way) ([#136](https://github.com/bartosz-antosik/vscode-spellright/issues/136)).
