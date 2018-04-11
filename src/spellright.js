@@ -254,17 +254,20 @@ var SpellRight = (function () {
         });
 
         for (var key in languages) {
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                var _description = languages[key];
-            } else {
-                var _description = '';
-            }
+            var _code = langcode.language2Code(key);
+            if (typeof _code != undefined) {
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    var _description = languages[key];
+                } else {
+                    var _description = '';
+                }
 
-            dictionaries.push({
-                id: langcode.language2Code(key),
-                label: key,
-                description: _description
-            });
+                dictionaries.push({
+                    id: _code,
+                    label: key,
+                    description: _description
+                });
+            }
         }
     }
 
@@ -454,8 +457,8 @@ var SpellRight = (function () {
         var _dict = '';
         dictionaries.forEach(function (entry) {
             // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
-            var _dictionary = dictionary.replace(/_/g, "-");
-            var _entry_id = entry.id.replace(/_/g, "-");
+            var _dictionary = dictionary.replace(/_/g, '-');
+            var _entry_id = entry.id.replace(/_/g, '-');
             if (_entry_id == _dictionary) {
                 _dict = entry.id;
                 return;
@@ -489,8 +492,8 @@ var SpellRight = (function () {
 
         dictionaries.forEach(function (entry) {
             // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
-            var _dictionary = dictionary.replace(/_/g, "-");
-            var _entry_id = entry.id.replace(/_/g, "-");
+            var _dictionary = dictionary.replace(/_/g, '-');
+            var _entry_id = entry.id.replace(/_/g, '-');
             if (_entry_id == _dictionary) {
                 result = true;
             }
@@ -1835,9 +1838,9 @@ var SpellRightIndicator = (function () {
 
         dictionaries.forEach(function (entry) {
             // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
-            var _dictionary = settings.language.replace(/_/g, "-");
-            var _entry_id = entry.id.replace(/_/g, "-");
-            if (entry.id == _dictionary) {
+            var _dictionary = settings.language.replace(/_/g, '-');
+            var _entry_id = entry.id.replace(/_/g, '-');
+            if (_entry_id == _dictionary) {
                 message = entry.label;
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     message = message + ' [' + settings.language + ']';
