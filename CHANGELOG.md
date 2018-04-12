@@ -2,6 +2,7 @@
 
 ## **2.2.10** released on 12th April 2018
 
+- **New:** Spelling of parenthetical plurals (e.g. "process(es)") removes part in parenthesis from spelling to avoid false positive ([#135](https://github.com/bartosz-antosik/vscode-spellright/issues/135)).
 - **Fix:** Wrong document type identified when output console activated ([#139](https://github.com/bartosz-antosik/vscode-spellright/issues/139)).
 - **Fix:** Error when unknown dictionary encountered ([#138](https://github.com/bartosz-antosik/vscode-spellright/issues/138)).
 

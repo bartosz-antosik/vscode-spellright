@@ -737,7 +737,9 @@ var SpellRight = (function () {
         }
 
         if (_parentheticalPlural) {
-            // Here spell special case of parenthical plural
+            // Here spell special case of parenthical plural (one or two
+            // characters in parenthesis directly glued to the word, like
+            // word(s), process(es) etc.)
             var ppmatch = /^(\w+)\((\w{1,2})\)$/;
             var match = ppmatch.exec(cword);
             cword = match[1];
