@@ -557,11 +557,11 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\.0-9\-\']+)');
-        var rsep = /[\.0-9\-]/;
+        var rother = XRegExp('([^\.0-9\-\'\(\)]+)');
+        var rsep = /[\.0-9\-\(\)]/;
         var parts = [];
 
-        // We need a phantom split (e.g. for "2sth" case).
+        // We need a phantom split (e.g. for "2sth", "(sth)" case).
         if (rsep.test(word)) {
             parts.push({
                 word: '',
@@ -728,10 +728,19 @@ var SpellRight = (function () {
         var _containsDash = /[-]/.test(cword);
         var _containsDigitInside = /\D\d\D/.test(cword);
         var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\uddff]/.test(cword);
+        var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
+        var _containsParenthesis = /[\(\)]/.test(cword);
 
         // Emojis crash Hunspell both on Linux and Windows
         if (_containsEmoji && this.hunspell) {
             return;
+        }
+
+        if (_parentheticalPlural) {
+            // Here spell special case of parenthical plural
+            var ppmatch = /^(\w+)\((\w{1,2})\)$/;
+            var match = ppmatch.exec(cword);
+            cword = match[1];
         }
 
         this.setDictionary(this.getEffectiveLanguage());
