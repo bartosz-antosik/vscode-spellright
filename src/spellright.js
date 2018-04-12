@@ -255,7 +255,7 @@ var SpellRight = (function () {
 
         for (var key in languages) {
             var _code = langcode.language2Code(key);
-            if (typeof _code != undefined) {
+            if (typeof _code !== 'undefined') {
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     var _description = languages[key];
                 } else {
