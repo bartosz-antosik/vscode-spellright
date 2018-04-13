@@ -189,7 +189,7 @@ Extends setting of `ignoreRegExps` per document type. Accepts object of key-mult
     "markdown": [ "/&amp;/g", "/&nbsp;/g" ],
     "cpp": [ "/#include\\\\s+\\\".+\\\"/g" ],
     "html": [ "/<script>[^]*?</script>/gm" ],
-    "latex": [ "/\\\\\\begin{minted}[^]*\\\\\\end{minted}/gm" ]
+    "latex": [ "/\\\\\\begin{minted}[^]*?\\\\\\end{minted}/gm" ]
 }
 ```
 
