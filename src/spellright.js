@@ -966,8 +966,6 @@ var SpellRight = (function () {
         helpers._commands.languages = [settings.language];
         helpers._commands.nlanguages = [];
 
-        this.getSettings(event.document);
-
         // Is off for this document type?
         if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
             indicator.updateStatusBarIndicator();
@@ -975,6 +973,8 @@ var SpellRight = (function () {
             this.diagnosticMap[event.document.uri.toString()] = undefined;
             return;
         }
+
+        this.getSettings(event.document);
 
         // Is language set to "none"?
         if (settings.language == '') {
@@ -1138,8 +1138,6 @@ var SpellRight = (function () {
         helpers._commands.languages = [settings.language];
         helpers._commands.nlanguages = [];
 
-        this.getSettings(document);
-
         // Is off for this document type?
         if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
             indicator.updateStatusBarIndicator();
@@ -1147,6 +1145,8 @@ var SpellRight = (function () {
             this.diagnosticMap[document.uri.toString()] = undefined;
             return;
         }
+
+        this.getSettings(document);
 
         // Is language set to "none"?
         if (settings.language == '') {
