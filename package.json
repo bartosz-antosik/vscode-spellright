@@ -2,10 +2,10 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.2.14",
+    "version": "2.2.16",
     "publisher": "ban",
     "engines": {
-        "vscode": "^1.13.0"
+        "vscode": "^1.20.0"
     },
     "categories": [
         "Other"
