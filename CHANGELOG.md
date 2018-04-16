@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.2.16** released on 16th April 2018
+
+- **Change:** Binaries updated for Electron 2.0.0-beta7 (insiders build at the moment).
+- **Change:** Word separation rules updated with percent, chapeau-chinois and at-sign (#140).
+
 ## **2.2.14** released on 16th April 2018
 
 - **Fix:** Another scenario of wrong document type identified when output console activated ([#139](https://github.com/bartosz-antosik/vscode-spellright/issues/139)).
