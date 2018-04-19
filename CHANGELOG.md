@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.2.18** released on 16th April 2018
+
+- **Change:** Word separation rules extended with selected Chinese punctuation characters ([#143](https://github.com/bartosz-antosik/vscode-spellright/issues/143)).
+
 ## **2.2.16** released on 16th April 2018
 
 - **Change:** Binaries updated for Electron 2.0.0-beta7 (insiders build at the moment).
