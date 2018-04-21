@@ -3,6 +3,7 @@
 ## **2.2.18** released on 16th April 2018
 
 - **Change:** Word separation rules extended with selected Chinese punctuation characters ([#143](https://github.com/bartosz-antosik/vscode-spellright/issues/143)).
+- **Fix:** Regression introduced by parenthetical plural ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)).
 
 ## **2.2.16** released on 16th April 2018
 

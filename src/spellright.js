@@ -745,6 +745,12 @@ var SpellRight = (function () {
             cword = match[1];
         }
 
+        if (!_parentheticalPlural && _containsParenthesis) {
+            // Clean up after passing parenthesis for parentical plural
+            cword = cword.replace('(', ' ');
+            cword = cword.replace(')', ' ');
+        }
+
         this.setDictionary(this.getEffectiveLanguage());
 
         // Before splitting make sure word is not spelled correctly or on the
@@ -814,7 +820,7 @@ var SpellRight = (function () {
 
         // Punctuation cleaned version of the word
 
-        // Special case of words ending with period  - if spelling
+        // Special case of words ending with period - if spelling
         // with dot at the end is correct contrary to spelling
         // without the dot then pass over.
         if (_endsWithPeriod) {
