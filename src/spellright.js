@@ -557,7 +557,7 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\.0-9\-\'\(\)]+)');
+        var rother = XRegExp('([^\.0-9\-\(\)]+)');
         var rsep = /[\.0-9\-\(\)]/;
         var parts = [];
 
@@ -675,13 +675,13 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, word, exword, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, token, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
 
         if (SPELLRIGHT_DEBUG_OUTPUT && false) {
-            console.log('[spellright] Spell [' + context +  ']: \"' + word + '\"');
+            console.log('[spellright] Spell [' + context + ']: \"' + token.word + '\"');
         }
 
         // Check if current context not disabled by syntatic control
@@ -706,7 +706,7 @@ var SpellRight = (function () {
         // they are treated in the same way so these are operations done on
         // every word/lexem spelled.
 
-        cword = word;
+        cword = token.word;
 
         // Special case of words ending with period - abbreviations, etc.
         // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
@@ -782,13 +782,30 @@ var SpellRight = (function () {
         // because it is part of legit abbreviations (e.g., i.e., etc.) which
         // should be spelled as well. So there can be lexems containing periods
         // inside. But they should be later on spelled as parts to minimize
-        // the number of false positives.
+        // the number of false positives. Same about apostrophe and few other
+        // white/punctuation/graphical characters which are permitted above.
         var _split = this.splitByOtherWhite(cword);
         if (_split.length > 1) {
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
+
+                    var _token = { word: e.word, parent: cword };
+                    var _source = '';
+                    var _offset = e.offset;
+
+                    if (token.map) {
+                        _offset = 0;
+                        for (var _i = 0; _i < e.offset; _i++) {
+                            _offset += token.map[_i].length;
+                        }
+                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                            _source += token.map[_i];
+                        }
+                        _token.source = _source;
+                    }
+
+                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -800,7 +817,23 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
+
+                    var _token = { word: e.word, parent: cword };
+                    var _source = '';
+                    var _offset = e.offset;
+
+                    if (token.map) {
+                        _offset = 0;
+                        for (var _i = 0; _i < e.offset; _i++) {
+                            _offset += token.map[_i].length;
+                        }
+                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                            _source += token.map[_i];
+                        }
+                        _token.source = _source;
+                    }
+
+                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -812,7 +845,23 @@ var SpellRight = (function () {
             var _this = this;
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
-                    _this.checkAndMark(document, context, diagnostics, e.word, cword, _linenumber, _colnumber + e.offset);
+
+                    var _token = { word: e.word, parent: cword };
+                    var _source = '';
+                    var _offset = e.offset;
+
+                    if (token.map) {
+                        _offset = 0;
+                        for (var _i = 0; _i < e.offset; _i++) {
+                            _offset += token.map[_i].length;
+                        }
+                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                            _source += token.map[_i];
+                        }
+                        _token.source = _source;
+                    }
+
+                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -840,14 +889,20 @@ var SpellRight = (function () {
             return;
         }
 
-        var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + cword.length);
+        if (token.source) {
+            var _size = token.source.length;
+        } else {
+            var _size = cword.length;
+        }
+
+        var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + _size);
 
         var message = '\"' + cword + '\"';
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             message += ' (' + context + ')';
         }
         if (settings.suggestionsInHints) {
-            var suggestions = bindings.getCorrectionsForMisspelling(word);
+            var suggestions = bindings.getCorrectionsForMisspelling(cword);
             if (suggestions.length > 0) {
                 message += ': suggestions';
                 if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
@@ -879,8 +934,7 @@ var SpellRight = (function () {
         diag.source = 'spelling';
 
         // Extend with context for actions provided in suggestions menu
-        diag['word'] = word;
-        diag['exword'] = exword;
+        diag['token'] = token;
         diag['language'] = this.getEffectiveLanguage();
         diag['context'] = context;
         diag['range'] = range;
@@ -1089,7 +1143,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, word, exword, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, word, exword, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1112,7 +1166,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, word, exword, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, word, exword, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1276,7 +1330,7 @@ var SpellRight = (function () {
 
         if (line <= document.lineCount) {
 
-            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, word, exword, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, word, exword, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
@@ -1350,6 +1404,8 @@ var SpellRight = (function () {
         if (word.length == 0)
             return undefined;
 
+        var token = diagnostic['token'];
+
         // Punctuation cleaned version of the word
         var cword = word.replace(/[.,]/g, '');
 
@@ -1399,14 +1455,14 @@ var SpellRight = (function () {
                     arguments: [document, cword]
                 });
             }
-            if (diagnostic['word'] != diagnostic['exword']) {
+            if (token.parent) {
                 // Here propose to add compound word to the dictionary when
                 // only a part of it spells incorectly
                 if (vscode.workspace.getWorkspaceFolder(helpers._uri)) {
                     commands.push({
-                        title: 'Add \"' + diagnostic['exword'] + '\" to workspace dictionary',
+                        title: 'Add \"' + token.parent + '\" to workspace dictionary',
                         command: SpellRight.addToWorkspaceDictionaryCommandId,
-                        arguments: [document, diagnostic['exword']]
+                        arguments: [document, token.parent]
                     });
                 }
             }
@@ -1415,13 +1471,13 @@ var SpellRight = (function () {
                 command: SpellRight.addToUserDictionaryCommandId,
                 arguments: [document, cword]
             });
-            if (diagnostic['word'] != diagnostic['exword']) {
+            if (token.parent) {
                 // Here propose to add compound word to the dictionary when
                 // only a part of it spells incorectly
                 commands.push({
-                    title: 'Add \"' + diagnostic['exword'] + '\" to user dictionary',
+                    title: 'Add \"' + token.parent + '\" to user dictionary',
                     command: SpellRight.addToUserDictionaryCommandId,
-                    arguments: [document, diagnostic['exword']]
+                    arguments: [document, token.parent]
                 });
             }
         }
@@ -1429,8 +1485,8 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.fixSuggestionCodeAction = function (document, diagnostic, word, suggestion) {
-        var docWord = document.getText(diagnostic.range);
-        if (word == docWord) {
+        var _word = document.getText(diagnostic.range);
+        if (diagnostic['token'].word == _word) {
             // Remove diagnostic from list
             var diagnostics = this.diagnosticMap[document.uri.toString()];
             var index = diagnostics.indexOf(diagnostic);
