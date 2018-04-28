@@ -2,7 +2,7 @@
 
 ## **2.3.1** released on 30th April 2018
 
-- **Fix:** Regression with Hunspell backend introduced with fixing of ([#143](https://github.com/bartosz-antosik/vscode-spellright/issues/143)).
+- **Fix:** Regression with Hunspell backend introduced with fixing of ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)).
 
 ## **2.3.0** released on 26th April 2018
 
