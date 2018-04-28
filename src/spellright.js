@@ -745,12 +745,6 @@ var SpellRight = (function () {
             cword = match[1];
         }
 
-        if (!_parentheticalPlural && _containsParenthesis) {
-            // Clean up after passing parenthesis for parentical plural
-            cword = cword.replace('(', ' ');
-            cword = cword.replace(')', ' ');
-        }
-
         this.setDictionary(this.getEffectiveLanguage());
 
         // Before splitting make sure word is not spelled correctly or on the

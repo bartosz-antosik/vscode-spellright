@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.3.1** released on 30th April 2018
+
+- **Fix:** Regression with Hunspell backend introduced with fixing of ([#143](https://github.com/bartosz-antosik/vscode-spellright/issues/143)).
+
 ## **2.3.0** released on 26th April 2018
 
 - **New:** LaTeX diacritics (e.g. \"{o}, \l{}, \'{o} etc.) are now spelled as normal characters ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
