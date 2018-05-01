@@ -557,8 +557,8 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\.0-9\-\(\)]+)');
-        var rsep = /[\.0-9\-\(\)]/;
+        var rother = XRegExp('([^\ \.0-9\-\(\)]+)');
+        var rsep = /[\ \.0-9\-\(\)]/;
         var parts = [];
 
         // We need a phantom split (e.g. for "2sth", "(sth)" case).
@@ -743,6 +743,12 @@ var SpellRight = (function () {
             var ppmatch = /^(\w+)\((\w{1,2})\)$/;
             var match = ppmatch.exec(cword);
             cword = match[1];
+        }
+
+        if (!_parentheticalPlural && _containsParenthesis) {
+            // Clean up after passing parenthesis for parentical plural
+            cword = cword.replace(/\(/g, ' ');
+            cword = cword.replace(/\)/g, ' ');
         }
 
         this.setDictionary(this.getEffectiveLanguage());
