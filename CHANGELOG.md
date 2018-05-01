@@ -1,7 +1,8 @@
 # Change Log
 
-## **2.3.1** released on 30th April 2018
+## **2.3.2** released on 1st May 2018
 
+- **Change:** Some solution to possessive apostrophe ([#150](https://github.com/bartosz-antosik/vscode-spellright/issues/150)).
 - **Fix:** Regression with Hunspell backend introduced with fixing of ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)) also resolves ([#149](https://github.com/bartosz-antosik/vscode-spellright/issues/149)) .
 
 ## **2.3.0** released on 26th April 2018

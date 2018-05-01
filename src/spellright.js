@@ -730,6 +730,7 @@ var SpellRight = (function () {
         var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\uddff]/.test(cword);
         var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
         var _containsParenthesis = /[\(\)]/.test(cword);
+        var _possesiveApostrophe = /^\w+\'s$/.test(cword);
 
         // Emojis crash Hunspell both on Linux and Windows
         if (_containsEmoji && this.hunspell) {
@@ -749,6 +750,13 @@ var SpellRight = (function () {
             // Clean up after passing parenthesis for parentical plural
             cword = cword.replace(/\(/g, ' ');
             cword = cword.replace(/\)/g, ' ');
+        }
+
+        if (_possesiveApostrophe) {
+            // Here spell special case of possesive 's
+            var ppmatch = /^(\w+)\'s$/;
+            var match = ppmatch.exec(cword);
+            cword = match[1];
         }
 
         this.setDictionary(this.getEffectiveLanguage());
