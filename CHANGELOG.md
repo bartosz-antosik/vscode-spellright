@@ -1,10 +1,14 @@
 # Change Log
 
+## **2.3.3** released on 3rd May 2018
+
+- **Fix:** Incorrect spell checking in Markdown fenced code blocks ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)).
+
 ## **2.3.2** released on 2nd May 2018
 
 - **Change:** Screenshots updated.
 - **Change:** Some solution to possessive apostrophe ([#150](https://github.com/bartosz-antosik/vscode-spellright/issues/150)).
-- **Fix:** Regression with Hunspell backend introduced with fixing of ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)) also resolves ([#149](https://github.com/bartosz-antosik/vscode-spellright/issues/149)) .
+- **Fix:** Regression with Hunspell backend introduced with fixing of ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)) also resolves ([#149](https://github.com/bartosz-antosik/vscode-spellright/issues/149)).
 
 ## **2.3.0** released on 26th April 2018
 
