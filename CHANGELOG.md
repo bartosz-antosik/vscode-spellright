@@ -3,6 +3,7 @@
 ## **2.3.4** released on 7th May 2018
 
 - **Change:** LaTeX 'magic comment' (`!TEX spellcheck = "CODE"`) changed as consequence of ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)) requires language code in double quotes.
+- **Change:** Word separation rules extended with additional punctuation characters ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)).
 - **Fix:** Incorrect dictionary name in block comments ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)). This changes the syntax of In-Document `spellcheck-language "CODE"` command: the language code/dictionary name has to be in double quotes.
 
 ## **2.3.3** released on 3rd May 2018
