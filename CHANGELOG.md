@@ -19,7 +19,7 @@
 
 ## **2.3.0** released on 26th April 2018
 
-- **New:** LaTeX diacritics (e.g. \"{o}, \l{}, \'{o} etc.) are now spelled as normal characters ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
+- **New:** LaTeX diacritics (e.g. `\"{o}`, `\l{}`, `\'{o}` etc.) in canonical form (that is no short forms, e.g. `\"o` supported for now) are now spelled as normal characters ([#133](https://github.com/bartosz-antosik/vscode-spellright/issues/133)).
 - **Change:** Word separation rules extended with selected Chinese punctuation characters ([#143](https://github.com/bartosz-antosik/vscode-spellright/issues/143)).
 - **Fix:** Regression introduced by parenthetical plural ([#144](https://github.com/bartosz-antosik/vscode-spellright/issues/144)).
 
