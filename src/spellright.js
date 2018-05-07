@@ -895,6 +895,13 @@ var SpellRight = (function () {
             }
         }
 
+        // Parenthesis e.g. brought by parenthical plurals
+        if (_containsParenthesis) {
+            if (!bindings.isMisspelled(cword.trim())) {
+                return;
+            }
+        }
+
         if (_containsDash) {
             return;
         }
