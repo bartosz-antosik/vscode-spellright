@@ -488,8 +488,10 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.checkDictionary = function (dictionary) {
-        var result = false;
 
+        if (typeof dictionary === 'undefined') return false;
+
+        var result = false;
         dictionaries.forEach(function (entry) {
             // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
             var _dictionary = dictionary.replace(/_/g, '-');
@@ -1075,7 +1077,7 @@ var SpellRight = (function () {
             if (command === 'on') {
                 helpers._commands.force = true;
             }
-            if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
+            if (command === 'language') {
                 if (_this.checkDictionary(parameters)) {
                     helpers._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;
@@ -1271,7 +1273,7 @@ var SpellRight = (function () {
             if (command === 'on') {
                 helpers._commands.force = true;
             }
-            if (command === 'language' && typeof parameters !== 'undefined' && parameters !== '') {
+            if (command === 'language') {
                 if (_this.checkDictionary(parameters)) {
                     helpers._commands.languages.pushIfNotExist(parameters, function (e) {
                         return e === parameters;

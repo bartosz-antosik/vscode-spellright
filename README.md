@@ -325,9 +325,9 @@ assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) docu
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
-<code>spellcheck&#x2d;language&nbsp;CODE</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;CODE</code> and `!TEX spellcheck = CODE` in comment areas of `latex` document class only)
+<code>spellcheck&#x2d;language&nbsp;"CODE"</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;"CODE"</code> and `!TEX spellcheck = "CODE"` in comment areas of `latex` document class only)
 
-Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;CODE</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
+Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;"CODE"</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
 In-Document commands for switching spelling language have highest priority over `settings.languageContextByClass` and `settings.languageContext` and `settings.language` configuration items.
 

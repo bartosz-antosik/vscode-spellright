@@ -1,5 +1,10 @@
 # Change Log
 
+## **2.3.4** released on 7th May 2018
+
+- **Change:** LaTeX 'magic comment' (`!TEX spellcheck = "CODE"`) changed as consequence of ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)) requires language code in double quotes.
+- **Fix:** Incorrect dictionary name in block comments ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)). This changes the syntax of In-Document `spellcheck-language "CODE"` command: the language code/dictionary name has to be in double quotes.
+
 ## **2.3.3** released on 3rd May 2018
 
 - **Fix:** Incorrect spell checking in Markdown fenced code blocks ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)).
