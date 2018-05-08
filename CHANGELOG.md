@@ -4,6 +4,7 @@
 
 - **Change:** Curly apostrophe (`’`) added to word separation rules as an equivalent to regular apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
 - **Change:** Screenshots updated.
+- **Change:** Additional links to dictionaries for Windows 7 and Linux in README.md.
 
 ## **2.3.4** released on 7th May 2018
 
