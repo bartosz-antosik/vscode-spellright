@@ -559,8 +559,8 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\ \.0-9\-\(\)]+)');
-        var rsep = /[\ \.0-9\-\(\)]/;
+        var rother = XRegExp('([^\ \.0-9\-\(\)‘’]+)');
+        var rsep = /[\ \.0-9\-\(\)‘’]/;
         var parts = [];
 
         // We need a phantom split (e.g. for "2sth", "(sth)" case).
@@ -713,10 +713,10 @@ var SpellRight = (function () {
         // Special case of words ending with period - abbreviations, etc.
         // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
         var _endsWithPeriod = cword.endsWith('.');
-        var _endsWithApostrophe = cword.endsWith('\'');
+        var _endsWithApostrophe = cword.endsWith('[\'\u2019]');
         while (cword.endsWith('.') || cword.endsWith('\'')) {
             _endsWithPeriod = cword.endsWith('.');
-            _endsWithApostrophe = cword.endsWith('\'');
+            _endsWithApostrophe = cword.endsWith('[\'\u2019]');
 
             var cword = cword.slice(0, -1);
         }
@@ -726,13 +726,13 @@ var SpellRight = (function () {
             _colnumber++;
         }
         var _containsPeriod = /[\.]/.test(cword);
-        var _containsApostrophe = /[\'']/.test(cword);
+        var _containsApostrophe = /[\'\u2019]/.test(cword);
         var _containsDash = /[-]/.test(cword);
         var _containsDigitInside = /\D\d\D/.test(cword);
         var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\uddff]/.test(cword);
         var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
         var _containsParenthesis = /[\(\)]/.test(cword);
-        var _possesiveApostrophe = /^\w+\'s$/.test(cword);
+        var _possesiveApostrophe = /^\w+[\'\u2019]s$/.test(cword);
 
         // Emojis crash Hunspell both on Linux and Windows
         if (_containsEmoji && this.hunspell) {
