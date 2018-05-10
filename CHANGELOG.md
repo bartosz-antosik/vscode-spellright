@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.3.5** released on 9th May 2018
+## **2.3.5** released on 10th May 2018
 
 - **Change:** Curly apostrophe (`’`) added to word separation rules as an equivalent to regular apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
 - **Change:** Screenshots updated.
