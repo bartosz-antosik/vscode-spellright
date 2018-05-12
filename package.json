@@ -171,6 +171,12 @@
                     ],
                     "scope": "resource",
                     "description": "List of LaTeX commands that will have the parameter list spell checked."
+                },
+                "spellright.useDocumentSymbolsInCode": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable/disable using document symbols when spelling using code parser (source code documents)."
                 }
             }
         },
