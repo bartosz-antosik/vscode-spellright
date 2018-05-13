@@ -139,7 +139,7 @@ var SpellRight = (function () {
         }, null);
 
         // register code actions provider for all languages
-        vscode.languages.registerCodeActionsProvider('*', this);
+        vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: '*' }, this);
     };
 
     SpellRight.prototype.deactivate = function () {
