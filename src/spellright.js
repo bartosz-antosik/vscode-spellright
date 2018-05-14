@@ -121,9 +121,9 @@ var SpellRight = (function () {
 
         vscode.workspace.onDidChangeConfiguration(this.doRefreshConfiguration, this, subscriptions);
 
-        vscode.workspace.onDidOpenTextDocument(this.SpellCheckActive, this, subscriptions);
-        vscode.workspace.onDidSaveTextDocument(this.SpellCheckActive, this, subscriptions);
-        vscode.window.onDidChangeVisibleTextEditors(this.SpellCheckActive, null);
+        vscode.workspace.onDidOpenTextDocument(this.doInitiateSpellCheckActive, this, subscriptions);
+        vscode.workspace.onDidSaveTextDocument(this.doInitiateSpellCheckActive, this, subscriptions);
+        vscode.window.onDidChangeVisibleTextEditors(this.doInitiateSpellCheckActive, null);
 
         vscode.workspace.onDidCloseTextDocument(function (document) {
             _this.diagnosticCollection.delete(document.uri);
@@ -132,11 +132,7 @@ var SpellRight = (function () {
 
         vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
 
-        vscode.window.onDidChangeActiveTextEditor(function (editor) {
-            // if (vscode.window.activeTextEditor.document) {
-            //     _this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
-            // }
-        }, null);
+//        vscode.window.onDidChangeActiveTextEditor(this.this.doInitiateSpellCheckActive, null);
 
         // register code actions provider for all languages
         vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: '*' }, this);
@@ -492,21 +488,6 @@ var SpellRight = (function () {
             }
         });
         return result;
-    }
-
-    SpellRight.prototype.SpellCheckActive = function () {
-        var _this = this;
-        if (vscode.window.activeTextEditor.document) {
-            _this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
-        }
-    }
-
-    SpellRight.prototype.SpellCheckAll = function () {
-        var _this = this;
-        _this.doCancelSpellCheck();
-        vscode.window.visibleTextEditors.forEach((editor, index, array) => {
-            _this.doInitiateSpellCheck(vscode.window.activeTextEditor.document);
-        });
     }
 
     SpellRight.prototype.splitCamelCase = function (word) {
@@ -976,13 +957,9 @@ var SpellRight = (function () {
             // Linear search. This should maybe be bisection or some
             // other algorithm in the future, but on the other hand
             // this code is called only on differential edits so there
-            // are very few calls thus it should not degrade
-            // performance much.
+            // are very few calls thus it should not degrade performance.
             for (var i = 0; i < diagnostics.length; i++) {
                 var _drange = diagnostics[i].range;
-                // if (_linenumber < _drange._end._line ||
-                //     (_linenumber <= _drange._end._line &&
-                //     _colnumber <= _drange._end._character)) {
                 if (_drange._end.isBeforeOrEqual(diag.range.start))
                     continue;
                 diagnostics.splice(i, 0, diag);
@@ -1037,7 +1014,7 @@ var SpellRight = (function () {
         this.refreshSettings();
     }
 
-    SpellRight.prototype.doDiffSpellCheck = async function (event) {
+    SpellRight.prototype.doDiffSpellCheck = function (event) {
 
         helpers._commands.ignore = false;
         helpers._commands.force = false;
@@ -1066,7 +1043,7 @@ var SpellRight = (function () {
             return
         };
 
-        await this.getDocumentSymbols(document, parser);
+        this.getDocumentSymbols(document, parser);
 
         var _this = this;
 
@@ -1209,7 +1186,15 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.doInitiateSpellCheck = async function (document) {
+    SpellRight.prototype.doInitiateSpellCheckActive = function () {
+        var _document = vscode.window.activeTextEditor.document;
+        this.doCancelSpellCheck();
+        if (_document) {
+            this.doInitiateSpellCheck(_document);
+        }
+    }
+
+    SpellRight.prototype.doInitiateSpellCheck = function (document) {
 
         helpers._commands.syntax = 0;
         helpers._commands.signature = '';
@@ -1245,7 +1230,7 @@ var SpellRight = (function () {
         // Select appropriate parser
         const parser = doctype.fromDocument(settings, document);
 
-        await this.getDocumentSymbols(document, parser);
+        this.getDocumentSymbols(document, parser);
 
         // No parser for this type of document
         if (parser == null) {
@@ -1655,19 +1640,37 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getDocumentSymbols = async function (document, parser) {
 
+        var _this = this;
         var _DocumentSymbols = [];
 
         if (settings.useDocumentSymbolsInCode && parser.constructor.name === 'Code') {
-            const symbols = await vscode.commands.executeCommand("vscode.executeDocumentSymbolProvider", document.uri);
+            const symbols = vscode.commands.executeCommand("vscode.executeDocumentSymbolProvider", document.uri).then(function (symbols) {
             _DocumentSymbols = Object.values(symbols).map(e => { return e.name; });
+                var _removed = 0;
+
+                // Remove diagnostics refering to just loaded symbols
+                // because we are already spelling 
+                if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
+                    var diagnostics = _this.diagnosticMap[document.uri.toString()];
+                    for (var i = 0; i < _DocumentSymbols.length; i++) {
+                        for (var j = 0; j < diagnostics.length; j++) {
+                            if (diagnostics[j]['token'].word === _DocumentSymbols[i]) {
+                                diagnostics.splice(j, 1);
+                                _removed++;
+                            }
+                        }
+                    }
+                }
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] Loaded ' + _DocumentSymbols.length + ' document symbols.');
+                    console.log('[spellright] Loaded ' + _DocumentSymbols.length + ' document symbols, removed ' + _removed + ' of ' + diagnostics.length + ' symbols.');
             }
+
+                helpers._DocumentSymbols = _DocumentSymbols;
+            });
         } else {
-            _DocumentSymbols = [];
+            helpers._DocumentSymbols = [];
         }
-        helpers._DocumentSymbols = _DocumentSymbols;
     }
 
     SpellRight.prototype.getUniqueArray = function (array) {
@@ -1906,7 +1909,7 @@ var SpellRight = (function () {
 
         this.getSettings();
         indicator.updateStatusBarIndicator();
-        this.SpellCheckAll();
+        this.doInitiateSpellCheckActive();
     }
 
     SpellRight.suggestCommandId = 'spellright.fixSuggestionCodeAction';
