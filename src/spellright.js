@@ -737,7 +737,7 @@ var SpellRight = (function () {
 
         if (_possesiveApostrophe) {
             // Here spell special case of possesive 's
-            var ppmatch = /^(\w+)\'s$/;
+            var ppmatch = /^(\w+)[\'\u2019]s$/;
             var match = ppmatch.exec(cword);
             cword = match[1];
         }
@@ -1186,10 +1186,12 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.doInitiateSpellCheckActive = function () {
-        var _document = vscode.window.activeTextEditor.document;
-        this.doCancelSpellCheck();
-        if (_document) {
-            this.doInitiateSpellCheck(_document);
+        if (vscode.window.activeTextEditor) {
+            var _document = vscode.window.activeTextEditor.document;
+            this.doCancelSpellCheck();
+            if (_document) {
+                this.doInitiateSpellCheck(_document);
+            }
         }
     }
 
