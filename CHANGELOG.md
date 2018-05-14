@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.4.4** released on 10th May 2018
+## **2.4.6** released on 14th May 2018
 
 - **New:** Document symbols (variable, function names etc.) used when spelling source code documents. Greatly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used. Cooperated with `spellright.useDocumentSymbolsInCode` configuration setting which is set to `true` by default.
 - **Fix:** Error "The suggestion was not applied because it is outdated" fixed ([#157](https://github.com/bartosz-antosik/vscode-spellright/issues/157)).
