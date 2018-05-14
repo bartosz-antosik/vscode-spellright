@@ -1493,33 +1493,30 @@ var SpellRight = (function () {
 
     SpellRight.prototype.fixSuggestionCodeAction = function (document, diagnostic, word, suggestion) {
         var _word = document.getText(diagnostic.range);
-        if (diagnostic['token'].word == _word) {
-            // Remove diagnostic from list
-            var diagnostics = this.diagnosticMap[document.uri.toString()];
-            var index = diagnostics.indexOf(diagnostic);
-            diagnostics.splice(index, 1);
 
-            // Update with new diagnostics
-            this.diagnosticMap[document.uri.toString()] = diagnostics;
-            this.diagnosticCollection.set(document.uri, diagnostics);
+        // Remove diagnostic from list
+        var diagnostics = this.diagnosticMap[document.uri.toString()];
+        var index = diagnostics.indexOf(diagnostic);
+        diagnostics.splice(index, 1);
 
-            // This is a way to cope with abbreviations ("etc.", "i.e." etc.)
-            // words ending with period are selected to spell with period but
-            // this may lead to either a proper abbreviation ("etc.") with
-            // period or with in a word or few words without period. Then it
-            // has to be added to revert to original phrasing.
+        // Update with new diagnostics
+        this.diagnosticMap[document.uri.toString()] = diagnostics;
+        this.diagnosticCollection.set(document.uri, diagnostics);
 
-            if (word.endsWith('.') && !suggestion.endsWith('.')) {
-                suggestion += '.';
-            }
+        // This is a way to cope with abbreviations ("etc.", "i.e." etc.)
+        // words ending with period are selected to spell with period but
+        // this may lead to either a proper abbreviation ("etc.") with
+        // period or with in a word or few words without period. Then it
+        // has to be added to revert to original phrasing.
 
-            // Insert the new text
-            var edit = new vscode.WorkspaceEdit();
-            edit.replace(document.uri, diagnostic.range, suggestion);
-            return vscode.workspace.applyEdit(edit);
-        } else {
-            vscode.window.showErrorMessage('SpellRight: The suggestion was not applied because it is outdated.');
+        if (word.endsWith('.') && !suggestion.endsWith('.')) {
+            suggestion += '.';
         }
+
+        // Insert the new text
+        var edit = new vscode.WorkspaceEdit();
+        edit.replace(document.uri, diagnostic.range, suggestion);
+        return vscode.workspace.applyEdit(edit);
     };
 
     SpellRight.prototype.addToWorkspaceDictionaryCodeAction = function (document, word) {
