@@ -1,5 +1,11 @@
 # Change Log
 
+## **2.4.0** released on 10th May 2018
+
+- **New:** Document symbols used when spelling source code documents. Greatly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used.
+- **Fix:** Error "The suggestion was not applied because it is outdated" fixed ([#157](https://github.com/bartosz-antosik/vscode-spellright/issues/157)).
+- **Fix:** Position goes haywire when backslash in front of LF ([#159](https://github.com/bartosz-antosik/vscode-spellright/issues/159)).
+
 ## **2.3.5** released on 10th May 2018
 
 - **Change:** Curly apostrophe (`’`) added to word separation rules as an equivalent to regular apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
