@@ -1,8 +1,9 @@
 # Change Log
 
-## **2.4.6** released on 14th May 2018
+## **2.4.8** released on 14th May 2018
 
 - **New:** Document symbols (variable, function names etc.) used when spelling source code documents. Greatly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used. Cooperated with `spellright.useDocumentSymbolsInCode` configuration setting which is set to `true` by default.
+- **Change:** Small change in the API of the upcoming version (currently in insiders build) caused suggestions (light bulb) stopped working ([#158](https://github.com/bartosz-antosik/vscode-spellright/issues/158)).
 - **Fix:** Error "The suggestion was not applied because it is outdated" fixed ([#157](https://github.com/bartosz-antosik/vscode-spellright/issues/157)).
 - **Fix:** Position goes haywire when backslash in front of LF ([#159](https://github.com/bartosz-antosik/vscode-spellright/issues/159)).
 - **Fix:** Regression introduced by possessive apostrophe ([#150](https://github.com/bartosz-antosik/vscode-spellright/issues/150)).
