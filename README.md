@@ -321,6 +321,10 @@ assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) docu
 * `latex` - spells everything except LaTeX commands;
 * `xml` - spells comments and everything outside markup.
 
+'spellright.useDocumentSymbolsInCode: true'
+
+If set to true Spell Right will use document symbols when spelling source code documents. Significantly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used and the symbol does not disassemble to properly spelled parts using CamelCase, snake_case etc. separation.
+
 ## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
