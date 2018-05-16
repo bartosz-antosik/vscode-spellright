@@ -974,10 +974,12 @@ var SpellRight = (function () {
             } else if (command === 'off') {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
-                if (this.checkDictionary(parameters)) {
-                    this.spellingContext[0]._languageCommand = parameters;
-                } else {
-                    this.spellingContext[0]._languageCommand = undefined;
+                if (parameters) {
+                    if (this.checkDictionary(parameters)) {
+                        this.spellingContext[0]._languageCommand = parameters;
+                    } else {
+                        this.spellingContext[0]._languageCommand = undefined;
+                    }
                 }
             }
         }
@@ -1064,14 +1066,16 @@ var SpellRight = (function () {
                 helpers._commands.force = true;
             }
             if (command === 'language') {
-                if (_this.checkDictionary(parameters)) {
-                    helpers._commands.languages.pushIfNotExist(parameters, function (e) {
-                        return e === parameters;
-                    });
-                } else {
-                    helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
-                        return e === parameters;
-                    });
+                if (parameters) {
+                    if (_this.checkDictionary(parameters)) {
+                        helpers._commands.languages.pushIfNotExist(parameters, function (e) {
+                            return e === parameters;
+                        });
+                    } else {
+                        helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                            return e === parameters;
+                        });
+                    }
                 }
             }
         });
@@ -1272,14 +1276,16 @@ var SpellRight = (function () {
                 helpers._commands.force = true;
             }
             if (command === 'language') {
-                if (_this.checkDictionary(parameters)) {
-                    helpers._commands.languages.pushIfNotExist(parameters, function (e) {
-                        return e === parameters;
-                    });
-                } else {
-                    helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
-                        return e === parameters;
-                    });
+                if (parameters) {
+                    if (_this.checkDictionary(parameters)) {
+                        helpers._commands.languages.pushIfNotExist(parameters, function (e) {
+                            return e === parameters;
+                        });
+                    } else {
+                        helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                            return e === parameters;
+                        });
+                    }
                 }
             }
         });
