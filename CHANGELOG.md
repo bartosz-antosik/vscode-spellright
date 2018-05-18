@@ -1,12 +1,16 @@
 # Change Log
 
+## **2.4.10** released on 18th May 2018
+
+- **Fix:** Sometimes context menu does not show spelling suggestions if it overlaps with another diagnostics from another extension.
+
 ## **2.4.9** released on 16th May 2018
 
 - **Fix:** Regression in In-Document command `spellcheck-off` ([#161](https://github.com/bartosz-antosik/vscode-spellright/issues/161)).
 
 ## **2.4.8** released on 14th May 2018
 
-- **New:** Document symbols (variable, function names etc.) used when spelling source code documents. Greatly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used. Cooperated with `spellright.useDocumentSymbolsInCode` configuration setting which is set to `true` by default.
+- **New:** Document symbols (variables, function names etc.) used when spelling source code documents. Greatly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used. Cooperates with `spellright.useDocumentSymbolsInCode` configuration setting which is set to `true` by default.
 - **Change:** Small change in the API of the upcoming version (currently in insiders build) caused suggestions (light bulb) stopped working ([#158](https://github.com/bartosz-antosik/vscode-spellright/issues/158)).
 - **Fix:** Error "The suggestion was not applied because it is outdated" fixed ([#157](https://github.com/bartosz-antosik/vscode-spellright/issues/157)).
 - **Fix:** Position goes haywire when backslash in front of LF ([#159](https://github.com/bartosz-antosik/vscode-spellright/issues/159)).

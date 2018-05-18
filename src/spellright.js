@@ -1399,7 +1399,7 @@ var SpellRight = (function () {
         var diagnostic = undefined;
 
         context.diagnostics.forEach(function (_diagnostics) {
-            if (_diagnostics.source == 'spelling' && _diagnostics.range._start._character <= range._start._character && _diagnostics.range._end._character >= range._end._character) {
+            if (_diagnostics.source == 'spelling') {
                 diagnostic = _diagnostics;
             }
         });
