@@ -898,6 +898,10 @@ var SpellRight = (function () {
             var _size = cword.length;
         }
 
+        if (_endsWithPeriod) {
+            _size++;
+        }
+
         var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + _size);
 
         var message = '\"' + cword + '\"';
