@@ -1404,7 +1404,7 @@ var SpellRight = (function () {
         var diagnostic = undefined;
 
         context.diagnostics.forEach(function (_diagnostics) {
-            if (_diagnostics.source == 'spelling') {
+            if (_diagnostics.source == 'spelling' && _diagnostics.range.contains(vscode.window.activeTextEditor.selection)) {
                 diagnostic = _diagnostics;
             }
         });

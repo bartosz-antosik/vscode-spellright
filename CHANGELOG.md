@@ -5,7 +5,7 @@
 - **Fix:** In markdown replacing structures that are removed from spelling may create artifacts (like indented code blocks).
 - **Fix:** Sometimes context menu does not show spelling suggestions if it overlaps with another diagnostics from another extension.
 - **Fix:** Regression introduced by parenthetical plural ([#166](https://github.com/bartosz-antosik/vscode-spellright/issues/166)).
-- **Fix:** Hopefully corrected code line detection regular expression which caused a very distant issue ([#163](https://github.com/bartosz-antosik/vscode-spellright/issues/163)).
+- **Fix:** Hopefully corrected markdown code line detection regular expression which caused a very distant issue ([#163](https://github.com/bartosz-antosik/vscode-spellright/issues/163)).
 
 ## **2.4.9** released on 16th May 2018
 
