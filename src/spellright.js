@@ -777,6 +777,11 @@ var SpellRight = (function () {
         // white/punctuation/graphical characters which are permitted above.
         var _split = this.splitByOtherWhite(cword);
         if (_split.length > 1) {
+
+            // Heal "(inkl. " like sitautions here
+            if (_endsWithPeriod) {
+                _split[_split.length - 1].word = _split[_split.length - 1].word + '.';
+            }
             var _this = this;
             _split.forEach (function(e) {
                 if (e.word.length >= 2) {
