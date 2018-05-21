@@ -134,7 +134,7 @@ var SpellRight = (function () {
         }, this, subscriptions);
 
         // register code actions provider for all languages
-        vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: '*' }, this);
+        vscode.languages.registerCodeActionsProvider({ scheme: '*', language: '*' }, this);
     };
 
     SpellRight.prototype.deactivate = function () {
@@ -695,7 +695,7 @@ var SpellRight = (function () {
         // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
         var _endsWithPeriod = cword.endsWith('.');
         var _endsWithApostrophe = cword.endsWith('[\'\u2019]');
-        while (cword.endsWith('.') || cword.endsWith('\'')) {
+        while (cword.endsWith('.') || cword.endsWith('\'\u2019')) {
             _endsWithPeriod = cword.endsWith('.');
             _endsWithApostrophe = cword.endsWith('[\'\u2019]');
 
@@ -714,6 +714,13 @@ var SpellRight = (function () {
         var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
         var _containsParenthesis = /[\(\)]/.test(cword);
         var _possesiveApostrophe = /^\w+[\'\u2019]s$/.test(cword);
+
+        // Detect placeholder replacement ("_") in used in markdown to
+        // avoid false detection of indented code blocks in situation when
+        // something is removed by regular expression or other rules.
+        if (/_+/.test(cword)) {
+            if (/_+/.exec(cword)[0].length == cword.length) return;
+        }
 
         // Emojis crash Hunspell both on Linux and Windows
         if (_containsEmoji && this.hunspell) {
