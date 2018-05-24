@@ -174,6 +174,10 @@ When `true` words added to user dictionary are stored in system default custom s
 
 Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-GB, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only on native Windows & macOS spelling APIs.
 
+`spellright.recheckOnSave: false`
+
+Enable/disable re-checking of entire document after file is saved.
+
 `spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
 
 Document types for which spelling will be turned ON by default.

@@ -65,6 +65,12 @@
                     "scope": "resource",
                     "description": "Enable/disable grouping of dictionaries by language."
                 },
+                "spellright.recheckOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable/disable spelling of entire document on save."
+                },
                 "spellright.statusBarIndicator": {
                     "type": "boolean",
                     "default": true,

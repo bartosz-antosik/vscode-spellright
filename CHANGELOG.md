@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.0** released on 24th May 2018
+
+- **New:** Configuration setting to enable/disable re-checking on save as an extension of ([#160](https://github.com/bartosz-antosik/vscode-spellright/issues/160)).
+
 ## **2.4.12** released on 21st May 2018
 
 - **Fix:** Suggestions menu does not appear in an unsaved document ([#167](https://github.com/bartosz-antosik/vscode-spellright/issues/167)).

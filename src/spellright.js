@@ -122,7 +122,13 @@ var SpellRight = (function () {
         vscode.workspace.onDidChangeConfiguration(this.doRefreshConfiguration, this, subscriptions);
 
         vscode.workspace.onDidOpenTextDocument(this.doInitiateSpellCheckActive, this, subscriptions);
-        vscode.workspace.onDidSaveTextDocument(this.doInitiateSpellCheckActive, this, subscriptions);
+
+        vscode.workspace.onDidSaveTextDocument(function (document) {
+            if(settings.recheckOnSave) {
+                this.doInitiateSpellCheckActive();
+            }
+        }, this, subscriptions);
+
         vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
 
         vscode.window.onDidChangeVisibleTextEditors(function () { _this.doInitiateSpellCheckActive }, null);
