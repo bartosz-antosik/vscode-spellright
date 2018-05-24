@@ -19,6 +19,18 @@
 * Small memory & CPU usage footprint - uses **offline**, **OS native** spell checking backends: Windows Spell Checking API (windows 8/10), NSSpellChecker (macOS) and Hunspell (Linux, Windows 7).
 * Extension uses **background processing** (on idle) and **differential edit notifications** to minimize area spelled during editing only to lines touched by changes.
 
+## Installation
+
+Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>):
+
+```PowerShell
+ext install spellright
+```
+
+Spell Right requires spelling back-end which is different for various platforms. Please read carefully the section below on how to provide dictionaries for Spell Right to work properly.
+
+If you have any problem with installation or you see that Spell Right does not work with some type of document please read carefully the lengthy README file below and if nothing seems to be related to the problems you face post an issue [here](https://github.com/bartosz-antosik/vscode-spellright/issues).
+
 ## Dictionaries
 
 ### **Windows 8+**
@@ -48,7 +60,11 @@ Dictionaries from the folder will be listed in the language selection list and u
 
 ### **User Dictionaries**
 
-Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. All the extension's commands add words to two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and another in workspace settings folder (`.vscode`). Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
+Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. All the extension's commands add words to two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and the other in workspace settings folder (`.vscode`). Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
+
+### **Symbols in Source Code Documents**
+
+When spelling source code class of document which provides symbol information for the document (e.g. the symbols which are used when <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> is pressed to perform GoTo symbol operation) the symbols are used for spelling of the document. It reduces the number of false spelling warnings mostly in comments which provide source code documentation on the usage of these symbols, e.g. variables, function parameters etc.
 
 ## Screenshots
 
@@ -71,14 +87,6 @@ It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*
 ![screenshot](media/screenshot-batch.png)
 
 ![screenshot](media/screenshot-html.png)
-
-## Installation
-
-Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>):
-
-```PowerShell
-ext install spellright
-```
 
 ## Usage
 
