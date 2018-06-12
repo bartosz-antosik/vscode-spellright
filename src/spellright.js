@@ -1029,6 +1029,14 @@ var SpellRight = (function () {
         }
     }
 
+    SpellRight.prototype.removeFromDiagnostics = function (diagnostics, token) {
+        for (var j = 0; j < diagnostics.length; j++) {
+            if (diagnostics[j]['token'].word === token.word) {
+                diagnostics.splice(j, 1);
+            }
+        }
+    }
+
     SpellRight.prototype.doRefreshConfiguration = function (event) {
 
         // Invalidate settings cache
@@ -1724,12 +1732,8 @@ var SpellRight = (function () {
                 if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
                     var diagnostics = _this.diagnosticMap[document.uri.toString()];
                     for (var i = 0; i < _DocumentSymbols.length; i++) {
-                        for (var j = 0; j < diagnostics.length; j++) {
-                            if (diagnostics[j]['token'].word === _DocumentSymbols[i]) {
-                                diagnostics.splice(j, 1);
-                                _removed++;
-                            }
-                        }
+                        _this.removeFromDiagnostics(diagnostics, { word: _DocumentSymbols[i], parent: '' } );
+                        _removed++;
                     }
                 }
 
