@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.2** released on 12th June 2018
+
+- **New:** Language indicator in status bar shows multiple languages if effective language is altered by `spellright.languageContext` or `spellright.languageContextByClass` configuration settings (e.g. comments are spelled in different language than strings in source code document).
+
 ## **2.5.0** released on 24th May 2018
 
 - **New:** Configuration setting to enable/disable re-checking on save as an extension of ([#160](https://github.com/bartosz-antosik/vscode-spellright/issues/160)).

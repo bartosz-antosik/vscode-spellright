@@ -1100,6 +1100,23 @@ var SpellRight = (function () {
                     }
                 }
             }
+        }, function (context) {
+            if (settings.languageContextByClass[document.languageId]) {
+                var _language = settings.languageContextByClass[document.languageId][context];
+            } else if (settings.languageContext[context]) {
+                var _language = settings.languageContext[context];
+            }
+            if (_language) {
+                if (_this.checkDictionary(_language)) {
+                    helpers._commands.languages.pushIfNotExist(_language, function (e) {
+                        return e === _language;
+                    });
+                } else {
+                    helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
+                        return e === _language;
+                    });
+                }
+            }
         });
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
@@ -1310,6 +1327,23 @@ var SpellRight = (function () {
                     }
                 }
             }
+        }, function (context) {
+            if (settings.languageContextByClass[document.languageId]) {
+                var _language = settings.languageContextByClass[document.languageId][context];
+            } else if (settings.languageContext[context]) {
+                var _language = settings.languageContext[context];
+            }
+            if (_language) {
+                if (_this.checkDictionary(_language)) {
+                    helpers._commands.languages.pushIfNotExist(_language, function (e) {
+                        return e === _language;
+                    });
+                } else {
+                    helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
+                        return e === _language;
+                    });
+                }
+            }
         });
 
         helpers._commands.syntax = _return.syntax;
@@ -1466,7 +1500,7 @@ var SpellRight = (function () {
                         }
                     }
                 }
-            });
+            }, function (context) {});
         };
 
         // Get suggestions
