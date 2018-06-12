@@ -3,6 +3,7 @@
 ## **2.5.2** released on 12th June 2018
 
 - **New:** Language indicator in status bar shows multiple languages if effective language is altered by `spellright.languageContext` or `spellright.languageContextByClass` configuration settings (e.g. comments are spelled in different language than strings in source code document).
+- **Fix:** In-Document command changing spelling language did not recheck document.
 
 ## **2.5.0** released on 24th May 2018
 

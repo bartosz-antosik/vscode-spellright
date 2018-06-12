@@ -1039,6 +1039,9 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
+        var _languages = helpers._commands.languages;
+        var _nlanguages = helpers._commands.nlanguages;
+
         helpers._commands.ignore = false;
         helpers._commands.force = false;
         helpers._commands.languages = [settings.language];
@@ -1118,6 +1121,14 @@ var SpellRight = (function () {
                 }
             }
         });
+
+        if (_languages.toString() !== helpers._commands.languages.toString() || _nlanguages.toString() !== helpers._commands.nlanguages.toString()) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('[spellright] In-Document language changed, rechecking');
+            }
+            this.doInitiateSpellCheck(document);
+            return;
+        }
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
         if (this.testIgnoreFile(document.uri)) {
