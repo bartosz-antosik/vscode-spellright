@@ -1029,10 +1029,11 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.removeFromDiagnostics = function (diagnostics, token) {
-        for (var j = 0; j < diagnostics.length; j++) {
-            if (diagnostics[j]['token'].word === token.word) {
-                diagnostics.splice(j, 1);
+    SpellRight.prototype.removeFromDiagnostics = function (diagnostics, word) {
+        for (var j = diagnostics.length; j > 0 ; j--) {
+            var _token = diagnostics[j - 1]['token'];
+            if (_token.word === word || _token.parent === word) {
+                diagnostics.splice(j - 1, 1);
             }
         }
     }
@@ -1539,9 +1540,9 @@ var SpellRight = (function () {
             });
             if (vscode.workspace.getWorkspaceFolder(helpers._uri)) {
                 commands.push({
-                    title: 'Add \"' + cword + '\" to workspace dictionary',
+                    title: 'Add \"' + token.word + '\" to workspace dictionary',
                     command: SpellRight.addToWorkspaceDictionaryCommandId,
-                    arguments: [document, cword]
+                    arguments: [document, token.word]
                 });
             }
             if (token.parent) {
@@ -1556,9 +1557,9 @@ var SpellRight = (function () {
                 }
             }
             commands.push({
-                title: 'Add \"' + cword + '\" to user dictionary',
+                title: 'Add \"' + token.word + '\" to user dictionary',
                 command: SpellRight.addToUserDictionaryCommandId,
-                arguments: [document, cword]
+                arguments: [document, token.word]
             });
             if (token.parent) {
                 // Here propose to add compound word to the dictionary when
@@ -1605,7 +1606,10 @@ var SpellRight = (function () {
         if (!this.addWordToWorkspaceDictionary(word, true)) {
             vscode.window.showWarningMessage('SpellRight: The word \"' + word + '\" has already been added to workspace dictionary.');
         } else {
-            this.refreshSettings();
+            var _diagnostics = this.diagnosticMap[document.uri.toString()];
+            this.removeFromDiagnostics(_diagnostics, word);
+            this.diagnosticMap[document.uri.toString()] = _diagnostics;
+            this.diagnosticCollection.set(document.uri, _diagnostics);
         }
     };
 
@@ -1620,13 +1624,16 @@ var SpellRight = (function () {
             var text = editor.document.getText(selection);
             if (!/\s/g.test(text)) {
                 if (this.addWordToWorkspaceDictionary(text, true)) {
-                    this.doInitiateSpellCheck(editor.document);
+                    var _diagnostics = this.diagnosticMap[editor.document.uri.toString()];
+                    this.removeFromDiagnostics(_diagnostics, text);
+                    this.diagnosticMap[editor.document.uri.toString()] = _diagnostics;
+                    this.diagnosticCollection.set(editor.document.uri, _diagnostics);
                 }
             } else {
                 vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
             }
         } else {
-            vscode.window.showInformationMessage('SpellRight: Cannot add multiline text to dictionary.');
+            vscode.window.showInformationMessage('SpellRight: Cannot add multiline selection to dictionary.');
         }
     }
 
@@ -1634,7 +1641,10 @@ var SpellRight = (function () {
         if (!this.addWordToUserDictionary(word)) {
             vscode.window.showWarningMessage('SpellRight: The word \"' + word + '\" has already been added to user dictionary.');
         } else {
-            this.refreshSettings();
+            var _diagnostics = this.diagnosticMap[document.uri.toString()];
+            this.removeFromDiagnostics(_diagnostics, word);
+            this.diagnosticMap[document.uri.toString()] = _diagnostics;
+            this.diagnosticCollection.set(document.uri, _diagnostics);
         }
     };
 
@@ -1649,13 +1659,16 @@ var SpellRight = (function () {
             var text = editor.document.getText(selection);
             if (!/\s/g.test(text)) {
                 if (this.addWordToUserDictionary(text)) {
-                    this.doInitiateSpellCheck(editor.document);
+                    var _diagnostics = this.diagnosticMap[editor.document.uri.toString()];
+                    this.removeFromDiagnostics(_diagnostics, text);
+                    this.diagnosticMap[editor.document.uri.toString()] = _diagnostics;
+                    this.diagnosticCollection.set(editor.document.uri, _diagnostics);
                 }
             } else {
                 vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
             }
         } else {
-            vscode.window.showInformationMessage('SpellRight: Cannot add multiline text to dictionary.');
+            vscode.window.showInformationMessage('SpellRight: Cannot add multiline selection to dictionary.');
         }
     }
 
@@ -1732,7 +1745,7 @@ var SpellRight = (function () {
                 if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
                     var diagnostics = _this.diagnosticMap[document.uri.toString()];
                     for (var i = 0; i < _DocumentSymbols.length; i++) {
-                        _this.removeFromDiagnostics(diagnostics, { word: _DocumentSymbols[i], parent: '' } );
+                        _this.removeFromDiagnostics(diagnostics, _DocumentSymbols[i]);
                         _removed++;
                     }
                 }
