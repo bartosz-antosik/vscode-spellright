@@ -1133,14 +1133,6 @@ var SpellRight = (function () {
             }
         });
 
-        if (_languages.toString() !== helpers._commands.languages.toString() || _nlanguages.toString() !== helpers._commands.nlanguages.toString()) {
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] In-Document language changed, rechecking');
-            }
-            this.doInitiateSpellCheck(document);
-            return;
-        }
-
         // .spellignore tested here so it can be overriden by InDoc command(s)
         if (this.testIgnoreFile(document.uri)) {
             helpers._commands.ignore = true;
@@ -1157,6 +1149,15 @@ var SpellRight = (function () {
             }
             return;
         }
+
+        if (_languages.toString() !== helpers._commands.languages.toString()) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('[spellright] In-Document language changed, rechecking');
+            }
+            this.doCancelSpellCheck();
+            this.doInitiateSpellCheck(document);
+            return;
+        } else
 
         if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
             this.doInitiateSpellCheck(document);
