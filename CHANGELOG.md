@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.5.2** released on 12th June 2018
+## **2.5.2** released on 13th June 2018
 
 - **New:** Adding word to dictionary does not re-check whole document ([#160](https://github.com/bartosz-antosik/vscode-spellright/issues/160)).
 - **New:** Language indicator in status bar shows multiple languages if effective language is altered by `spellright.languageContext` or `spellright.languageContextByClass` configuration settings (e.g. comments are spelled in different language than strings in source code document).
