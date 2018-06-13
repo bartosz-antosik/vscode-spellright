@@ -1002,6 +1002,8 @@ var SpellRight = (function () {
                     } else {
                         this.spellingContext[0]._languageCommand = undefined;
                     }
+                } else {
+                    this.spellingContext[0]._languageCommand = settings.language;
                 }
             }
         }
@@ -1737,7 +1739,7 @@ var SpellRight = (function () {
 
         if (settings.useDocumentSymbolsInCode && parser.constructor.name === 'Code') {
             const symbols = vscode.commands.executeCommand("vscode.executeDocumentSymbolProvider", document.uri).then(function (symbols) {
-            _DocumentSymbols = Object.values(symbols).map(e => { return e.name; });
+                _DocumentSymbols = Object.values(symbols).map(e => { return e.name; });
                 var _removed = 0;
 
                 // Remove diagnostics refering to just loaded symbols
