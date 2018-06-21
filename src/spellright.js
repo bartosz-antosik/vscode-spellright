@@ -632,7 +632,19 @@ var SpellRight = (function () {
         if (helpers._ignoreFilesSettings.ignores(path.relative(urifspath, uri.fsPath)) || helpers._ignoreFilesSpellignore.ignores(path.relative(urifspath, uri.fsPath))) {
             return true;
         }
-        return false;
+
+        // Test absolute path which is an extension to GitIgnore patterns
+        var _absolute = false;
+        helpers._ignoreFilesSettings._rules.forEach(function(g) {
+            if (g.pattern.toLowerCase() == uri.fsPath.toLowerCase()) _absolute = true;
+        });
+        helpers._ignoreFilesSpellignore._rules.forEach(function(g) {
+            if (g.pattern.toLowerCase() == uri.fsPath.toLowerCase())  _absolute = true;
+        });
+        if (_absolute)
+            return true
+        else
+            return false;
     }
 
     SpellRight.prototype.testWordInDictionaries = function (word) {
