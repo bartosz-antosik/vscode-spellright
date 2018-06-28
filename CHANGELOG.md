@@ -3,6 +3,7 @@
 ## **2.5.4** released on 28th June 2018
 
 - **New:** Absolute file locations in `spellright.ignoreFiles` ([#172](https://github.com/bartosz-antosik/vscode-spellright/issues/172)).
+- **Fix:** Incorrect spelling of multiple trailing apostrophes ([#173](https://github.com/bartosz-antosik/vscode-spellright/issues/173)).
 
 ## **2.5.2** released on 13th June 2018
 

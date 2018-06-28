@@ -707,21 +707,21 @@ var SpellRight = (function () {
         // they are treated in the same way so these are operations done on
         // every word/lexem spelled.
 
-        cword = token.word;
+        var cword = token.word;
 
         // Special case of words ending with period - abbreviations, etc.
         // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
         var _endsWithPeriod = cword.endsWith('.');
-        var _endsWithApostrophe = cword.endsWith('[\'\u2019]');
-        while (cword.endsWith('.') || cword.endsWith('\'\u2019')) {
+        var _endsWithApostrophe = cword.endsWith('\'') || cword.endsWith('\u2019');
+        while (cword.endsWith('.') || cword.endsWith('\'') || cword.endsWith('\u2019')) {
             _endsWithPeriod = cword.endsWith('.');
-            _endsWithApostrophe = cword.endsWith('[\'\u2019]');
+            _endsWithApostrophe = cword.endsWith('\'') || cword.endsWith('\u2019');
 
-            var cword = cword.slice(0, -1);
+            cword = cword.slice(0, -1);
         }
 
         while (cword.startsWith('.') || cword.startsWith('\'')) {
-            var cword = cword.slice(1);
+            cword = cword.slice(1);
             _colnumber++;
         }
         var _containsPeriod = /[\.]/.test(cword);
