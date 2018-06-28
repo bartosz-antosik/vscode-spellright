@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.4** released on 28th June 2018
+
+- **New:** Absolute file locations in `spellright.ignoreFiles` ([#172](https://github.com/bartosz-antosik/vscode-spellright/issues/172)).
+
 ## **2.5.2** released on 13th June 2018
 
 - **New:** Adding word to dictionary does not re-check whole document ([#160](https://github.com/bartosz-antosik/vscode-spellright/issues/160)).
