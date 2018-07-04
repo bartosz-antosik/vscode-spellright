@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.8** released on 4th July 2018
+
+- **New:** Angular braces (`<>`) added to LaTeX commands.
+
 ## **2.5.4** released on 28th June 2018
 
 - **New:** Absolute file locations in `spellright.ignoreFiles` ([#172](https://github.com/bartosz-antosik/vscode-spellright/issues/172)).
