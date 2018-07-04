@@ -930,8 +930,9 @@ var SpellRight = (function () {
             var _size = cword.length;
         }
 
+        // Avoid proposing a word with a dot to be added to dictionary
         if (_endsWithPeriod) {
-            _size++;
+            token.word = cword;
         }
 
         var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + _size);
@@ -1564,7 +1565,7 @@ var SpellRight = (function () {
                     command: SpellRight.addToWorkspaceDictionaryCommandId,
                     arguments: [document, token.word]
                 });
-                if (token.parent) {
+                if (token.parent && (token.parent.trim() != token.word)) {
                     // Here propose to add compound word to the dictionary when
                     // only a part of it spells incorectly
                     if (vscode.workspace.getWorkspaceFolder(document.uri)) {
@@ -1581,7 +1582,7 @@ var SpellRight = (function () {
                 command: SpellRight.addToUserDictionaryCommandId,
                 arguments: [document, token.word]
             });
-            if (token.parent) {
+            if (token.parent && (token.parent.trim() != token.word)) {
                 // Here propose to add compound word to the dictionary when
                 // only a part of it spells incorectly
                 commands.push({
@@ -1614,6 +1615,13 @@ var SpellRight = (function () {
 
         if (word.endsWith('.') && !suggestion.endsWith('.')) {
             suggestion += '.';
+        }
+
+        // And other way around: Once original word does not contain dot at
+        // the end and the suggestion (e.g. one out of many) contains dot,
+        // remove it.
+        if (suggestion.endsWith('.') && !word.endsWith('.')) {
+            suggestion = suggestion.slice(0, -1);
         }
 
         // Insert the new text
