@@ -31,7 +31,6 @@ const CDICTIONARY = 'spellright.dict';
 
 var helpers = {
     _cache: [],
-    _uri: '',
     _currentDictionary: '',
     _currentPath: '',
     _UserDictionary: [],
@@ -121,31 +120,38 @@ var SpellRight = (function () {
 
         vscode.workspace.onDidChangeConfiguration(this.doRefreshConfiguration, this, subscriptions);
 
-        vscode.workspace.onDidOpenTextDocument(this.doInitiateSpellCheckActive, this, subscriptions);
-
-        vscode.workspace.onDidSaveTextDocument(function (document) {
-            if(settings.recheckOnSave) {
-                this.doInitiateSpellCheckActive();
-            }
+        vscode.workspace.onDidOpenTextDocument(function (document) {
+            this.doInitiateSpellCheck(document);
         }, this, subscriptions);
-
-        vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
-
-        vscode.window.onDidChangeVisibleTextEditors(function () { _this.doInitiateSpellCheckActive }, null);
-        vscode.window.onDidChangeActiveTextEditor(function () { _this.doInitiateSpellCheckActive }, null);
 
         vscode.workspace.onDidCloseTextDocument(function (document) {
             _this.diagnosticCollection.delete(document.uri);
             _this.diagnosticMap[document.uri.toString()] = undefined;
         }, this, subscriptions);
 
+        vscode.workspace.onDidSaveTextDocument(function (document) {
+            if(settings.recheckOnSave) {
+                _this.doInitiateSpellCheck(document);
+            }
+        }, this, subscriptions);
+
+        vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
+
+        // vscode.window.onDidChangeVisibleTextEditors(function () {
+        //     _this.doInitiateSpellCheckVisible();
+        // }, this, subscriptions);
+
+        vscode.window.onDidChangeActiveTextEditor(function () {
+            _this.doInitiateSpellCheckVisible();
+        }, this, subscriptions);
+
         // register code actions provider for all languages
         vscode.languages.registerCodeActionsProvider({ scheme: '*', language: '*' }, this);
+
+        this.doInitiateSpellCheckVisible();
     };
 
     SpellRight.prototype.deactivate = function () {
-        fs.unwatchFile(SpellRight.CONFIGFILE);
-        fs.unwatchFile(pellRight.IGNOREFILE);
     }
 
     SpellRight.prototype.setCurrentTypeON = function () {
@@ -299,16 +305,19 @@ var SpellRight = (function () {
             console.log('[spellright] Update configuration: \"' + _language + '\", \"' + _documentTypes + '\".');
         }
 
-        if (persistent && helpers._uri) {
-            var _settings = vscode.workspace.getConfiguration('spellright', helpers._uri);
-            var _scope = this.getSettingsScope(helpers._uri);
+        var _editor = vscode.window.activeTextEditor;
+        var _uri = _editor.document.uri;
+
+        if (persistent) {
+            var _settings = vscode.workspace.getConfiguration('spellright', _uri);
+            var _scope = this.getSettingsScope(_uri);
 
             _settings.update("language", _language, _scope);
             _settings.update("documentTypes", _documentTypes, _scope);
             if (Object.keys(_parserByClass).length !== 0)
                 _settings.update("parserByClass", _parserByClass, _scope);
         } else {
-            this.refreshSettings();
+            this.doRefreshConfiguration();
         }
     }
 
@@ -362,8 +371,6 @@ var SpellRight = (function () {
             } else if (roff.test(selection.label)) {
                 var off = roff.exec(selection.label);
             }
-
-            _this.doCancelSpellCheck();
 
             if (!off && doctype.fromDocument(settings, _document) !== null) {
                 settings.language = dict;
@@ -1052,14 +1059,6 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.doRefreshConfiguration = function (event) {
-
-        // Invalidate settings cache
-        helpers._cache = [];
-
-        this.refreshSettings();
-    }
-
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
         var _languages = helpers._commands.languages;
@@ -1116,9 +1115,7 @@ var SpellRight = (function () {
             if (command === 'language') {
                 if (parameters) {
                     if (_this.checkDictionary(parameters)) {
-                        helpers._commands.languages.pushIfNotExist(parameters, function (e) {
-                            return e === parameters;
-                        });
+                        helpers._commands.languages.push(parameters);
                     } else {
                         helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
                             return e === parameters;
@@ -1134,9 +1131,7 @@ var SpellRight = (function () {
             }
             if (_language) {
                 if (_this.checkDictionary(_language)) {
-                    helpers._commands.languages.pushIfNotExist(_language, function (e) {
-                        return e === _language;
-                    });
+                    helpers._commands.languages.push(_language);
                 } else {
                     helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
                         return e === _language;
@@ -1167,11 +1162,9 @@ var SpellRight = (function () {
                 console.log('[spellright] In-Document language changed, rechecking');
             }
             this.doCancelSpellCheck();
-            this.doInitiateSpellCheck(document);
+            this.doInitiateSpellCheck(document, true);
             return;
-        } else
-
-        if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
+        } else if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
             this.doInitiateSpellCheck(document);
             return;
         }
@@ -1263,17 +1256,30 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.doInitiateSpellCheckActive = function () {
-        if (vscode.window.activeTextEditor) {
-            var _document = vscode.window.activeTextEditor.document;
-            this.doCancelSpellCheck();
-            if (_document) {
-                this.doInitiateSpellCheck(_document);
-            }
-        }
+    SpellRight.prototype.doRefreshConfiguration = function (event) {
+        indicator.updateStatusBarIndicator();
+        this.doInitiateSpellCheckVisible(true);
     }
 
-    SpellRight.prototype.doInitiateSpellCheck = function (document) {
+    SpellRight.prototype.doInitiateSpellCheckVisible = function (force = false) {
+        this.doCancelSpellCheck();
+        var _active = vscode.window.activeTextEditor.document;
+        if (vscode.window.activeTextEditor && _active) {
+            this.doInitiateSpellCheck(_active, force);
+        }
+        vscode.window.visibleTextEditors.forEach((editor, index) => {
+            if (editor !== vscode.window.activeTextEditor) {
+                var _document = editor.document;
+                if (_document) {
+                    this.doInitiateSpellCheck(_document, force);
+                }
+            }
+        });
+        // To update status bar if there were more than one visible editor
+        this.doInitiateSpellCheck(_active, force);
+    }
+
+    SpellRight.prototype.doInitiateSpellCheck = function (document, force = false) {
 
         helpers._commands.syntax = 0;
         helpers._commands.signature = '';
@@ -1303,7 +1309,8 @@ var SpellRight = (function () {
             return;
         }
 
-        // Speller was already started
+        // Speller was already started && do not spell what's
+        // already spelled, just diff watch differences
         var initiate = (this.spellingContext.length == 0);
 
         // Select appropriate parser
@@ -1352,9 +1359,7 @@ var SpellRight = (function () {
             if (command === 'language') {
                 if (parameters) {
                     if (_this.checkDictionary(parameters)) {
-                        helpers._commands.languages.pushIfNotExist(parameters, function (e) {
-                            return e === parameters;
-                        });
+                        helpers._commands.languages.push(parameters);
                     } else {
                         helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
                             return e === parameters;
@@ -1370,9 +1375,7 @@ var SpellRight = (function () {
             }
             if (_language) {
                 if (_this.checkDictionary(_language)) {
-                    helpers._commands.languages.pushIfNotExist(_language, function (e) {
-                        return e === _language;
-                    });
+                    helpers._commands.languages.push(_language);
                 } else {
                     helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
                         return e === _language;
@@ -1400,19 +1403,21 @@ var SpellRight = (function () {
             return;
         }
 
+        // Already spelled, needs cleaned diagnostics to respell
+        if (this.diagnosticMap[document.uri.toString()] !== undefined && !force) {
+            return;
+        }
+
         this.spellingContext.pushIfNotExist(_context, function (e) {
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+            }
             return e._document.uri === _context._document.uri;
         });
 
         if (initiate) {
             // The rest is done "OnIdle" state
             setImmediate(function () { _this.doStepSpellCheck(_this) });
-        }
-
-        if (_length != this.spellingContext.length) {
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
-            }
         }
     }
 
@@ -1553,22 +1558,22 @@ var SpellRight = (function () {
                     arguments: [document, diagnostic, word, suggestion]
                 });
             });
-            if (vscode.workspace.getWorkspaceFolder(helpers._uri)) {
+            if (vscode.workspace.getWorkspaceFolder(document.uri)) {
                 commands.push({
                     title: 'Add \"' + token.word + '\" to workspace dictionary',
                     command: SpellRight.addToWorkspaceDictionaryCommandId,
                     arguments: [document, token.word]
                 });
-            }
-            if (token.parent) {
-                // Here propose to add compound word to the dictionary when
-                // only a part of it spells incorectly
-                if (vscode.workspace.getWorkspaceFolder(helpers._uri)) {
-                    commands.push({
-                        title: 'Add \"' + token.parent + '\" to workspace dictionary',
-                        command: SpellRight.addToWorkspaceDictionaryCommandId,
-                        arguments: [document, token.parent]
-                    });
+                if (token.parent) {
+                    // Here propose to add compound word to the dictionary when
+                    // only a part of it spells incorectly
+                    if (vscode.workspace.getWorkspaceFolder(document.uri)) {
+                        commands.push({
+                            title: 'Add \"' + token.parent + '\" to workspace dictionary',
+                            command: SpellRight.addToWorkspaceDictionaryCommandId,
+                            arguments: [document, token.parent]
+                        });
+                    }
                 }
             }
             commands.push({
@@ -1788,25 +1793,20 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getSettingsScope = function (uri) {
-        var editor = vscode.window.activeTextEditor;
-        if (editor) {
-            if (vscode.workspace.getWorkspaceFolder(editor.document.uri)) {
-                if (settings.configurationScope == "user") {
-                    return vscode.ConfigurationTarget.Global;
-                } else {
-                    return vscode.ConfigurationTarget.WorkspaceFolder;
-                }
+        if (vscode.workspace.getWorkspaceFolder(uri)) {
+            if (settings.configurationScope == "user") {
+                return vscode.ConfigurationTarget.Global;
             } else {
-                if (vscode.workspace.workspaceFolders) {
-                    // Out of workspace document opened IN WORKSPACE
-                    return vscode.ConfigurationTarget.Workspace;
-                } else {
-                    // Out of workspace document opened STANDALONE
-                    return vscode.ConfigurationTarget.Global;
-                }
+                return vscode.ConfigurationTarget.WorkspaceFolder;
             }
         } else {
-            return vscode.ConfigurationTarget.Global;
+            if (vscode.workspace.workspaceFolders) {
+                // Out of workspace document opened IN WORKSPACE
+                return vscode.ConfigurationTarget.Workspace;
+            } else {
+                // Out of workspace document opened STANDALONE
+                return vscode.ConfigurationTarget.Global;
+            }
         }
     };
 
@@ -1957,35 +1957,8 @@ var SpellRight = (function () {
                 urifspath = uriwpath.uri.fsPath;
         }
 
-        if (!helpers._cache[urifspath]) {
-            var _settings = vscode.workspace.getConfiguration('spellright', uri);
-
-            // Shadow settings
-            for (var p in _settings) settings[p] = _settings[p];
-
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] Get LIVE settings for \"' + urifspath + '\".');
-            }
-
-            helpers._cache[urifspath] = Object.assign({}, settings);
-        } else  {
-            // Update settings
-            if (helpers._uri) {
-                var _uriwpath = vscode.workspace.getWorkspaceFolder(helpers._uri);
-                if (_uriwpath !== undefined) {
-                    var _urifspath = _uriwpath.uri.fsPath;
-                    if (_urifspath != urifspath && helpers._cache[_urifspath]) {
-                        helpers._cache[_urifspath] = Object.assign({}, settings);
-                    }
-                }
-            }
-            settings = Object.assign({}, helpers._cache[urifspath]);
-
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] Get CACHED settings for \"' + urifspath + '\".');
-            }
-        }
-        helpers._uri = uri;
+        var _settings = vscode.workspace.getConfiguration('spellright', uri);
+        for (var p in _settings) settings[p] = _settings[p];
 
         this.collectDictionaries();
         this.selectDefaultLanguage();
@@ -2007,13 +1980,6 @@ var SpellRight = (function () {
 
         return;
     };
-
-    SpellRight.prototype.refreshSettings = function (event) {
-
-        this.getSettings();
-        indicator.updateStatusBarIndicator();
-        this.doInitiateSpellCheckActive();
-    }
 
     SpellRight.suggestCommandId = 'spellright.fixSuggestionCodeAction';
     SpellRight.addToWorkspaceDictionaryCommandId = 'spellright.addToWorkspaceDictionaryCodeAction';
