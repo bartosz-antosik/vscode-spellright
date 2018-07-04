@@ -3,6 +3,7 @@
 ## **2.5.8** released on 4th July 2018
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.
+- **Change:** Hunspell back end does not understand curly apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
 
 ## **2.5.4** released on 28th June 2018
 

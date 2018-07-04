@@ -752,6 +752,11 @@ var SpellRight = (function () {
             return;
         }
 
+        // Hunspell does not understand curly apostrophe
+        if (_containsApostrophe && this.hunspell) {
+            cword = cword.replace(/\u2019/g, '\'');
+        }
+
         if (_parentheticalPlural) {
             // Here spell special case of parenthical plural (one or two
             // characters in parenthesis directly glued to the word, like
