@@ -3,6 +3,7 @@
 ## **2.5.14** released on 8th July 2018
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.
+- **New:** LaTeX bibliography (BibTex) magic comments (`!BIB`) removed from spelling.
 - **Change:** Added `captionof` and `begin{frame}` to default value of `spellright.latexSpellParameters` to ease use of beamer presentation template in LaTeX.
 - **Change:** Hunspell back end does not understand curly apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
 - **Change:** Way in which dots & parenthesis are processed in words changed a bit to help in some confusing situations.
