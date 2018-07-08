@@ -306,10 +306,11 @@ Defines LaTeX commands that should have both mandatory (`[]`) and optional (`{}`
     "emph",
     "item",
     "footnote(text)?",
-    "caption",
+    "caption(of)?",
     "multicolumn",
     "href",
-    "hyperref"
+    "hyperref",
+    "begin\\{frame\\}"
 ]
 ```
 

@@ -1,8 +1,9 @@
 # Change Log
 
-## **2.5.8** released on 4th July 2018
+## **2.5.14** released on 8th July 2018
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.
+- **Change:** Added `captionof` and `begin{frame}` to default value of `spellright.latexSpellParameters` to ease use of beamer presentation template in LaTeX.
 - **Change:** Hunspell back end does not understand curly apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
 - **Change:** Way in which dots & parenthesis are processed in words changed a bit to help in some confusing situations.
 - **Fix:** Problem with spelling only active document when multiple panes are opened aside each with document to spell.

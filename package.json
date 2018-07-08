@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.5.4",
+    "version": "2.5.14",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.20.0"
@@ -170,10 +170,11 @@
                         "emph",
                         "item",
                         "footnote(text)?",
-                        "caption",
+                        "caption(of)?",
                         "multicolumn",
                         "href",
-                        "hyperref"
+                        "hyperref",
+                        "begin\\{frame\\}"
                     ],
                     "scope": "resource",
                     "description": "List of LaTeX commands that will have the parameter list spell checked."
