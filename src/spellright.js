@@ -131,7 +131,7 @@ var SpellRight = (function () {
 
         vscode.workspace.onDidSaveTextDocument(function (document) {
             if(settings.recheckOnSave) {
-                _this.doInitiateSpellCheck(document);
+                _this.doInitiateSpellCheck(document, true);
             }
         }, this, subscriptions);
 
@@ -642,11 +642,11 @@ var SpellRight = (function () {
 
         // Test absolute path which is an extension to GitIgnore patterns
         var _absolute = false;
-        helpers._ignoreFilesSettings._rules.forEach(function(g) {
-            if (g.pattern.toLowerCase() == uri.fsPath.toLowerCase()) _absolute = true;
+        helpers._ignoreFilesSettings._rules.forEach(function(_i) {
+            if (path.relative(_i.pattern, uri.fsPath) === '') _absolute = true;
         });
-        helpers._ignoreFilesSpellignore._rules.forEach(function(g) {
-            if (g.pattern.toLowerCase() == uri.fsPath.toLowerCase())  _absolute = true;
+        helpers._ignoreFilesSpellignore._rules.forEach(function(_i) {
+            if (path.relative(_i.pattern, uri.fsPath) === '') _absolute = true;
         });
         if (_absolute)
             return true
@@ -1414,12 +1414,24 @@ var SpellRight = (function () {
             return;
         }
 
-        this.spellingContext.pushIfNotExist(_context, function (e) {
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+        // The array spellingContext holds queue of documents to be spelled
+        // successively. New documents are put in position 0 so that no matter 
+         // what was spelled a currently opened document will be spelled first.
+        var _index = this.spellingContext.findIndex(e => e._document.uri === _context._document.uri);
+
+        if (_index != -1) {
+            // Move from position N to zero, only it it is not already on 0
+            if (_index > 0) {
+                this.spellingContext.splice(0, 0, this.spellingContext[_index]);
+                this.spellingContext.splice(_index + 1, 1);
             }
-            return e._document.uri === _context._document.uri;
-        });
+        } else {
+            this.spellingContext.splice(0, 0, _context);
+        }
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+        }
 
         if (initiate) {
             // The rest is done "OnIdle" state

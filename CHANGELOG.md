@@ -4,6 +4,8 @@
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.
 - **Change:** Hunspell back end does not understand curly apostrophe ([#154](https://github.com/bartosz-antosik/vscode-spellright/issues/154)).
+- **Change:** Way in which dots & parenthesis are processed in words changed a bit to help in some confusing situations.
+- **Fix:** Problem with spelling only active document when multiple panes are opened aside each with document to spell.
 
 ## **2.5.4** released on 28th June 2018
 
