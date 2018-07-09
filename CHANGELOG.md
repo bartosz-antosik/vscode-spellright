@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.5.14** released on 8th July 2018
+## **2.5.16** released on 9th July 2018
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.
 - **New:** LaTeX bibliography (BibTex) magic comments (`!BIB`) removed from spelling.
