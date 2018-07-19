@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.18** released on 19th July 2018
+
+- **Change:** VSCode's [portable mode](https://code.visualstudio.com/docs/editor/portable) has changed some things from unofficial portable version from some ago and hence saving words to user dictionary required changes ([#179](https://github.com/bartosz-antosik/vscode-spellright/issues/179)).
+
 ## **2.5.16** released on 9th July 2018
 
 - **New:** Angular braces (`<>`) added to LaTeX commands.

@@ -1269,20 +1269,22 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doInitiateSpellCheckVisible = function (force = false) {
         this.doCancelSpellCheck();
-        var _active = vscode.window.activeTextEditor.document;
-        if (vscode.window.activeTextEditor && _active) {
+        if (vscode.window.activeTextEditor) {
+            var _active = vscode.window.activeTextEditor.document;
+            if (vscode.window.activeTextEditor && _active) {
+                this.doInitiateSpellCheck(_active, force);
+            }
+            vscode.window.visibleTextEditors.forEach((editor, index) => {
+                if (editor !== vscode.window.activeTextEditor) {
+                    var _document = editor.document;
+                    if (_document) {
+                        this.doInitiateSpellCheck(_document, force);
+                    }
+                }
+            });
+            // To update status bar if there were more than one visible editor
             this.doInitiateSpellCheck(_active, force);
         }
-        vscode.window.visibleTextEditors.forEach((editor, index) => {
-            if (editor !== vscode.window.activeTextEditor) {
-                var _document = editor.document;
-                if (_document) {
-                    this.doInitiateSpellCheck(_document, force);
-                }
-            }
-        });
-        // To update status bar if there were more than one visible editor
-        this.doInitiateSpellCheck(_active, force);
     }
 
     SpellRight.prototype.doInitiateSpellCheck = function (document, force = false) {
@@ -1837,24 +1839,28 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getDictionariesPath = function () {
 
-
         var codeFolder = 'Code';
         if (vscode.version.indexOf('insider') >= 0) codeFolder = 'Code - Insiders';
 
         if (process.platform == 'win32') {
             // Regular version, workspace opened
-            var sourcePath = path.join(process.env.APPDATA, codeFolder);
-            if (this.context.storagePath == undefined) {
-                // Regular version, workspace NOT opened
-                if (!fs.existsSync(sourcePath)) {
-                    // Portable version
-                    sourcePath = path.join(vscode.env.appRoot, '..', '..', '..', '..', 'Data', 'code');
-                }
+            if (process.env.VSCODE_PORTABLE) {
+                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+            } else {
+                var sourcePath = path.join(process.env.APPDATA, codeFolder);
             }
         } else if (process.platform == 'darwin') {
-            var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
+            if (process.env.VSCODE_PORTABLE) {
+                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+            } else {
+                var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
+            }
         } else if (process.platform == 'linux') {
-            var sourcePath = path.join(process.env.HOME, '.config', codeFolder);
+            if (process.env.VSCODE_PORTABLE) {
+                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+            } else {
+                var sourcePath = path.join(process.env.HOME, '.config', codeFolder);
+            }
         }
         var userRoot = path.normalize(sourcePath);
 
@@ -1908,14 +1914,25 @@ var SpellRight = (function () {
         if (vscode.version.indexOf('insider') >= 0)
             codeFolder = 'Code - Insiders';
         if (process.platform == 'win32')
-            return path.join(process.env.APPDATA, codeFolder, 'User', CDICTIONARY);
+            if (process.env.VSCODE_PORTABLE) {
+                return path.join(process.env.VSCODE_PORTABLE, 'user-data', 'User', CDICTIONARY);
+            } else {
+                return path.join(process.env.APPDATA, codeFolder, 'User', CDICTIONARY);
+            }
         else if (process.platform == 'darwin')
-            return path.join(process.env.HOME, 'Library', 'Application Support', codeFolder, 'User', CDICTIONARY);
+            if (process.env.VSCODE_PORTABLE) {
+                return path.join(process.env.VSCODE_PORTABLE, 'user-data', 'User', CDICTIONARY);
+            } else {
+                return path.join(process.env.HOME, 'Library', 'Application Support', codeFolder, 'User', CDICTIONARY);
+            }
         else if (process.platform == 'linux')
-            return path.join(process.env.HOME, '.config', codeFolder, 'User', CDICTIONARY);
+            if (process.env.VSCODE_PORTABLE) {
+                return path.join(process.env.VSCODE_PORTABLE, 'user-data', 'User', CDICTIONARY);
+            } else {
+                return path.join(process.env.HOME, '.config', codeFolder, 'User', CDICTIONARY);
+            }
         else
             return '';
-
     };
 
     SpellRight.prototype.readDictionaryFile = function (fileName) {
