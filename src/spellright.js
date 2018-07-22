@@ -719,6 +719,7 @@ var SpellRight = (function () {
         // Special case of words ending with period - abbreviations, etc.
         // Also cleanup for situations like: "peoples'." or LaTeX ""``up''".
         var _endsWithPeriod = cword.endsWith('.');
+        var _startsWithPeriod = cword.startsWith('.');
         var _endsWithApostrophe = cword.endsWith('\'') || cword.endsWith('\u2019');
         while (cword.endsWith('.') || cword.endsWith('\'') || cword.endsWith('\u2019')) {
             _endsWithPeriod = cword.endsWith('.');
@@ -936,7 +937,7 @@ var SpellRight = (function () {
         }
 
         // Avoid proposing a word with a dot to be added to dictionary
-        if (_endsWithPeriod) {
+        if (_startsWithPeriod || _endsWithPeriod) {
             token.word = cword;
         }
 

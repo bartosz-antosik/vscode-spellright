@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.20** released on 22nd July 2018
+
+- **Fix:** Incorrect suggestion for misspelled words starting with period ([#181](https://github.com/bartosz-antosik/vscode-spellright/issues/181)).
+
 ## **2.5.18** released on 19th July 2018
 
 - **Change:** VSCode's [portable mode](https://code.visualstudio.com/docs/editor/portable) has changed some things from unofficial portable version from some ago and hence saving words to user dictionary required changes ([#179](https://github.com/bartosz-antosik/vscode-spellright/issues/179)).
