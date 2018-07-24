@@ -1,6 +1,10 @@
 # Change Log
 
-## **2.5.20** released on 22nd July 2018
+## **2.5.22** released on 24th July 2018
+
+- **Change:** Further LaTeX [beamer](https://www.sharelatex.com/learn/Beamer) presentation package commands added to default value of `spellright.latexSpellParameters`.
+
+## **2.5.20** releasd on 22nd July 2018
 
 - **Fix:** Incorrect suggestion for misspelled words starting with period ([#181](https://github.com/bartosz-antosik/vscode-spellright/issues/181)).
 
@@ -261,7 +265,7 @@
 ## **2.0.0** released on 2nd November 2017
 
 - **New:** Multi Root Workspace ready with all the settings and custom workspace dictionaries having "resource" scope (that is per component root folder). It allows to e.g. have root folders with various languages, document types or custom dictionaries considered for spelling. Users of single root workspaces should not feel any difference to the way it was working so far with the exception of the point below.
-- **New:** All the workspace settings are now stored in workspace settings file (`settings.json`) managed by VSCode. It is more in line with recommendations and seems bit more future proof. Current settings can be manually transferred from currently used dedicated workspace settings files (`spellright.json`) remembering that each setting has to be preceded by  `spellright.` prefix.
+- **New:** All the workspace settings are now stored in workspace settings file (`settings.json`) managed by VSCode. It is more in line with recommendations and seems bit more future proof. Current settings can be manually transferred from currently used dedicated workspace settings files (`spellright.json`) remembering that each setting has to be preceded by `spellright.` prefix.
 - **New:** Selecting dictionary (language) or switching document class ON/OFF is now persistent and automatically stored in workspace settings if workspace is open or user settings if not.
 - **New:** New setting `spellright.ignoreRegExpsByClass` allow to add regular expressions that will be ignored in spelling of a document of particular document class. Created extending the request from ([#78](https://github.com/bartosz-antosik/vscode-spellright/issues/78)).
 - **Change:** Heavily refactored & simplified code. Although tested, may bring annoyances for which I am sorry. Please report on issues page.
@@ -396,7 +400,7 @@
 ## **1.0.42** released on 6th August 2017
 
 - **Change:** Some math expressions in latex should not be spelled ([#35](https://github.com/bartosz-antosik/vscode-spellright/issues/35)).
-- **Change:** LaTeX parser now excludes more types of math braces, that is: `\(` ... `\)` and `\[` ... `\]`   ([#34](https://github.com/bartosz-antosik/vscode-spellright/issues/34)).
+- **Change:** LaTeX parser now excludes more types of math braces, that is: `\(` ... `\)` and `\[` ... `\]` ([#34](https://github.com/bartosz-antosik/vscode-spellright/issues/34)).
 
 ## **1.0.40** released on 4th August 2017
 
