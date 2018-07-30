@@ -156,47 +156,47 @@ Add text selected in editor to main user dictionary.
 
 `SpellRight: Update Configuration`
 
-Saves current state of GUI (that is language and map of documents classes spell checked) to appropriate configuration file. Works only if `spellright.configurationUpdate` is set to `false`.
+Saves current state of GUI (that is language and map of documents classes spell checked) to appropriate configuration file. Works only if `"spellright.configurationUpdate"` is set to `false`.
 
 ## Settings
 
 This extension contributes the following settings (with default values):
 
-`spellright.language: ""`
+`"spellright.language": ""`
 
-Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE (e.g.: "en", "fr", when `groupDictionaries` is `true`) or LANGUAGE-COUNTRY format (e.g.: "en-US", "en-GB", "fr-CA", "pl-PL", when  `groupDictionaries` is `false`). When *Hunspell* spelling engine is used (e.g. in Windows 7) this setting should be the name of the dictionary file without extension. In case `language` parameter is not set then language from OS locales is used.
+Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE (e.g.: "en", "fr", when `"spellright.groupDictionaries"` is `true`) or LANGUAGE-COUNTRY format (e.g.: "en-US", "en-GB", "fr-CA", "pl-PL", when  `"spellright.groupDictionaries"` is `false`). When *Hunspell* spelling engine is used (e.g. in Windows 7) this setting should be the name of the dictionary file without extension. In case `language` parameter is not set then language from OS locales is used.
 
-`spellright.statusBarIndicator: true`
+`"spellright.statusBarIndicator": true`
 
 Enable/disable language & status indicator switch in status bar.
 
-`spellright.suggestionsInHints: true`
+`"spellright.suggestionsInHints": true`
 
 Enable/disable including suggested corrections in hints. Disabling suggestions significantly speeds checking up. May be useful in case of large, often switched or saved documents.
 
-`spellright.addToSystemDictionary: false`
+`"spellright.addToSystemDictionary": false`
 
 When `true` words added to user dictionary are stored in system default custom spelling dictionary instead.
 
-`spellright.groupDictionaries: true`
+`"spellright.groupDictionaries": true`
 
 Enable/disable grouping of dictionaries by language. Disabling grouping results in displaying dictionaries for all regional variants (e.g. en-US, en-GB, en-CA etc.) as separate entries. When enabled regional dictionaries are displayed as single dictionary under common language name (e.g. "English"). Works only on native Windows & macOS spelling APIs.
 
-`spellright.recheckOnSave: false`
+`"spellright.recheckOnSave": false`
 
 Enable/disable re-checking of entire document after file is saved.
 
-`spellright.documentTypes: [ "plaintext", "markdown", "latex" ]`
+`"spellright.documentTypes": [ "plaintext", "markdown", "latex" ]`
 
 Document types for which spelling will be turned ON by default.
 
-`spellright.ignoreRegExps: []`
+`"spellright.ignoreRegExps": []`
 
 Regular expressions ignored in spelling. Allows to ignore/consider as spelled correctly generalized expressions. Works on raw document **before** separating words to spell which allows to ignore larger parts of the document. Regular expressions have to be in double quoted format. That is backslash has to be quoted as well e.g.: `"/(\\\\.?)(gif|png)/g"` to ignore file extensions like `".gif"` and `".png"`.
 
-`spellright.ignoreRegExpsByClass: {}`
+`"spellright.ignoreRegExpsByClass": {}`
 
-Extends setting of `ignoreRegExps` per document type. Accepts object of key-multi-value pairs. For example following settings:
+Extends setting of `"spellright.ignoreRegExps"` per document type. Accepts object of key-multi-value pairs. For example following settings:
 
 ```JSON
 "spellright.ignoreRegExpsByClass": {
@@ -212,15 +212,15 @@ Extends setting of `ignoreRegExps` per document type. Accepts object of key-mult
 * avoid spelling of multiline `<script></script>` tag content in HTML documents;
 * avoid spelling of "minted" code blocks in LaTeX documents.
 
-`spellright.ignoreFiles: [ "**/.gitignore", "**/.spellignore" ]`
+`"spellright.ignoreFiles": [ "**/.gitignore", "**/.spellignore" ]`
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
 
-`spellright.notificationClass: "error"`
+`"spellright.notificationClass": "error"`
 
 Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
 
-`spellright.spellContext: "body comments strings"`
+`"spellright.spellContext": "body comments strings"`
 
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:
 
@@ -229,9 +229,9 @@ Allows to enable (present in string) or disable (absent in string) spelling of s
 * `comments` - comment (block & line) sections in programming languages, also LaTeX;
 * `strings` - strings in programming languages.
 
-`spellright.spellContextByClass: {}`
+`"spellright.spellContextByClass": {}`
 
-Same as `spellContext` but per document type. Accepts object of key-value pairs. For example following settings:
+Same as `"spellright.spellContext"` but per document type. Accepts object of key-value pairs. For example following settings:
 
 ```JSON
 "spellright.spellContextByClass": {
@@ -245,7 +245,7 @@ Same as `spellContext` but per document type. Accepts object of key-value pairs.
 * disable spelling of strings in CPP documents;
 * disable spelling of comments in Python documents.
 
-`spellright.languageContext: {}`
+`"spellright.languageContext": {}`
 
 Allows to decide on which language is used to spell syntactical parts of the documents. For example following settings:
 
@@ -256,13 +256,13 @@ Allows to decide on which language is used to spell syntactical parts of the doc
 }
 ```
 
-will spell strings in *American English* and comments in *British English* of course if the `groupDictionaries` flag is set to `false`.
+will spell strings in *American English* and comments in *British English* of course if the `"spellright.groupDictionaries"` flag is set to `false`.
 
-Configuration item `settings.languageContext` is more important than `settings.language` but less important than In-Document commands.
+Configuration item `"spellright.languageContext"` is more important than `"spellright.language"` but less important than In-Document commands.
 
-`spellright.languageContextByClass: {}`
+`"spellright.languageContextByClass": {}`
 
-Same as `languageContext` but per document type. For example following settings:
+Same as `"spellright.languageContext"` but per document type. For example following settings:
 
 ```JSON
 "spellright.languageContext": {
@@ -275,17 +275,17 @@ Same as `languageContext` but per document type. For example following settings:
 
 will spell body of `latex` documents in *French* and comments in *English*.
 
-Configuration item `settings.languageContextByClass` is more important than `settings.language` and `settings.languageContext` but less important than In-Document commands.
+Configuration item `"spellright.languageContextByClass"` is more important than `"spellright.language"` and `"spellright.languageContext"` but less important than In-Document commands.
 
-`spellright.configurationUpdate: true`
+`"spellright.configurationUpdate": true`
 
-If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `spellright.configurationUpdate` command to save the changes performed in GUI.
+If set to true then each operation on the GUI (change of language, turning spelling OFF for particular document type) is automatically saved in appropriate configuration settings (workspace if workspace is open and user if not). Setting to false requires using of `"spellright.configurationUpdate"` command to save the changes performed in GUI.
 
-`spellright.configurationScope: workspace`
+`"spellright.configurationScope": "workspace"`
 
-Allows to decide which configuration gets updated when `spellright.configurationUpdate` is set to true. Possible values are `user` and `workspace`.
+Allows to decide which configuration gets updated when `"spellright.configurationUpdate"` is set to true. Possible values are `user` and `workspace`.
 
-`spellright.latexSpellParameters: (see below for default value)`
+`"spellright.latexSpellParameters": (see below for default value)`
 
 Defines LaTeX commands that should have both mandatory (`[]`) and optional (`{}`) parameters spelled. Other commands are removed from spelling. Default value:
 
@@ -314,7 +314,7 @@ Defines LaTeX commands that should have both mandatory (`[]`) and optional (`{}`
 ]
 ```
 
-`spellright.parserByClass: {}`
+`"spellright.parserByClass": {}`
 
 Allows to assign or override generic parser for particular document class. For example following settings:
 
@@ -334,7 +334,7 @@ assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) docu
 * `latex` - spells everything except LaTeX commands;
 * `xml` - spells comments and everything outside markup.
 
-`spellright.useDocumentSymbolsInCode: true`
+`"spellright.useDocumentSymbolsInCode": true`
 
 If set to true Spell Right will use document symbols (variable, function names etc.) when spelling source code documents. Significantly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used and the symbol does not disassemble to properly spelled parts using CamelCase, snake_case etc. separation.
 
@@ -346,7 +346,7 @@ Beside global settings following commands can be embedded inside spelled parts o
 
 Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;"CODE"</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
-In-Document commands for switching spelling language have highest priority over `settings.languageContextByClass` and `settings.languageContext` and `settings.language` configuration items.
+In-Document commands for switching spelling language have highest priority over `"spellright.languageContextByClass"` and `"spellright.languageContext"` and `"spellright.language"` configuration items.
 
 `spellcheck-off` (alternative syntax: `spellcheck: off`)
 

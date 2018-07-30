@@ -3,6 +3,7 @@
 ## **2.5.24** released on 31st July 2018
 
 - **New:** Support for some rudimentary AsciiDoc constructs ([#188](https://github.com/bartosz-antosik/vscode-spellright/issues/188)).
+- **Change:** Settings names wrapped in quotes ([#185](https://github.com/bartosz-antosik/vscode-spellright/issues/185)).
 
 ## **2.5.22** released on 24th July 2018
 
