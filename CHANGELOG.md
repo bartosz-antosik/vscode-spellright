@@ -4,7 +4,7 @@
 
 - **New:** Configuration setting (`spellright.notificationClassByParser`) to change class of diagnostic messages produced by Spell Right per parser used ([#183](https://github.com/bartosz-antosik/vscode-spellright/issues/183)).
 - **New:** Support for some rudimentary AsciiDoc constructs ([#188](https://github.com/bartosz-antosik/vscode-spellright/issues/188)).
-- **Change:** Settings names wrapped in quotes ([#185](https://github.com/bartosz-antosik/vscode-spellright/issues/185)).
+- **Change:** Settings names wrapped in quotes in README.md ([#185](https://github.com/bartosz-antosik/vscode-spellright/issues/185)).
 
 ## **2.5.22** released on 24th July 2018
 
