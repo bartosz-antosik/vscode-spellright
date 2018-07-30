@@ -1,10 +1,14 @@
 # Change Log
 
+## **2.5.24** released on 31st July 2018
+
+- **New:** Support for some rudimentary AsciiDoc constructs ([#188](https://github.com/bartosz-antosik/vscode-spellright/issues/188)).
+
 ## **2.5.22** released on 24th July 2018
 
 - **Change:** Further LaTeX [beamer](https://www.sharelatex.com/learn/Beamer) presentation package commands added to default value of `spellright.latexSpellParameters`.
 
-## **2.5.20** releasd on 22nd July 2018
+## **2.5.20** released on 22nd July 2018
 
 - **Fix:** Incorrect suggestion for misspelled words starting with period ([#181](https://github.com/bartosz-antosik/vscode-spellright/issues/181)).
 
