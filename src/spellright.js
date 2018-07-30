@@ -824,7 +824,7 @@ var SpellRight = (function () {
             _split.forEach (function(e) {
                 if (e.word.length >= 2) {
 
-                    var _token = { word: e.word, parent: cword };
+                    var _token = { word: e.word, parent: cword, parser: token.parser };
                     var _source = '';
                     var _offset = e.offset;
 
@@ -852,7 +852,7 @@ var SpellRight = (function () {
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
 
-                    var _token = { word: e.word, parent: cword };
+                    var _token = { word: e.word, parent: cword, parser: token.parser };
                     var _source = '';
                     var _offset = e.offset;
 
@@ -880,7 +880,7 @@ var SpellRight = (function () {
             _split.forEach(function (e) {
                 if (e.word.length >= 2) {
 
-                    var _token = { word: e.word, parent: cword };
+                    var _token = { word: e.word, parent: cword, parser: token.parser };
                     var _source = '';
                     var _offset = e.offset;
 
@@ -973,6 +973,14 @@ var SpellRight = (function () {
         } else if (settings.notificationClass === 'information') {
             diagnosticsType = vscode.DiagnosticSeverity.Information;
         } else if (settings.notificationClass === 'hint') {
+            diagnosticsType = vscode.DiagnosticSeverity.Hint;
+        }
+
+        if (settings.notificationClassByParser[token.parser] === 'warning') {
+            diagnosticsType = vscode.DiagnosticSeverity.Warning;
+        } else if (settings.notificationClassByParser[token.parser] === 'information') {
+            diagnosticsType = vscode.DiagnosticSeverity.Information;
+        } else if (settings.notificationClassByParser[token.parser] === 'hint') {
             diagnosticsType = vscode.DiagnosticSeverity.Hint;
         }
 

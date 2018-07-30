@@ -220,6 +220,18 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 
 Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
 
+`"spellright.notificationClassByParser": {}`
+
+Extends `"spellright.notificationClass"` to allow change class of diagnostic messages per parser. For example following settings:
+
+```JSON
+"spellright.notificationClassByParser": {
+    "code": "information"
+}
+```
+
+will produce `"information"` class diagnostics for documents spelled with `code` parser. Possible values on left side of the association are: `plain`, `markdown`, `code`, `latex` and `xml`.
+
 `"spellright.spellContext": "body comments strings"`
 
 Allows to enable (present in string) or disable (absent in string) spelling of syntactic parts of the documents. Currently supported are:

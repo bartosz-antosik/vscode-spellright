@@ -122,6 +122,12 @@
                     "scope": "resource",
                     "description": "Assign class of diagnostic messages produced by SpellRight."
                 },
+                "spellright.notificationClassByParser": {
+                    "type": "object",
+                    "default": {},
+                    "scope": "resource",
+                    "description": "Assign class of diagnostic messages produced by SpellRight per parser."
+                },
                 "spellright.spellContext": {
                     "type": "string",
                     "default": "body comments strings",
