@@ -16,7 +16,7 @@ const XRegExp = require('xregexp');
 const ignore = require('ignore');
 const os = require('os');
 const osLocale = require('os-locale');
-const opn = require("opn");
+const opn = require('opn');
 
 const bindings = require('../lib/bindings');
 
@@ -100,6 +100,14 @@ var SpellRight = (function () {
         context.subscriptions.push(indicator);
 
         subscriptions.push(this);
+
+        //
+        // Does not pass pressing of Ctrl alone. Could be useful for "replace 
+        // all occurences" if it would.
+        // vscode.commands.registerCommand('type', function(args) {
+        //     ;
+        // });
+        //
 
         vscode.commands.registerCommand('spellright.configurationUpdate', this.configurationUpdate, this);
         vscode.commands.registerCommand('spellright.selectDictionary', this.selectDictionary, this);
@@ -1333,12 +1341,12 @@ var SpellRight = (function () {
         // Select appropriate parser
         const parser = doctype.fromDocument(settings, document);
 
-        this.getDocumentSymbols(document, parser);
-
         // No parser for this type of document
         if (parser == null) {
             return;
         }
+
+        this.getDocumentSymbols(document, parser);
 
         var _context = {
             _document: document,
