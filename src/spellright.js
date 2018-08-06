@@ -1801,24 +1801,26 @@ var SpellRight = (function () {
 
         if (settings.useDocumentSymbolsInCode && parser.constructor.name === 'Code') {
             const symbols = vscode.commands.executeCommand("vscode.executeDocumentSymbolProvider", document.uri).then(function (symbols) {
-                _DocumentSymbols = Object.values(symbols).map(e => { return e.name; });
-                var _removed = 0;
+                if (symbols) {
+                    _DocumentSymbols = Object.values(symbols).map(e => { return e.name; });
+                    var _removed = 0;
 
-                // Remove diagnostics refering to just loaded symbols
-                // because we are already spelling 
-                if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
-                    var diagnostics = _this.diagnosticMap[document.uri.toString()];
-                    for (var i = 0; i < _DocumentSymbols.length; i++) {
-                        _this.removeFromDiagnostics(diagnostics, _DocumentSymbols[i]);
-                        _removed++;
+                    // Remove diagnostics refering to just loaded symbols
+                    // because we are already spelling.
+                    if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
+                        var diagnostics = _this.diagnosticMap[document.uri.toString()];
+                        for (var i = 0; i < _DocumentSymbols.length; i++) {
+                            _this.removeFromDiagnostics(diagnostics, _DocumentSymbols[i]);
+                            _removed++;
+                        }
                     }
+
+                    if (SPELLRIGHT_DEBUG_OUTPUT) {
+                            console.log('[spellright] Loaded ' + _DocumentSymbols.length + ' document symbols, removed ' + _removed + ' of ' + diagnostics.length + ' symbols.');
+                    }
+
+                    helpers._DocumentSymbols = _DocumentSymbols;
                 }
-
-            if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    console.log('[spellright] Loaded ' + _DocumentSymbols.length + ' document symbols, removed ' + _removed + ' of ' + diagnostics.length + ' symbols.');
-            }
-
-                helpers._DocumentSymbols = _DocumentSymbols;
             });
         } else {
             helpers._DocumentSymbols = [];
