@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.28** released on 6th August 2018
+
+- **Fix:** Incorrectly encoded accent acute in latex diacritics ([#192](https://github.com/bartosz-antosik/vscode-spellright/issues/192)).
+
 ## **2.5.24** released on 31st July 2018
 
 - **New:** Configuration setting (`spellright.notificationClassByParser`) to change class of diagnostic messages produced by Spell Right per parser used ([#183](https://github.com/bartosz-antosik/vscode-spellright/issues/183)).
