@@ -1,6 +1,6 @@
 # Change Log
 
-## **2.5.28** released on 6th August 2018
+## **2.5.28** released on 7th August 2018
 
 - **Fix:** Incorrectly encoded accent acute in latex diacritics ([#192](https://github.com/bartosz-antosik/vscode-spellright/issues/192)).
 - **Fix:** Silent crash when document symbols returned as undefined ([#190](https://github.com/bartosz-antosik/vscode-spellright/issues/190)).
