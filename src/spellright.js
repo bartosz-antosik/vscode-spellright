@@ -588,7 +588,6 @@ var SpellRight = (function () {
                 // Convert the JSON of RegExp Strings into a real RegExp
                 var flags = settings.ignoreRegExps[i].replace(/.*\/([gimy]*)$/, '$1');
                 var pattern = settings.ignoreRegExps[i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
-                pattern = pattern.replace(/\\\\/g, '\\');
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     console.log('[spellright] RegExp prepare: ' + settings.ignoreRegExps[i] + ' = /' + pattern + '/' + flags);
                 }
@@ -608,7 +607,6 @@ var SpellRight = (function () {
                     // Convert the JSON of RegExp Strings into a real RegExp
                     var flags = settings.ignoreRegExpsByClass[languageid][i].replace(/.*\/([gimy]*)$/, '$1');
                     var pattern = settings.ignoreRegExpsByClass[languageid][i].replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
-                    pattern = pattern.replace(/\\\\/g, '\\');
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
                         console.log('[spellright] RegExp prepare: by Class [' + languageid + ']: \"' + settings.ignoreRegExpsByClass[languageid][i] + ' = /' + pattern + '/' + flags);
                     }
@@ -1074,12 +1072,15 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.removeFromDiagnostics = function (diagnostics, word) {
+        var _removed = 0;
         for (var j = diagnostics.length; j > 0 ; j--) {
             var _token = diagnostics[j - 1]['token'];
             if (_token.word === word || _token.parent === word) {
                 diagnostics.splice(j - 1, 1);
+                _removed++;
             }
         }
+        return _removed;
     }
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
@@ -1810,8 +1811,7 @@ var SpellRight = (function () {
                     if (typeof _this.diagnosticMap[document.uri.toString()] !== 'undefined') {
                         var diagnostics = _this.diagnosticMap[document.uri.toString()];
                         for (var i = 0; i < _DocumentSymbols.length; i++) {
-                            _this.removeFromDiagnostics(diagnostics, _DocumentSymbols[i]);
-                            _removed++;
+                            _removed += _this.removeFromDiagnostics(diagnostics, _DocumentSymbols[i]);
                         }
                     }
 
@@ -1820,6 +1820,8 @@ var SpellRight = (function () {
                     }
 
                     helpers._DocumentSymbols = _DocumentSymbols;
+                } else {
+                    helpers._DocumentSymbols = [];
                 }
             });
         } else {
