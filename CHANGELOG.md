@@ -2,6 +2,7 @@
 
 ## **2.5.30** released on 12th August 2018
 
+- **New:** First implementation of Quick Fixes available from Problems list ([#193](https://github.com/bartosz-antosik/vscode-spellright/issues/193)).
 - **Change:** Regular expressions quoting rules changed to more natural (see `ignoreRegExps`, `ignoreRegExpsByClass` description in README.md for details).
 
 ## **2.5.28** released on 7th August 2018

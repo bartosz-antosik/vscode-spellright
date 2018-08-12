@@ -1590,11 +1590,11 @@ var SpellRight = (function () {
 
             // Add suggestions to command list
             suggestions.forEach(function (suggestion) {
-                commands.push({
-                    title: suggestion,
-                    command: SpellRight.suggestCommandId,
-                    arguments: [document, diagnostic, word, suggestion]
-                });
+                var action = new vscode.CodeAction(suggestion);
+                action.kind = vscode.CodeActionKind.QuickFix;
+                action.edit = new vscode.WorkspaceEdit();
+                action.edit.replace(document.uri, diagnostic.range, suggestion);
+                commands.push(action);
             });
             if (vscode.workspace.getWorkspaceFolder(document.uri)) {
                 commands.push({
