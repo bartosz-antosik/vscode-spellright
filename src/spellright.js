@@ -102,7 +102,7 @@ var SpellRight = (function () {
         subscriptions.push(this);
 
         //
-        // Does not pass pressing of Ctrl alone. Could be useful for "replace 
+        // Does not pass pressing of Ctrl alone. Could be useful for "replace
         // all occurences" if it would.
         // vscode.commands.registerCommand('type', function(args) {
         //     ;
