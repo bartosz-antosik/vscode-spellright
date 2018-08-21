@@ -22,7 +22,7 @@ const bindings = require('../lib/bindings');
 
 const langcode = require('../lib/langcode')
 const doctype = require('../lib/doctype');
-const parsers = require('../lib/parser');
+const parser = require('../lib/parser');
 
 var settings = {};
 var dictionaries = [];
@@ -1085,6 +1085,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doDiffSpellCheck = function (event) {
 
+        var _document = event.document;
+
         var _languages = helpers._commands.languages;
         var _nlanguages = helpers._commands.nlanguages;
 
@@ -1094,28 +1096,27 @@ var SpellRight = (function () {
         helpers._commands.nlanguages = [];
 
         // Is off for this document type?
-        if (settings.documentTypes.indexOf(event.document.languageId) == (-1)) {
+        if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
             indicator.updateStatusBarIndicator();
-            this.diagnosticCollection.delete(event.document.uri);
-            this.diagnosticMap[event.document.uri.toString()] = undefined;
+            this.diagnosticCollection.delete(_document.uri);
+            this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
 
-        this.getSettings(event.document);
+        this.getSettings(_document);
 
         // Is language set to "none"?
         if (settings.language == '') {
             return;
         }
 
-        var document = event.document;
-        var parser = doctype.fromDocument(settings, document);
+        var _parser = doctype.fromDocument(settings, _document);
 
-        if (parser == null) {
+        if (_parser == null) {
             return
         };
 
-        this.getDocumentSymbols(document, parser);
+        this.getDocumentSymbols(_document, _parser);
 
         var _this = this;
 
@@ -1123,7 +1124,7 @@ var SpellRight = (function () {
         var _signature = '';
         var _local_context = false;
 
-        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
+        _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
 
@@ -1141,15 +1142,15 @@ var SpellRight = (function () {
                     if (_this.checkDictionary(parameters)) {
                         helpers._commands.languages.push(parameters);
                     } else {
-                        helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                        parser.pushIfNotExist(helpers._commands.nlanguages, parameters, function (e) {
                             return e === parameters;
                         });
                     }
                 }
             }
         }, function (context) {
-            if (settings.languageContextByClass[document.languageId]) {
-                var _language = settings.languageContextByClass[document.languageId][context];
+            if (settings.languageContextByClass[_document.languageId]) {
+                var _language = settings.languageContextByClass[_document.languageId][context];
             } else if (settings.languageContext[context]) {
                 var _language = settings.languageContext[context];
             }
@@ -1157,7 +1158,7 @@ var SpellRight = (function () {
                 if (_this.checkDictionary(_language)) {
                     helpers._commands.languages.push(_language);
                 } else {
-                    helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
+                    parser.pushIfNotExist(helpers._commands.nlanguages, _language, function (e) {
                         return e === _language;
                     });
                 }
@@ -1165,7 +1166,7 @@ var SpellRight = (function () {
         });
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (this.testIgnoreFile(document.uri)) {
+        if (this.testIgnoreFile(_document.uri)) {
             helpers._commands.ignore = true;
         }
 
@@ -1173,10 +1174,10 @@ var SpellRight = (function () {
 
         // Ignore spelling forced
         if (helpers._commands.ignore && !helpers._commands.force) {
-            if (typeof this.diagnosticMap[document.uri.toString()] !== 'undefined') {
+            if (typeof this.diagnosticMap[_document.uri.toString()] !== 'undefined') {
                 this.doCancelSpellCheck();
-                this.diagnosticCollection.delete(document.uri);
-                this.diagnosticMap[document.uri.toString()] = undefined;
+                this.diagnosticCollection.delete(_document.uri);
+                this.diagnosticMap[_document.uri.toString()] = undefined;
             }
             return;
         }
@@ -1186,10 +1187,10 @@ var SpellRight = (function () {
                 console.log('[spellright] In-Document language changed, rechecking');
             }
             this.doCancelSpellCheck();
-            this.doInitiateSpellCheck(document, true);
+            this.doInitiateSpellCheck(_document, true);
             return;
-        } else if (typeof this.diagnosticMap[document.uri.toString()] === 'undefined') {
-            this.doInitiateSpellCheck(document);
+        } else if (typeof this.diagnosticMap[_document.uri.toString()] === 'undefined') {
+            this.doInitiateSpellCheck(_document);
             return;
         }
 
@@ -1198,12 +1199,12 @@ var SpellRight = (function () {
         var diagnostics = [];
 
         if (this.spellingContext.length == 0) {
-            diagnostics = this.diagnosticMap[document.uri.toString()];
+            diagnostics = this.diagnosticMap[_document.uri.toString()];
 
             // Create temporary context
             var _context = {
-                _document: document,
-                _parser: parser,
+                _document: _document,
+                _parser: _parser,
                 _diagnostics: diagnostics,
                 _line: 0,
                 _start: Date.now(),
@@ -1234,7 +1235,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1257,7 +1258,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1269,14 +1270,14 @@ var SpellRight = (function () {
         if (_local_context)
             this.spellingContext.shift();
 
-        this.diagnosticCollection.set(document.uri, diagnostics);
+        this.diagnosticCollection.set(_document.uri, diagnostics);
 
         if (helpers._commands.syntax != _return.syntax ||
             helpers._commands.signature !== _signature) {
             this.doCancelSpellCheck();
             helpers._commands.syntax = _return.syntax;
             helpers._commands.signature = _signature;
-            this.doInitiateSpellCheck(document);
+            this.doInitiateSpellCheck(_document);
         }
     };
 
@@ -1307,6 +1308,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.doInitiateSpellCheck = function (document, force = false) {
 
+        var _document = document;
+
         helpers._commands.syntax = 0;
         helpers._commands.signature = '';
         helpers._commands.ignore = false;
@@ -1315,14 +1318,14 @@ var SpellRight = (function () {
         helpers._commands.nlanguages = [];
 
         // Is off for this document type?
-        if (settings.documentTypes.indexOf(document.languageId) == (-1)) {
+        if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
             indicator.updateStatusBarIndicator();
-            this.diagnosticCollection.delete(document.uri);
-            this.diagnosticMap[document.uri.toString()] = undefined;
+            this.diagnosticCollection.delete(_document.uri);
+            this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
 
-        this.getSettings(document);
+        this.getSettings(_document);
 
         // Is language set to "none"?
         if (settings.language == '') {
@@ -1331,7 +1334,7 @@ var SpellRight = (function () {
 
         // Is this a private URI? (VSCode started having 'private:' versions
         // of non-plaintext documents with languageId = 'plaintext')
-        if (document.uri.scheme != 'file' && document.uri.scheme != 'untitled') {
+        if (_document.uri.scheme != 'file' && _document.uri.scheme != 'untitled') {
             return;
         }
 
@@ -1340,18 +1343,18 @@ var SpellRight = (function () {
         var initiate = (this.spellingContext.length == 0);
 
         // Select appropriate parser
-        const parser = doctype.fromDocument(settings, document);
+        const _parser = doctype.fromDocument(settings, _document);
 
         // No parser for this type of document
-        if (parser == null) {
+        if (_parser == null) {
             return;
         }
 
-        this.getDocumentSymbols(document, parser);
+        this.getDocumentSymbols(_document, _parser);
 
         var _context = {
-            _document: document,
-            _parser: parser,
+            _document: _document,
+            _parser: _parser,
             _diagnostics: [],
             _line: 0,
             _start: Date.now(),
@@ -1368,7 +1371,7 @@ var SpellRight = (function () {
         var _this = this;
         var _length = this.spellingContext.length;
 
-        _return = parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
+        _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
             latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
@@ -1387,15 +1390,15 @@ var SpellRight = (function () {
                     if (_this.checkDictionary(parameters)) {
                         helpers._commands.languages.push(parameters);
                     } else {
-                        helpers._commands.nlanguages.pushIfNotExist(parameters, function (e) {
+                        parser.pushIfNotExist(helpers._commands.nlanguages, parameters, function (e) {
                             return e === parameters;
                         });
                     }
                 }
             }
         }, function (context) {
-            if (settings.languageContextByClass[document.languageId]) {
-                var _language = settings.languageContextByClass[document.languageId][context];
+            if (settings.languageContextByClass[_document.languageId]) {
+                var _language = settings.languageContextByClass[_document.languageId][context];
             } else if (settings.languageContext[context]) {
                 var _language = settings.languageContext[context];
             }
@@ -1403,7 +1406,7 @@ var SpellRight = (function () {
                 if (_this.checkDictionary(_language)) {
                     helpers._commands.languages.push(_language);
                 } else {
-                    helpers._commands.nlanguages.pushIfNotExist(_language, function (e) {
+                    parser.pushIfNotExist(helpers._commands.nlanguages, _language, function (e) {
                         return e === _language;
                     });
                 }
@@ -1414,7 +1417,7 @@ var SpellRight = (function () {
         helpers._commands.signature = _signature;
 
         // .spellignore tested here so it can be overriden by InDoc command(s)
-        if (this.testIgnoreFile(document.uri)) {
+        if (this.testIgnoreFile(_document.uri)) {
             helpers._commands.ignore = true;
         }
 
@@ -1422,20 +1425,20 @@ var SpellRight = (function () {
 
         // Ignore spelling forced
         if (helpers._commands.ignore && !helpers._commands.force) {
-            if (typeof this.diagnosticMap[document.uri.toString()] !== 'undefined') {
-                this.diagnosticCollection.delete(document.uri);
-                this.diagnosticMap[document.uri.toString()] = undefined;
+            if (typeof this.diagnosticMap[_document.uri.toString()] !== 'undefined') {
+                this.diagnosticCollection.delete(_document.uri);
+                this.diagnosticMap[_document.uri.toString()] = undefined;
             }
             return;
         }
 
         // Already spelled, needs cleaned diagnostics to respell
-        if (this.diagnosticMap[document.uri.toString()] !== undefined && !force) {
+        if (this.diagnosticMap[_document.uri.toString()] !== undefined && !force) {
             return;
         }
 
         // The array spellingContext holds queue of documents to be spelled
-        // successively. New documents are put in position 0 so that no matter 
+        // successively. New documents are put in position 0 so that no matter
          // what was spelled a currently opened document will be spelled first.
         var _index = this.spellingContext.findIndex(e => e._document.uri === _context._document.uri);
 
@@ -1450,7 +1453,7 @@ var SpellRight = (function () {
         }
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('[spellright] Spelling of \"' + document.fileName + '\" [' + document.languageId + '] STARTED.');
+            console.log('[spellright] Spelling of \"' + _document.fileName + '\" [' + _document.languageId + '] STARTED.');
         }
 
         if (initiate) {

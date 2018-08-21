@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.32** released on 21st August 2018
+
+- **Change:** Global prototype mutations removed & global constants renamed to ensure uniqueness ([#199](https://github.com/bartosz-antosik/vscode-spellright/issues/199)).
+
 ## **2.5.30** released on 12th August 2018
 
 - **New:** First implementation of Quick Fixes available from Problems list ([#193](https://github.com/bartosz-antosik/vscode-spellright/issues/193)).
