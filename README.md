@@ -72,21 +72,13 @@ When spelling source code class of document which provides symbol information fo
 
 Spelling of **plain text**/**markdown**/**LaTeX** documents:
 
-![screenshot](media/screenshot-default-markdown.png)
-
-![screenshot](media/screenshot-default-latex.png)
+![screenshot](media/screenshot-documents.png)
 
 ### Source Code & Markup Documents
 
 It can spell *strings*/*comments* parts of most **source code** (*C++*, *Python*, *JavaScript*, *Batch* and lots of others) and *text*/*comment* nodes on **XML**/**HTML** class documents:
 
-![screenshot](media/screenshot-cpp.png)
-
-![screenshot](media/screenshot-python.png)
-
-![screenshot](media/screenshot-batch.png)
-
-![screenshot](media/screenshot-html.png)
+![screenshot](media/screenshot-code.png)
 
 ## Usage
 

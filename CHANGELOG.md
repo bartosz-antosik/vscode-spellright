@@ -1,5 +1,9 @@
 # Change Log
 
+## **2.5.34** released on 22nd August 2018
+
+- **Change:** Screenshots updated.
+
 ## **2.5.32** released on 21st August 2018
 
 - **New:** Added spelling for 'eliksir' document type ([#198](https://github.com/bartosz-antosik/vscode-spellright/issues/198)).
