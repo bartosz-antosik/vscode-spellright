@@ -10,13 +10,10 @@ const vscode = require('vscode');
 const path = require('path');
 const glob = require('glob');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
-const jsonMinify = require('jsonminify');
 const XRegExp = require('xregexp');
 const ignore = require('ignore');
 const os = require('os');
 const osLocale = require('os-locale');
-const opn = require('opn');
 
 const bindings = require('../lib/bindings');
 
