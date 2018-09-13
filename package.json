@@ -2,7 +2,7 @@
     "name": "spellright",
     "displayName": "Spell Right",
     "description": "Multilingual, Offline and Lightweight Spellchecker",
-    "version": "2.5.32",
+    "version": "2.9.0",
     "publisher": "ban",
     "engines": {
         "vscode": "^1.20.0"
@@ -28,10 +28,10 @@
             "title": "Spell Right configuration",
             "properties": {
                 "spellright.language": {
-                    "type": "string",
+                    "type": "array",
                     "default": "",
                     "scope": "resource",
-                    "description": "Default language (dictionary/region) used for spelling."
+                    "description": "Default language set (dictionary/region) used for spelling."
                 },
                 "spellright.documentTypes": {
                     "type": "array",
