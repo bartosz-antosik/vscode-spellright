@@ -278,7 +278,7 @@ var SpellRight = (function () {
 
         // After default settings & reading settings the language is not set.
         // If it is OFF ('') then lets try to initialize it from system locales
-        if (settings.language === '') {
+        if (settings.language === []) {
             var _locale = osLocale.sync();
             var _locale_c = '';
             if (settings.groupDictionaries) {
@@ -291,12 +291,12 @@ var SpellRight = (function () {
 
             dictionaries.forEach(function (entry) {
                 if (entry.label == _locale_c) {
-                    settings.language = entry.id;
+                    settings.language = [entry.id];
                     return;
                 }
             });
             if (SPELLRIGHT_DEBUG_OUTPUT) {
-                console.log('[spellright] System locale: \"' + _locale + '\", set locale: \"' + settings.language + '\".');
+                console.log('[spellright] System locale: \"' + _locale + '\", set locale: \"' + settings.language.join(', ') + '\".');
             }
         }
     }
@@ -307,7 +307,7 @@ var SpellRight = (function () {
         var _parserByClass = settings.parserByClass;
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('[spellright] Update configuration: \"' + _language + '\", \"' + _documentTypes + '\".');
+            console.log('[spellright] Update configuration: \"' + _language.join(', ') + '\", \"' + _documentTypes + '\".');
         }
 
         var _editor = vscode.window.activeTextEditor;
@@ -339,22 +339,27 @@ var SpellRight = (function () {
             if (SPELLRIGHT_DEBUG_OUTPUT || (settings.groupDictionaries === false && _this.hunspell === false)) {
                 items.push({
                     label: '$(globe) ' + entry.label,
-                    description: '[' + entry.description + ']'
+                    description: '[' + entry.description + ']',
+                    picked: (settings.language.indexOf(entry.id) != -1 &&
+                        settings.documentTypes.indexOf(_documenttype) != -1)
                 });
             } else {
                 items.push({
-                    label: '$(globe) ' + entry.label
+                    label: '$(globe) ' + entry.label,
+                    picked: (settings.language.indexOf(entry.id) != -1 &&
+                        settings.documentTypes.indexOf(_documenttype) != -1)
                 });
             }
         });
 
-        items.push({
-            label: '$(x) Turn OFF for Current Document Type',
-            description: '[' + _documenttype + ']'
-        });
+        // items.push({
+        //     label: '$(x) Turn OFF for Current Document Type',
+        //     description: '[' + _documenttype + ']'
+        // });
 
         var options = {
-            placeHolder: 'Select dictionary (language) or turn spelling OFF'
+            placeHolder: 'Select dictionary (language) or turn spelling OFF',
+            canPickMany: true
         };
 
         vscode.window.showQuickPick(items, options).then(function (selection) {
@@ -363,23 +368,26 @@ var SpellRight = (function () {
             }
 
             var rdict = /\(globe\) (.*)/;
-            var roff = /\(x\)/;
+            var dict = [];
+            var off = false;
 
-            if (rdict.test(selection.label)) {
-                var dict = rdict.exec(selection.label)[1];
-                dictionaries.forEach(function (entry) {
-                    if (entry.label == dict) {
-                        dict = entry.id;
-                        return;
+            if (selection.length > 0) {
+                selection.forEach(function (dictionary) {
+                    if (rdict.test(dictionary.label)) {
+                        var _label = rdict.exec(dictionary.label)[1];
+                        dictionaries.forEach(function (entry) {
+                            if (entry.label == _label) {
+                                dict.push(entry.id);
+                            }
+                        });
                     }
                 });
-            } else if (roff.test(selection.label)) {
-                var off = roff.exec(selection.label);
+            } else {
+                off = true;
             }
 
             if (!off && doctype.fromDocument(settings, _document) !== null) {
                 settings.language = dict;
-                _this.setDictionary(dict);
                 _this.setCurrentTypeON();
                 _this.configurationUpdate(settings.configurationUpdate);
             } else {
@@ -677,9 +685,9 @@ var SpellRight = (function () {
         // The hierarchy should be from topmost to lowest: In-Document Command,
         // Context, Default language chosen for spelling of the current word.
 
-        if (this.spellingContext[0]._languageCommand) {
+        if (this.spellingContext[0]._languageCommand.length > 0) {
             return this.spellingContext[0]._languageCommand;
-        } else if (this.spellingContext[0]._languageContext) {
+        } else if (this.spellingContext[0]._languageContext.length > 0) {
             return this.spellingContext[0]._languageContext;
         } else {
             return this.spellingContext[0]._languageDefault;
@@ -706,11 +714,11 @@ var SpellRight = (function () {
 
         // Set language for the current syntactical context
         if (settings.languageContextByClass[document.languageId]) {
-            this.spellingContext[0]._languageContext = settings.languageContextByClass[document.languageId][context];
+            this.spellingContext[0]._languageContext = this.readAsArray(settings.languageContextByClass[document.languageId][context]);
         } else if (settings.languageContext[context]) {
-            this.spellingContext[0]._languageContext = settings.languageContext[context];
+            this.spellingContext[0]._languageContext = this.readAsArray(settings.languageContext[context]);
         } else {
-            this.spellingContext[0]._languageContext = undefined;
+            this.spellingContext[0]._languageContext = [];
         }
 
         // Words are selected by language specific parsers but from here on
@@ -783,245 +791,266 @@ var SpellRight = (function () {
             cword = match[1];
         }
 
-        this.setDictionary(this.getEffectiveLanguage());
+        var _effectiveLanguages = this.getEffectiveLanguage();
 
-        // Before splitting make sure word is not spelled correctly or on the
-        // ignore list or regular expressions to ignore as a whole.
-        if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
+        // Here check if the word is correct in ANY of the languages. If it is
+        // then exit. If it is incorrect in ALL of them then proceed.
+        for (var _li = 0; _li < _effectiveLanguages.length; _li++) {
 
-            // Here word is spelled correctly or on the ignore list but there
-            // are some special cases, like flaws in spelling engines.
+            var _effectiveLanguage = _effectiveLanguages[_li];
 
-            var _digitInsideOnWindows = false;
+            this.setDictionary(_effectiveLanguage);
 
-            // Some special cases are held here
+            // Before splitting make sure word is not spelled correctly or on the
+            // ignore list or regular expressions to ignore as a whole.
+            if (!bindings.isMisspelled(cword) || this.testWordInDictionaries(cword)) {
 
-            // Somehow Windows Spelling API considers anything with digit
-            // inside a correctly spelled entity. Has to be corrected.
-            if (_containsDigitInside && !this.hunspell && process.platform == 'win32') {
-                _digitInsideOnWindows = true;
-            }
+                // Here word is spelled correctly or on the ignore list but there
+                // are some special cases, like flaws in spelling engines.
 
-            // Do not exit if one of special cases
-            if (!_digitInsideOnWindows) {
-                return;
-            } else if (this.testWordInDictionaries(cword)) {
-                return;
+                var _digitInsideOnWindows = false;
+
+                // Some special cases are held here
+
+                // Somehow Windows Spelling API considers anything with digit
+                // inside a correctly spelled entity. Has to be corrected.
+                if (_containsDigitInside && !this.hunspell && process.platform == 'win32') {
+                    _digitInsideOnWindows = true;
+                }
+
+                // Do not exit if one of special cases
+                if (!_digitInsideOnWindows) {
+                    return;
+                } else if (this.testWordInDictionaries(cword)) {
+                    return;
+                }
             }
         }
 
-        // Split words containing period inside. Period does not break words
-        // because it is part of legit abbreviations (e.g., i.e., etc.) which
-        // should be spelled as well. So there can be lexems containing periods
-        // inside. But they should be later on spelled as parts to minimize
-        // the number of false positives. Same about apostrophe and few other
-        // white/punctuation/graphical characters which are permitted above.
-        var _split = this.splitByOtherWhite(cword);
-        if (_split.length > 1) {
+        var _singleNoSuggestions = false;
 
-            // Heal "(inkl. " like sitautions here
+        for (var _li = 0; _li < _effectiveLanguages.length; _li++) {
+
+            var _effectiveLanguage = _effectiveLanguages[_li];
+
+            // Split words containing period inside. Period does not break words
+            // because it is part of legit abbreviations (e.g., i.e., etc.) which
+            // should be spelled as well. So there can be lexems containing periods
+            // inside. But they should be later on spelled as parts to minimize
+            // the number of false positives. Same about apostrophe and few other
+            // white/punctuation/graphical characters which are permitted above.
+            var _split = this.splitByOtherWhite(cword);
+            if (_split.length > 1) {
+
+                // Heal "(inkl. " like sitautions here
+                if (_endsWithPeriod) {
+                    _split[_split.length - 1].word = _split[_split.length - 1].word + '.';
+                }
+                var _this = this;
+                _split.forEach (function(e) {
+                    if (e.word.length >= 2) {
+
+                        var _token = { word: e.word, parent: cword, parser: token.parser };
+                        var _source = '';
+                        var _offset = e.offset;
+
+                        if (token.map) {
+                            _offset = 0;
+                            for (var _i = 0; _i < e.offset; _i++) {
+                                _offset += token.map[_i].length;
+                            }
+                            for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                                _source += token.map[_i];
+                            }
+                            _token.source = _source;
+                        }
+
+                        _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    }
+                });
+                return;
+            }
+
+            // Deal with CamelCase
+            _split = this.splitCamelCase(cword);
+            if (_split.length > 1) {
+                var _this = this;
+                _split.forEach(function (e) {
+                    if (e.word.length >= 2) {
+
+                        var _token = { word: e.word, parent: cword, parser: token.parser };
+                        var _source = '';
+                        var _offset = e.offset;
+
+                        if (token.map) {
+                            _offset = 0;
+                            for (var _i = 0; _i < e.offset; _i++) {
+                                _offset += token.map[_i].length;
+                            }
+                            for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                                _source += token.map[_i];
+                            }
+                            _token.source = _source;
+                        }
+
+                        _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    }
+                });
+                return;
+            }
+
+            // Deal with snake_case
+            _split = this.splitSnakeCase(cword);
+            if (_split.length > 1) {
+                var _this = this;
+                _split.forEach(function (e) {
+                    if (e.word.length >= 2) {
+
+                        var _token = { word: e.word, parent: cword, parser: token.parser };
+                        var _source = '';
+                        var _offset = e.offset;
+
+                        if (token.map) {
+                            _offset = 0;
+                            for (var _i = 0; _i < e.offset; _i++) {
+                                _offset += token.map[_i].length;
+                            }
+                            for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                                _source += token.map[_i];
+                            }
+                            _token.source = _source;
+                        }
+
+                        _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    }
+                });
+                return;
+            }
+
+            // Punctuation cleaned version of the word
+
+            // Special case of words ending with period - if spelling
+            // with dot at the end is correct contrary to spelling
+            // without the dot then pass over.
             if (_endsWithPeriod) {
-                _split[_split.length - 1].word = _split[_split.length - 1].word + '.';
+                if (!bindings.isMisspelled(cword + '.')) {
+                    return;
+                }
             }
-            var _this = this;
-            _split.forEach (function(e) {
-                if (e.word.length >= 2) {
 
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+            // Same case if it ends with apostrophe
+            if (_endsWithApostrophe) {
+                if (!bindings.isMisspelled(cword + '\'')) {
+                    return;
                 }
-            });
-            return;
-        }
+            }
 
-        // Deal with CamelCase
-        _split = this.splitCamelCase(cword);
-        if (_split.length > 1) {
-            var _this = this;
-            _split.forEach(function (e) {
-                if (e.word.length >= 2) {
-
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+            // Parenthesis e.g. brought by parenthical plurals
+            if (_containsParenthesis) {
+                if (!bindings.isMisspelled(cword.trim())) {
+                    return;
                 }
-            });
-            return;
-        }
+            }
 
-        // Deal with snake_case
-        _split = this.splitSnakeCase(cword);
-        if (_split.length > 1) {
-            var _this = this;
-            _split.forEach(function (e) {
-                if (e.word.length >= 2) {
-
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
-                }
-            });
-            return;
-        }
-
-        // Punctuation cleaned version of the word
-
-        // Special case of words ending with period - if spelling
-        // with dot at the end is correct contrary to spelling
-        // without the dot then pass over.
-        if (_endsWithPeriod) {
-            if (!bindings.isMisspelled(cword + '.')) {
+            if (_containsDash) {
                 return;
             }
-        }
 
-        // Same case if it ends with apostrophe
-        if (_endsWithApostrophe) {
-            if (!bindings.isMisspelled(cword + '\'')) {
-                return;
-            }
-        }
-
-        // Parenthesis e.g. brought by parenthical plurals
-        if (_containsParenthesis) {
-            if (!bindings.isMisspelled(cword.trim())) {
-                return;
-            }
-        }
-
-        if (_containsDash) {
-            return;
-        }
-
-        if (token.source) {
-            var _size = token.source.length;
-        } else {
-            var _size = cword.length;
-        }
-
-        // Avoid proposing a word with a dot to be added to dictionary
-        if (_startsWithPeriod || _endsWithPeriod) {
-            token.word = cword;
-        }
-
-        var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + _size);
-
-        var message = '\"' + cword + '\"';
-        if (SPELLRIGHT_DEBUG_OUTPUT) {
-            message += ' (' + context + ')';
-        }
-        if (settings.suggestionsInHints) {
-            var suggestions = bindings.getCorrectionsForMisspelling(cword);
-            if (suggestions.length > 0) {
-                message += ': suggestions';
-                if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
-                    message += ' [' + this.getEffectiveLanguage() + ']: ';
-                } else {
-                    message += ': ';
-                }
-                for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
-                    var s = suggestions_1[_i];
-                    message += s + ', ';
-                }
-                message = message.slice(0, message.length - 2);
+            if (token.source) {
+                var _size = token.source.length;
             } else {
-                message += ': no suggestions';
+                var _size = cword.length;
             }
-        }
 
-        var diagnosticsType = vscode.DiagnosticSeverity.Error;
+            // Avoid proposing a word with a dot to be added to dictionary
+            if (_startsWithPeriod || _endsWithPeriod) {
+                token.word = cword;
+            }
 
-        if (settings.notificationClass === 'warning') {
-            diagnosticsType = vscode.DiagnosticSeverity.Warning;
-        } else if (settings.notificationClass === 'information') {
-            diagnosticsType = vscode.DiagnosticSeverity.Information;
-        } else if (settings.notificationClass === 'hint') {
-            diagnosticsType = vscode.DiagnosticSeverity.Hint;
-        }
+            this.setDictionary(_effectiveLanguage);
 
-        if (settings.notificationClassByParser[token.parser] === 'warning') {
-            diagnosticsType = vscode.DiagnosticSeverity.Warning;
-        } else if (settings.notificationClassByParser[token.parser] === 'information') {
-            diagnosticsType = vscode.DiagnosticSeverity.Information;
-        } else if (settings.notificationClassByParser[token.parser] === 'hint') {
-            diagnosticsType = vscode.DiagnosticSeverity.Hint;
-        }
+            var range = new vscode.Range(_linenumber, _colnumber, _linenumber, _colnumber + _size);
 
-        var diag = new vscode.Diagnostic(range, message, diagnosticsType);
-        diag.source = 'spelling';
+            var message = '\"' + cword + '\"';
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                message += ' (' + context + ')';
+            }
+            if (settings.suggestionsInHints) {
+                var suggestions = bindings.getCorrectionsForMisspelling(cword);
+                if (suggestions.length > 0) {
+                    message += ': suggestions';
+                    if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
+                        message += ' [' + _effectiveLanguage + ']: ';
+                    } else {
+                        message += ': ';
+                    }
+                    for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
+                        var s = suggestions_1[_i];
+                        message += s + ', ';
+                    }
+                    message = message.slice(0, message.length - 2);
+                } else {
+                    if (_singleNoSuggestions) continue;
+                    message += ': no suggestions';
+                    _singleNoSuggestions = true;
+                }
+            }
 
-        // Extend with context for actions provided in suggestions menu
-        diag['token'] = token;
-        diag['language'] = this.getEffectiveLanguage();
-        diag['context'] = context;
-        diag['range'] = range;
+            var diagnosticsType = vscode.DiagnosticSeverity.Error;
 
-        // Now insert diagnostics at the right place
-        var append = false;
-        if (diagnostics.length > 0) {
-            var _drange = diagnostics[diagnostics.length - 1].range;
-            // At the end if fits there
-            var append = (_linenumber > _drange._end._line ||
-                (_linenumber == _drange._end._line &&
-                _colnumber >= _drange._end._character));
-        } else {
-            // Definitely at the end!
-            var append = true;
-        }
+            if (settings.notificationClass === 'warning') {
+                diagnosticsType = vscode.DiagnosticSeverity.Warning;
+            } else if (settings.notificationClass === 'information') {
+                diagnosticsType = vscode.DiagnosticSeverity.Information;
+            } else if (settings.notificationClass === 'hint') {
+                diagnosticsType = vscode.DiagnosticSeverity.Hint;
+            }
 
-        if (append) {
-            diagnostics.push(diag);
-        } else {
-            // Linear search. This should maybe be bisection or some
-            // other algorithm in the future, but on the other hand
-            // this code is called only on differential edits so there
-            // are very few calls thus it should not degrade performance.
-            for (var i = 0; i < diagnostics.length; i++) {
-                var _drange = diagnostics[i].range;
-                if (_drange._end.isBeforeOrEqual(diag.range.start))
-                    continue;
-                diagnostics.splice(i, 0, diag);
-                break;
+            if (settings.notificationClassByParser[token.parser] === 'warning') {
+                diagnosticsType = vscode.DiagnosticSeverity.Warning;
+            } else if (settings.notificationClassByParser[token.parser] === 'information') {
+                diagnosticsType = vscode.DiagnosticSeverity.Information;
+            } else if (settings.notificationClassByParser[token.parser] === 'hint') {
+                diagnosticsType = vscode.DiagnosticSeverity.Hint;
+            }
+
+            var diag = new vscode.Diagnostic(range, message, diagnosticsType);
+            diag.source = 'spelling';
+
+            // Extend with context for actions provided in suggestions menu
+            diag['token'] = token;
+            diag['languages'] = _effectiveLanguages;
+            diag['language'] = _effectiveLanguage;
+            diag['context'] = context;
+            diag['range'] = range;
+
+            // Now insert diagnostics at the right place
+            var append = false;
+            if (diagnostics.length > 0) {
+                var _drange = diagnostics[diagnostics.length - 1].range;
+                // At the end if fits there
+                var append = (_linenumber > _drange._end._line ||
+                    (_linenumber == _drange._end._line &&
+                    _colnumber >= _drange._end._character));
+            } else {
+                // Definitely at the end!
+                var append = true;
+            }
+
+            if (append) {
+                diagnostics.push(diag);
+            } else {
+                // Linear search. This should maybe be bisection or some
+                // other algorithm in the future, but on the other hand
+                // this code is called only on differential edits so there
+                // are very few calls thus it should not degrade performance.
+                for (var i = 0; i < diagnostics.length; i++) {
+                    var _drange = diagnostics[i].range;
+                    if (_drange._end.isBeforeOrEqual(diag.range.start))
+                        continue;
+                    diagnostics.splice(i, 0, diag);
+                    break;
+                }
             }
         }
     }
@@ -1034,13 +1063,14 @@ var SpellRight = (function () {
                 this.spellingContext[0]._enabled = false;
             } else if (command === 'language') {
                 if (parameters) {
-                    if (this.checkDictionary(parameters)) {
-                        this.spellingContext[0]._languageCommand = parameters;
-                    } else {
-                        this.spellingContext[0]._languageCommand = undefined;
-                    }
+                    var _this = this;
+                    this.splitParams(parameters, ' ', false).forEach(function (_parameter) {
+                        if (_this.checkDictionary(_parameter)) {
+                            _this.spellingContext[0]._languageCommand.push(_parameter);
+                        }
+                    });
                 } else {
-                    this.spellingContext[0]._languageCommand = settings.language;
+                    this.spellingContext[0]._languageCommand = [];
                 }
             }
         }
@@ -1089,7 +1119,7 @@ var SpellRight = (function () {
 
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = [settings.language];
+        helpers._commands.languages = settings.language.slice();
         helpers._commands.nlanguages = [];
 
         // Is off for this document type?
@@ -1103,7 +1133,7 @@ var SpellRight = (function () {
         this.getSettings(_document);
 
         // Is language set to "none"?
-        if (settings.language == '') {
+        if (settings.language == []) {
             return;
         }
 
@@ -1136,25 +1166,31 @@ var SpellRight = (function () {
             }
             if (command === 'language') {
                 if (parameters) {
-                    if (_this.checkDictionary(parameters)) {
-                        helpers._commands.languages.push(parameters);
-                    } else {
-                        parser.pushIfNotExist(helpers._commands.nlanguages, parameters, function (e) {
-                            return e === parameters;
-                        });
-                    }
+                    _this.splitParams(parameters, ' ', false).forEach(function (_parameter) {
+                        if (_this.checkDictionary(_parameter)) {
+                            // It has to be push, because the order and
+                            // repetition of languages makes the difference.
+                            helpers._commands.languages.push(_parameter);
+                        } else {
+                            parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                                return e === _parameter;
+                            });
+                        }
+                    });
                 }
             }
         }, function (context) {
             if (settings.languageContextByClass[_document.languageId]) {
-                var _language = settings.languageContextByClass[_document.languageId][context];
+                var _language = _this.readAsArray(settings.languageContextByClass[_document.languageId][context]);
             } else if (settings.languageContext[context]) {
-                var _language = settings.languageContext[context];
+                var _language = _this.readAsArray(settings.languageContext[context]);
             }
             if (_language) {
                 if (_this.checkDictionary(_language)) {
+                    // It has to be push, because the order and
+                    // repetition of languages makes the difference.
                     helpers._commands.languages.push(_language);
-                } else {
+        } else {
                     parser.pushIfNotExist(helpers._commands.nlanguages, _language, function (e) {
                         return e === _language;
                     });
@@ -1206,9 +1242,9 @@ var SpellRight = (function () {
                 _line: 0,
                 _start: Date.now(),
                 _update: Date.now(),
-                _languageDefault: settings.language,
-                _languageContext: undefined,
-                _languageCommand: undefined,
+                _languageDefault: settings.language.slice(),
+                _languageContext: [],
+                _languageCommand: [],
                 _enabled: true
             };
             this.spellingContext.push(_context);
@@ -1311,7 +1347,7 @@ var SpellRight = (function () {
         helpers._commands.signature = '';
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = [settings.language];
+        helpers._commands.languages = settings.language.slice();
         helpers._commands.nlanguages = [];
 
         // Is off for this document type?
@@ -1325,7 +1361,7 @@ var SpellRight = (function () {
         this.getSettings(_document);
 
         // Is language set to "none"?
-        if (settings.language == '') {
+        if (settings.language == []) {
             return;
         }
 
@@ -1356,9 +1392,9 @@ var SpellRight = (function () {
             _line: 0,
             _start: Date.now(),
             _update: Date.now(),
-            _languageDefault: settings.language,
-            _languageContext: undefined,
-            _languageCommand: undefined,
+            _languageDefault: settings.language.slice(),
+            _languageContext: [],
+            _languageCommand: [],
             _enabled: true
         };
 
@@ -1371,7 +1407,7 @@ var SpellRight = (function () {
         _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
             latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, range) {
 
-            _signature = _signature + command + '-' + parameters;
+            _signature = command + '-' + parameters;
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
                 console.log('[spellright] In-Document Command: ' + command + ' [' + parameters + ']');
@@ -1384,23 +1420,29 @@ var SpellRight = (function () {
             }
             if (command === 'language') {
                 if (parameters) {
-                    if (_this.checkDictionary(parameters)) {
-                        helpers._commands.languages.push(parameters);
-                    } else {
-                        parser.pushIfNotExist(helpers._commands.nlanguages, parameters, function (e) {
-                            return e === parameters;
-                        });
-                    }
+                    _this.splitParams(parameters, ' ', false).forEach(function (_parameter) {
+                        if (_this.checkDictionary(_parameter)) {
+                            // It has to be push, because the order and
+                            // repetition of languages makes the difference.
+                            helpers._commands.languages.push(_parameter);
+                        } else {
+                            parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                                return e === _parameter;
+                            });
+                        }
+                    });
                 }
             }
         }, function (context) {
             if (settings.languageContextByClass[_document.languageId]) {
-                var _language = settings.languageContextByClass[_document.languageId][context];
+                var _language = _this.readAsArray(settings.languageContextByClass[_document.languageId][context]);
             } else if (settings.languageContext[context]) {
-                var _language = settings.languageContext[context];
+                var _language = _this.readAsArray(settings.languageContext[context]);
             }
             if (_language) {
                 if (_this.checkDictionary(_language)) {
+                    // It has to be push, because the order and
+                    // repetition of languages makes the difference.
                     helpers._commands.languages.push(_language);
                 } else {
                     parser.pushIfNotExist(helpers._commands.nlanguages, _language, function (e) {
@@ -1530,89 +1572,85 @@ var SpellRight = (function () {
 
     SpellRight.prototype.provideCodeActions = function (document, range, context, token) {
 
-        var diagnostic = undefined;
+        var diagnostics = [];
 
         context.diagnostics.forEach(function (_diagnostics) {
             if (_diagnostics.source == 'spelling' && _diagnostics.range.contains(vscode.window.activeTextEditor.selection)) {
-                diagnostic = _diagnostics;
+                diagnostics.push(_diagnostics);
             }
         });
 
-        if (!diagnostic) return null;
+        if (diagnostics == []) return null;
 
-        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force) || settings.language == '') {
+        if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force) || settings.language == []) {
             return null;
         }
 
-        var rmatch = /\"(.*)\"/;
-        var match = rmatch.exec(diagnostic.message);
-        var word = '';
-        if (match.length >= 2)
-            word = match[1];
-        if (word.length == 0)
-            return undefined;
-
-        var token = diagnostic['token'];
-
-        // Punctuation cleaned version of the word
-        var cword = word.replace(/[.,]/g, '');
-
-        if (SPELLRIGHT_DEBUG_OUTPUT) {
-            console.log('[spellright] Providing code action for \"' + word + '\".');
-        }
-
-        var language = settings.language;
-
-        // Parse to identify language which should be used for suggestions
-        var parser = doctype.fromDocument(settings, document);
-        var _this = this;
-
-        if (parser) {
-            parser.parseForCommands(document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, function (command, parameters, crange) {
-                if (crange._start._line <= range._start._line) {
-                    if (command === 'language') {
-                        if (_this.checkDictionary(parameters)) {
-                            language = parameters;
-                        } else {
-                            language = settings.language;
-                        }
-                    }
-                }
-            }, function (context) {});
-        };
-
-        // Get suggestions
-        this.setDictionary(diagnostic['language']);
-
         var commands = [];
-        if (word && word.length >= 1) {
-            var suggestions = bindings.getCorrectionsForMisspelling(word);
 
-            // Add suggestions to command list
-            suggestions.forEach(function (suggestion) {
-                var action = new vscode.CodeAction(suggestion);
-                action.kind = vscode.CodeActionKind.QuickFix;
-                action.edit = new vscode.WorkspaceEdit();
-                action.edit.replace(document.uri, diagnostic.range, suggestion);
-                commands.push(action);
-            });
-            if (vscode.workspace.getWorkspaceFolder(document.uri)) {
-                commands.push({
-                    title: 'Add \"' + token.word + '\" to workspace dictionary',
-                    command: SpellRight.addToWorkspaceDictionaryCommandId,
-                    arguments: [document, token.word]
+        for (var _li = 0; _li < diagnostics.length; _li++) {
+
+            var diagnostic = diagnostics[_li];
+
+            var rmatch = /\"(.*)\"/;
+            var match = rmatch.exec(diagnostic.message);
+            var word = '';
+            if (match.length >= 2)
+                word = match[1];
+            if (word.length == 0)
+                return undefined;
+
+            var token = diagnostic['token'];
+
+            // Punctuation cleaned version of the word
+            var cword = word.replace(/[.,]/g, '');
+
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                console.log('[spellright] Providing code action for \"' + word + '\".');
+            }
+
+            var _multilang = (diagnostic['languages'].length > 1);
+
+            // Get suggestions
+            this.setDictionary(diagnostic['language']);
+
+            if (_multilang) {
+                var _language_info = ' [' + diagnostic['language'] + ']';
+            } else {
+                var _language_info = '';
+            }
+
+            if (word && word.length >= 1) {
+                var suggestions = bindings.getCorrectionsForMisspelling(word);
+
+                // Add suggestions to command list
+                suggestions.forEach(function (suggestion) {
+                    var action = new vscode.CodeAction(suggestion + _language_info);
+                    action.kind = vscode.CodeActionKind.QuickFix;
+                    action.edit = new vscode.WorkspaceEdit();
+                    action.edit.replace(document.uri, diagnostic.range, suggestion);
+                    commands.push(action);
                 });
-                if (token.parent && (token.parent.trim() != token.word)) {
-                    // Here propose to add compound word to the dictionary when
-                    // only a part of it spells incorectly
-                    if (vscode.workspace.getWorkspaceFolder(document.uri)) {
-                        commands.push({
-                            title: 'Add \"' + token.parent + '\" to workspace dictionary',
-                            command: SpellRight.addToWorkspaceDictionaryCommandId,
-                            arguments: [document, token.parent]
-                        });
-                    }
+            }
+        }
+        if (word && word.length >= 1) {
+            if (vscode.workspace.getWorkspaceFolder(document.uri)) {
+            commands.push({
+                title: 'Add \"' + token.word + '\" to workspace dictionary',
+                command: SpellRight.addToWorkspaceDictionaryCommandId,
+                arguments: [document, token.word]
+            });
+            if (token.parent && (token.parent.trim() != token.word)) {
+                // Here propose to add compound word to the dictionary when
+                // only a part of it spells incorectly
+                if (vscode.workspace.getWorkspaceFolder(document.uri)) {
+                    commands.push({
+                        title: 'Add \"' + token.parent + '\" to workspace dictionary',
+                        command: SpellRight.addToWorkspaceDictionaryCommandId,
+                        arguments: [document, token.parent]
+                    });
                 }
+            }
             }
             commands.push({
                 title: 'Add \"' + token.word + '\" to user dictionary',
@@ -2006,6 +2044,60 @@ var SpellRight = (function () {
         return result;
     }
 
+    SpellRight.prototype.readAsArray = function (_language) {
+        // Correct old style configuration (string to array)
+        if (Array.isArray(_language)) {
+            return _language;
+        } else {
+            return [_language];
+        }
+    }
+
+    // Adapted from https://github.com/elgs/splitargs
+    SpellRight.prototype.splitParams = function (input, sep, keepQuotes) {
+        var separator = sep || /\s/g;
+        var singleQuoteOpen = false;
+        var doubleQuoteOpen = false;
+        var tokenBuffer = [];
+        var ret = [];
+
+        var arr = input.split('');
+        for (var i = 0; i < arr.length; ++i) {
+            var element = arr[i];
+            var matches = element.match(separator);
+            if (element === "'" && !doubleQuoteOpen) {
+                if (keepQuotes === true) {
+                    tokenBuffer.push(element);
+                }
+                singleQuoteOpen = !singleQuoteOpen;
+                continue;
+            } else if (element === '"' && !singleQuoteOpen) {
+                if (keepQuotes === true) {
+                    tokenBuffer.push(element);
+                }
+                doubleQuoteOpen = !doubleQuoteOpen;
+                continue;
+            }
+
+            if (!singleQuoteOpen && !doubleQuoteOpen && matches) {
+                if (tokenBuffer.length > 0) {
+                    ret.push(tokenBuffer.join(''));
+                    tokenBuffer = [];
+                } else if (!!sep) {
+                    ret.push(element);
+                }
+            } else {
+                tokenBuffer.push(element);
+            }
+        }
+        if (tokenBuffer.length > 0) {
+            ret.push(tokenBuffer.join(''));
+        } else if (!!sep) {
+            ret.push('');
+        }
+        return ret;
+    }
+
     SpellRight.prototype.getSettings = function (document = undefined) {
         var uri = undefined;
         var languageid = undefined;
@@ -2022,6 +2114,7 @@ var SpellRight = (function () {
 
         var _settings = vscode.workspace.getConfiguration('spellright', uri);
         for (var p in _settings) settings[p] = _settings[p];
+        settings.language = this.readAsArray(_settings.language);
 
         this.collectDictionaries();
         this.selectDefaultLanguage();
@@ -2079,22 +2172,24 @@ var SpellRightIndicator = (function () {
         }
         var document = editor.document;
 
-        var message = settings.language;
+        var message = settings.language.join(', ');
         var color = 'default';
         var tooltip = 'Spell Checking - ';
 
-        dictionaries.forEach(function (entry) {
-            // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
-            var _dictionary = settings.language.replace(/_/g, '-');
-            var _entry_id = entry.id.replace(/_/g, '-');
-            if (_entry_id == _dictionary) {
-                message = entry.label;
-                if (SPELLRIGHT_DEBUG_OUTPUT) {
-                    message = message + ' [' + settings.language + ']';
+        if (settings.language.length == 1) {
+            dictionaries.forEach(function (entry) {
+                // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
+                var _dictionary = settings.language[0].replace(/_/g, '-');
+                var _entry_id = entry.id.replace(/_/g, '-');
+                if (_entry_id == _dictionary) {
+                    message = entry.label;
+                    if (SPELLRIGHT_DEBUG_OUTPUT) {
+                        message = message + ' [' + settings.language[0] + ']';
+                    }
+                    return;
                 }
-                return;
-            }
-        });
+            });
+        }
 
         if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force)) {
             message = '[off]';
@@ -2105,7 +2200,7 @@ var SpellRightIndicator = (function () {
                 tooltip = tooltip + 'OFF';
             }
         } else {
-            if (settings.language == '') {
+            if (settings.language == []) {
                 message = '[none]';
                 tooltip = tooltip + 'No Language Selected';
             } else if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {

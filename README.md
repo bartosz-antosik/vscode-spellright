@@ -154,7 +154,7 @@ Saves current state of GUI (that is language and map of documents classes spell 
 
 This extension contributes the following settings (with default values):
 
-`"spellright.language": ""`
+`"spellright.language": [ "" ]`
 
 Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE (e.g.: "en", "fr", when `"spellright.groupDictionaries"` is `true`) or LANGUAGE-COUNTRY format (e.g.: "en-US", "en-GB", "fr-CA", "pl-PL", when  `"spellright.groupDictionaries"` is `false`). When *Hunspell* spelling engine is used (e.g. in Windows 7) this setting should be the name of the dictionary file without extension. In case `language` parameter is not set then language from OS locales is used.
 
@@ -255,8 +255,8 @@ Allows to decide on which language is used to spell syntactical parts of the doc
 
 ```JSON
 "spellright.languageContext": {
-    "strings": "en-US",
-    "comments": "en-GB"
+    "strings": [ "en-US" ],
+    "comments": [ "en-GB" ]
 }
 ```
 
@@ -271,8 +271,8 @@ Same as `"spellright.languageContext"` but per document type. For example follow
 ```JSON
 "spellright.languageContext": {
     "latex": {
-        "body": "fr",
-        "comments": "en"
+        "body": [ "fr" ],
+        "comments": [ "en" ]
     }
 }
 ```
@@ -346,7 +346,7 @@ If set to true Spell Right will use document symbols (variable, function names e
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):
 
-<code>spellcheck&#x2d;language&nbsp;"CODE"</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;"CODE"</code> and `!TEX spellcheck = "CODE"` in comment areas of `latex` document class only)
+<code>spellcheck&#x2d;language&nbsp;"CODE" ["CODE"]\*</code> (alternative syntax: <code>spellcheck:&nbsp;language&nbsp;"CODE" ["CODE"]\*</code> and `!TEX spellcheck = "CODE"`, but with only one language code in comment areas of `latex` document class only)
 
 Forces **switching spelling language** for the following part of the document or until next <code>spellcheck&#x2d;language&nbsp;"CODE"</code> command. `CODE` is language code according to used spellcheck background service, typically in a LANGUAGE or LANGUAGE-COUNTRY format (e.g.: "en", "fr", "en-US", "en-GB", "fr-CA", "pl-PL" etc.) If `CODE` is empty switches **back to default spelling language**.
 
