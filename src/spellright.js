@@ -417,7 +417,7 @@ var SpellRight = (function () {
                     });
 
                     var options = {
-                        placeHolder: 'Select generic parser for this document type [' + _document.languageId + ']'
+                        placeHolder: 'Select generic parser for [' + _document.languageId + '] document type'
                     };
 
                     vscode.window.showQuickPick(items, options).then(function (selection) {
