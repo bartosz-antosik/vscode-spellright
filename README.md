@@ -10,7 +10,7 @@
 * Supports **every language** that can be used with either of the below mentioned native spelling engines (e.g. **all languages** that are available in Microsoft Office, see [here](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows), **multiple languages** in Windows Single Language editions, like [here](https://github.com/bartosz-antosik/vscode-spellright/issues/23#issuecomment-314038083) etc.)
 * Supports use of multiple workspace plaintext file dictionaries which may be used for specialized vocabularies like **medical terms**, **trademark names** etc.
 * Spelling documents' syntactic elements e.g. **comments**/**strings** in **different languages** (e.g. strings spelled in English and comments spelled in French).
-* Spelling of **multiple languages in one document** (using In-Document commands to switch between languages).
+* Spelling of **multiple languages in one document** either by selecting more than one language for spelling or using In-Document commands to switch between languages.
 * **Case sensitive** which means that it will distinguish between *english* and *English*, *french* and *French* and which is critical in some western languages like e.g. German.
 * Spells, among others, **short words**, **abbreviations**, **contractions** (*I*, *I'm*, *I'll*, *i.e.*, *doesn't*, *etc.*) and parenthetical plurals (*word(s)*, *process(es)*).
 * Spells **CamelCase**, **snake_case** and **digit2inside** compound phrases respecting Unicode capital/small letters distinction (e.g.: *SuperŚlimak* is spelled as *Super* *Ślimak*) and capital letter adhesion (e.g.: *HTMLTest* is spelled as *HTML* *Test*).
@@ -110,7 +110,9 @@ Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule
 
 ### Multiple languages in one document
 
-When language is switched e.g. by In-Document command <code>spellcheck&#x2d;language</code> placed within document:
+Language selector allows to select more than one language. Document is then spelled using all of the dictionaries and when a token (word) is considered correct **in one of the dictionaries** it is considered spelled correctly. When it is not, then suggestions for all selected languages are shown.
+
+Language can also be switched by using In-Document command <code>spellcheck&#x2d;language</code> placed within document:
 
 ![switch](media/screenshot-switch-multiple.png)
 
