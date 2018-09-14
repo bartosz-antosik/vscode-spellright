@@ -352,13 +352,8 @@ var SpellRight = (function () {
             }
         });
 
-        // items.push({
-        //     label: '$(x) Turn OFF for Current Document Type',
-        //     description: '[' + _documenttype + ']'
-        // });
-
         var options = {
-            placeHolder: 'Select dictionary (language) or turn spelling OFF',
+            placeHolder: 'Select language(s) or turn OFF for [' + _documenttype + ']',
             canPickMany: true
         };
 
@@ -1880,7 +1875,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getSettingsScope = function (uri) {
         if (vscode.workspace.getWorkspaceFolder(uri)) {
-            if (settings.configurationScope == "user") {
+            if (settings.configurationScope == 'user') {
                 return vscode.ConfigurationTarget.Global;
             } else {
                 return vscode.ConfigurationTarget.WorkspaceFolder;
@@ -1888,7 +1883,11 @@ var SpellRight = (function () {
         } else {
             if (vscode.workspace.workspaceFolders) {
                 // Out of workspace document opened IN WORKSPACE
+                if (settings.configurationScope == 'user') {
+                    return vscode.ConfigurationTarget.Global;
+                } else {
                 return vscode.ConfigurationTarget.Workspace;
+                }
             } else {
                 // Out of workspace document opened STANDALONE
                 return vscode.ConfigurationTarget.Global;
@@ -2115,6 +2114,7 @@ var SpellRight = (function () {
         var _settings = vscode.workspace.getConfiguration('spellright', uri);
         for (var p in _settings) settings[p] = _settings[p];
         settings.language = this.readAsArray(_settings.language);
+        settings.parserByClass = Object.assign({}, _settings.parserByClass);
 
         this.collectDictionaries();
         this.selectDefaultLanguage();

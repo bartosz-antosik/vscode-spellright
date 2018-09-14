@@ -4,6 +4,8 @@
 
 - **New:** Added multi-language spelling without the need of inline documentation switches ([#171](https://github.com/bartosz-antosik/vscode-spellright/issues/171)).
 - **Change:** In-Document command `spellcheck-language "CODE" ["CODE"]*` can now accept multiple languages.
+- **Fix:** Option `spellright.configurationScope` set to `user` not working correctly for an out of workspace file ([#205](https://github.com/bartosz-antosik/vscode-spellright/issues/205)).
+- **Fix:** Error assigning `spellright.parserByClass` when using GUI ([#205](https://github.com/bartosz-antosik/vscode-spellright/issues/205)).
 
 ## **2.5.34** released on 22nd August 2018
 
