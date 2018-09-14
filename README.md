@@ -110,7 +110,7 @@ Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule
 
 ### Multiple languages in one document
 
-Language selector allows to select more than one language. Document is then spelled using all of the dictionaries and when a token (word) is considered correct **in one of the dictionaries** it is considered spelled correctly. When it is not, then suggestions for all selected languages are shown.
+Language selector allows to select more than one language. Document is then spelled using all of the dictionaries and when a token (word) is considered correct **in one of the dictionaries** it is considered as spelled correctly. When it is not, then suggestions for all selected languages are shown.
 
 Language can also be switched by using In-Document command <code>spellcheck&#x2d;language</code> placed within document:
 
