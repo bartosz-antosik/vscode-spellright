@@ -959,11 +959,15 @@ var SpellRight = (function () {
         }
 
         // Avoid proposing a word with a dot to be added to dictionary
-        if (_startsWithPeriod || _endsWithPeriod) {
+        if (_startsWithPeriod || _endsWithPeriod || _containsParenthesis) {
             token.word = cword;
         }
 
         var message = '\"' + cword + '\"';
+
+        var hints = '';
+        var hintCount = 0;
+
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             message += ' (' + context + ')';
         }
@@ -972,8 +976,6 @@ var SpellRight = (function () {
 
         if (settings.suggestionsInHints) {
 
-            message += ': suggestions';
-
             for (var _li = 0; _li < _effectiveLanguages.length; _li++) {
 
                 var _effectiveLanguage = _effectiveLanguages[_li];
@@ -981,22 +983,29 @@ var SpellRight = (function () {
                 this.setDictionary(_effectiveLanguage);
 
                 var suggestions = bindings.getCorrectionsForMisspelling(cword);
+
+                hintCount += suggestions.length;
+
                 if (suggestions.length > 0) {
                     if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
-                        message += ' [' + _effectiveLanguage + ']: ';
+                        hints += ' [' + _effectiveLanguage + ']: ';
                     } else {
-                        message += ': ';
+                        hints += ': ';
                     }
                     for (var _i = 0, suggestions_1 = suggestions; _i < suggestions_1.length; _i++) {
                         var s = suggestions_1[_i];
-                        message += s + ', ';
+                        hints += s + ', ';
                     }
-                    message = message.slice(0, message.length - 2);
+                    hints = hints.slice(0, hints.length - 2);
                 }
             }
-        } else {
-            message += ': no suggestions';
-        }
+
+            if (hintCount == 0) {
+                message += ': no suggestions';
+            } else {
+                message += ': suggestions' + hints;
+            }
+    }
 
         var diagnosticsType = vscode.DiagnosticSeverity.Error;
 
@@ -1096,6 +1105,11 @@ var SpellRight = (function () {
                 }
             }
         }
+    }
+
+    SpellRight.prototype.removeAllDiagnostics = function () {
+        this.diagnosticCollection.clear();
+        this.diagnosticMap = {};
     }
 
     SpellRight.prototype.removeFromDiagnostics = function (diagnostics, word) {
@@ -1315,6 +1329,7 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.doRefreshConfiguration = function (event) {
+        this.removeAllDiagnostics();
         indicator.updateStatusBarIndicator();
         this.doInitiateSpellCheckVisible(true);
     }
