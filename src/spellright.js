@@ -206,7 +206,7 @@ var SpellRight = (function () {
                     }
                 }
             } else {
-//                vscode.window.showErrorMessage('SpellRight: The path to dictionaries \"' + this.getDictionariesPath() + '\" does not exist.')
+                //  vscode.window.showErrorMessage('SpellRight: The path to dictionaries \"' + this.getDictionariesPath() + '\" does not exist.')
             }
         } else {
             // Other dictionaries are ISO language/culture pairs
@@ -1107,11 +1107,6 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.removeAllDiagnostics = function () {
-        this.diagnosticCollection.clear();
-        this.diagnosticMap = {};
-    }
-
     SpellRight.prototype.removeFromDiagnostics = function (diagnostics, word) {
         var _removed = 0;
         for (var j = diagnostics.length; j > 0 ; j--) {
@@ -1329,7 +1324,10 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.doRefreshConfiguration = function (event) {
-        this.removeAllDiagnostics();
+        // Remove all diagnostics
+        this.diagnosticCollection.clear();
+        this.diagnosticMap = {};
+
         indicator.updateStatusBarIndicator();
         this.doInitiateSpellCheckVisible(true);
     }
