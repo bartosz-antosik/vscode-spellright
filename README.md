@@ -271,7 +271,7 @@ Configuration item `"spellright.languageContext"` is more important than `"spell
 Same as `"spellright.languageContext"` but per document type. For example following settings:
 
 ```JSON
-"spellright.languageContext": {
+"spellright.languageContextByClass": {
     "latex": {
         "body": [ "fr" ],
         "comments": [ "en" ]
