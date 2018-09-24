@@ -1920,8 +1920,7 @@ var SpellRight = (function () {
 
     SpellRight.prototype.getDictionariesPath = function () {
 
-        var codeFolder = 'Code';
-        if (vscode.version.indexOf('insider') >= 0) codeFolder = 'Code - Insiders';
+        var codeFolder = vscode.env.appName.replace("Visual Studio ", "");
 
         if (process.platform == 'win32') {
             // Regular version, workspace opened
@@ -1991,9 +1990,9 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getUserDictionaryFilename = function () {
-        var codeFolder = 'Code';
-        if (vscode.version.indexOf('insider') >= 0)
-            codeFolder = 'Code - Insiders';
+
+        var codeFolder = vscode.env.appName.replace("Visual Studio ", "");
+
         if (process.platform == 'win32')
             if (process.env.VSCODE_PORTABLE) {
                 return path.join(process.env.VSCODE_PORTABLE, 'user-data', 'User', CDICTIONARY);

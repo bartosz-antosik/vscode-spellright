@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.2** released on 30th September 2018
+
+- **Change:** Better discovery of VSCode's user settings folder name ([#211](https://github.com/bartosz-antosik/vscode-spellright/issues/211)).
+
 ## **3.0.0** released on 21st September 2018
 
 - **New:** Added multi-language spelling without the need of inline documentation switches ([#171](https://github.com/bartosz-antosik/vscode-spellright/issues/171)).
