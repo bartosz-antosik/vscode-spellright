@@ -1,17 +1,29 @@
 {
-    "version": "0.1.0",
-    "command": "make",
-    "isShellCommand": true,
-    "args": [],
-    "showOutput": "always",
-    "suppressTaskName": false,
+    "version": "2.0.0",
     "tasks": [
         {
-            "isBuildCommand": true,
-            "taskName": "package"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "label": "package",
+            "command": "make",
+            "args": [ "package" ],
+            "type": "shell",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
         },
         {
-            "taskName": "publish"
+            "label": "publish",
+            "command": "make",
+            "args": [ "publish" ],
+            "type": "shell",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
         }
     ]
 }
