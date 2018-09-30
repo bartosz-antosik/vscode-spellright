@@ -14,6 +14,7 @@
                 "reveal": "silent",
                 "panel": "shared"
             },
+            "problemMatcher": [ ]
         },
         {
             "label": "publish",
@@ -24,6 +25,7 @@
                 "reveal": "silent",
                 "panel": "shared"
             },
+            "problemMatcher": [ ]
         }
     ]
 }
