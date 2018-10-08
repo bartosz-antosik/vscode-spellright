@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.4** released on 8th October 2018
+
+- **Change:** Better information on missing dictionary for language read from configuration and information on languages used in status bar tooltip in case of multiple languages selected ([#215](https://github.com/bartosz-antosik/vscode-spellright/issues/215)).
+- **Fix:** Corrected behavior when language is not set, neither in user or workspace settings ([#215](https://github.com/bartosz-antosik/vscode-spellright/issues/215)).
+
 ## **3.0.2** released on 30th September 2018
 
 - **Change:** Better discovery of VSCode's user settings folder name ([#211](https://github.com/bartosz-antosik/vscode-spellright/issues/211)).

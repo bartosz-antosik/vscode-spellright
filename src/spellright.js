@@ -278,7 +278,7 @@ var SpellRight = (function () {
 
         // After default settings & reading settings the language is not set.
         // If it is OFF ('') then lets try to initialize it from system locales
-        if (settings.language === []) {
+        if (settings.language.length === 0) {
             var _locale = osLocale.sync();
             var _locale_c = '';
             if (settings.groupDictionaries) {
@@ -1128,8 +1128,20 @@ var SpellRight = (function () {
 
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = settings.language.slice();
+        helpers._commands.languages = [];
         helpers._commands.nlanguages = [];
+
+        var _this = this;
+
+        settings.language.slice().forEach(function (_parameter) {
+            if (_this.checkDictionary(_parameter)) {
+                helpers._commands.languages.push(_parameter);
+            } else {
+                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                    return e === _parameter;
+                });
+            }
+        });
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
@@ -1153,8 +1165,6 @@ var SpellRight = (function () {
         };
 
         this.getDocumentSymbols(_document, _parser);
-
-        var _this = this;
 
         var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
@@ -1360,8 +1370,20 @@ var SpellRight = (function () {
         helpers._commands.signature = '';
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = settings.language.slice();
+        helpers._commands.languages = [];
         helpers._commands.nlanguages = [];
+
+        var _this = this;
+
+        settings.language.slice().forEach(function (_parameter) {
+            if (_this.checkDictionary(_parameter)) {
+                helpers._commands.languages.push(_parameter);
+            } else {
+                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                    return e === _parameter;
+                });
+            }
+        });
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
@@ -1414,7 +1436,6 @@ var SpellRight = (function () {
         var _return = { syntax: 0, linecount: 0 };
         var _signature = '';
 
-        var _this = this;
         var _length = this.spellingContext.length;
 
         _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
@@ -2178,6 +2199,21 @@ var SpellRightIndicator = (function () {
     SpellRightIndicator.prototype.dispose = function () {
         this.hideLanguage();
     };
+    SpellRightIndicator.prototype.expandDictionary = function (dictionary) {
+
+        if (typeof dictionary === 'undefined') return '';
+
+        var result = dictionary;
+        dictionaries.forEach(function (entry) {
+            // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
+            var _dictionary = dictionary.replace(/_/g, '-');
+            var _entry_id = entry.id.replace(/_/g, '-');
+            if (_entry_id == _dictionary) {
+                result = entry.label;
+            }
+        });
+        return result;
+    }
     SpellRightIndicator.prototype.updateStatusBarIndicator = function () {
         var location = vscode.StatusBarAlignment.Right;
         var priority = SPELLRIGHT_STATUSBAR_ITEM_PRIORITY;
@@ -2196,21 +2232,15 @@ var SpellRightIndicator = (function () {
 
         var message = settings.language.join(', ');
         var color = 'default';
-        var tooltip = 'Spell Checking - ';
+        var tooltip = 'Spelling - ';
+
+        var _this = this;
 
         if (settings.language.length == 1) {
-            dictionaries.forEach(function (entry) {
-                // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
-                var _dictionary = settings.language[0].replace(/_/g, '-');
-                var _entry_id = entry.id.replace(/_/g, '-');
-                if (_entry_id == _dictionary) {
-                    message = entry.label;
-                    if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        message = message + ' [' + settings.language[0] + ']';
-                    }
-                    return;
-                }
-            });
+            message = this.expandDictionary(settings.language[0]);
+            if (SPELLRIGHT_DEBUG_OUTPUT) {
+                message = message + ' [' + settings.language[0] + ']';
+            }
         }
 
         if (settings.documentTypes.indexOf(document.languageId) == (-1) || (helpers._commands.ignore && !helpers._commands.force)) {
@@ -2225,18 +2255,31 @@ var SpellRightIndicator = (function () {
             if (settings.language == []) {
                 message = '[none]';
                 tooltip = tooltip + 'No Language Selected';
-            } else if (helpers._commands.languages.length > 1 || helpers._commands.nlanguages.length > 0) {
+            } else if (helpers._commands.languages.length == 0 && helpers._commands.nlanguages.length == 1) {
+                color = '#ff5858';
+                tooltip = tooltip + '[unknown language]';
+            } else if (helpers._commands.languages.length + helpers._commands.nlanguages.length > 1) {
                 message = '[multi]';
                 tooltip = tooltip + 'Multiple Languages';
-                if (helpers._commands.nlanguages.length > 0) {
-                    color = '#ff5858';
-                    tooltip = tooltip + ' (missing: ';
-                    helpers._commands.nlanguages.forEach(function (entry, i, a) {
-                        tooltip = tooltip + entry;
+                tooltip = tooltip + ' [';
+                if (helpers._commands.languages.length > 0) {
+                    helpers._commands.languages.forEach(function (entry, i, a) {
+                        tooltip = tooltip + _this.expandDictionary(entry);
                         if (i !== a.length - 1) tooltip = tooltip + ', ';
                     });
-                    tooltip = tooltip + ')';
+                    if (helpers._commands.nlanguages.length > 0) {
+                        tooltip = tooltip + ', ';
+                    }
                 }
+                if (helpers._commands.nlanguages.length > 0) {
+                    color = '#ff5858';
+                    tooltip = tooltip + 'unknown: ';
+                    helpers._commands.nlanguages.forEach(function (entry, i, a) {
+                        tooltip = tooltip + _this.expandDictionary(entry);
+                        if (i !== a.length - 1) tooltip = tooltip + ', ';
+                    });
+                }
+                tooltip = tooltip + ']';
             } else {
                 tooltip = tooltip + 'ON';
             }
