@@ -28,7 +28,7 @@
             "properties": {
                 "spellright.language": {
                     "type": "array",
-                    "default": "",
+                    "default": [],
                     "scope": "resource",
                     "description": "Default language set (dictionary/region) used for spelling."
                 },
