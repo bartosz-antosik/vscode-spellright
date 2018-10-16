@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.5** released on 16th October 2018
+
+- **Change:** Temporary workaround for VSCode's error ([#60394](https://github.com/Microsoft/vscode/issues/60394)) updating diagnostics.
+
 ## **3.0.4** released on 8th October 2018
 
 - **Change:** Better information on missing dictionary for language read from configuration and information on languages used in status bar tooltip in case of multiple languages selected ([#215](https://github.com/bartosz-antosik/vscode-spellright/issues/215)).

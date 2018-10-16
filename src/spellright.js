@@ -1039,12 +1039,12 @@ var SpellRight = (function () {
         if (diagnostics.length > 0) {
             var _drange = diagnostics[diagnostics.length - 1].range;
             // At the end if fits there
-            var append = (_linenumber > _drange._end._line ||
+            append = (_linenumber > _drange._end._line ||
                 (_linenumber == _drange._end._line &&
                 _colnumber >= _drange._end._character));
         } else {
             // Definitely at the end!
-            var append = true;
+            append = true;
         }
 
         if (append) {
@@ -1287,7 +1287,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.end.character, range.end.line + shift, range.end.character);
+            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1322,7 +1322,8 @@ var SpellRight = (function () {
         if (_local_context)
             this.spellingContext.shift();
 
-        this.diagnosticCollection.set(_document.uri, diagnostics);
+        this.diagnosticMap[_document.uri.toString()] = diagnostics;
+        this.diagnosticCollection.set(_document.uri, diagnostics.slice(0));
 
         if (helpers._commands.syntax != _return.syntax ||
             helpers._commands.signature !== _signature) {
@@ -1559,8 +1560,8 @@ var SpellRight = (function () {
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
                 if (Date.now() - update > this.updateInterval) {
-                    _this.diagnosticCollection.set(document.uri, diagnostics);
                     _this.diagnosticMap[document.uri.toString()] = diagnostics;
+                    _this.diagnosticCollection.set(document.uri, diagnostics.slice(0));
 
                     _this.spellingContext[0]._update = Date.now();
                 }
@@ -1570,8 +1571,8 @@ var SpellRight = (function () {
             _this.spellingContext[0]._line += SPELLRIGHT_LINES_BATCH;
 
         } else {
-            _this.diagnosticCollection.set(document.uri, diagnostics);
             _this.diagnosticMap[document.uri.toString()] = diagnostics;
+            _this.diagnosticCollection.set(document.uri, diagnostics.slice(0));
 
             if (SPELLRIGHT_DEBUG_OUTPUT) {
                 var secs = (Date.now() - start) / 1000;
@@ -1592,8 +1593,8 @@ var SpellRight = (function () {
         var _this = this;
         if (this.spellingContext[0] !== null) {
             this.spellingContext.forEach((context, index, array) => {
-                _this.diagnosticCollection.set(context._document.uri, []);
                 _this.diagnosticMap[context._document.uri.toString()] = undefined;
+                _this.diagnosticCollection.set(context._document.uri, []);
 
                 if (SPELLRIGHT_DEBUG_OUTPUT) {
                     console.log('[spellright] Spelling of \"' + context._document.fileName + '\" [' + context._document.languageId + '] CANCELLED.');
@@ -1720,7 +1721,7 @@ var SpellRight = (function () {
 
         // Update with new diagnostics
         this.diagnosticMap[document.uri.toString()] = diagnostics;
-        this.diagnosticCollection.set(document.uri, diagnostics);
+        this.diagnosticCollection.set(document.uri, diagnostics.slice(0));
 
         // This is a way to cope with abbreviations ("etc.", "i.e." etc.)
         // words ending with period are selected to spell with period but
@@ -1751,7 +1752,7 @@ var SpellRight = (function () {
             var _diagnostics = this.diagnosticMap[document.uri.toString()];
             this.removeFromDiagnostics(_diagnostics, word);
             this.diagnosticMap[document.uri.toString()] = _diagnostics;
-            this.diagnosticCollection.set(document.uri, _diagnostics);
+            this.diagnosticCollection.set(document.uri, _diagnostics.slice(0));
         }
     };
 
@@ -1769,7 +1770,7 @@ var SpellRight = (function () {
                     var _diagnostics = this.diagnosticMap[editor.document.uri.toString()];
                     this.removeFromDiagnostics(_diagnostics, text);
                     this.diagnosticMap[editor.document.uri.toString()] = _diagnostics;
-                    this.diagnosticCollection.set(editor.document.uri, _diagnostics);
+                    this.diagnosticCollection.set(editor.document.uri, _diagnostics.slice(0));
                 }
             } else {
                 vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
@@ -1786,7 +1787,7 @@ var SpellRight = (function () {
             var _diagnostics = this.diagnosticMap[document.uri.toString()];
             this.removeFromDiagnostics(_diagnostics, word);
             this.diagnosticMap[document.uri.toString()] = _diagnostics;
-            this.diagnosticCollection.set(document.uri, _diagnostics);
+            this.diagnosticCollection.set(document.uri, _diagnostics.slice(0));
         }
     };
 
@@ -1804,7 +1805,7 @@ var SpellRight = (function () {
                     var _diagnostics = this.diagnosticMap[editor.document.uri.toString()];
                     this.removeFromDiagnostics(_diagnostics, text);
                     this.diagnosticMap[editor.document.uri.toString()] = _diagnostics;
-                    this.diagnosticCollection.set(editor.document.uri, _diagnostics);
+                    this.diagnosticCollection.set(editor.document.uri, _diagnostics.slice(0));
                 }
             } else {
                 vscode.window.showInformationMessage('SpellRight: Cannot add text with whitespaces to dictionary.');
