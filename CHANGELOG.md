@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.6** released on 16th October 2018
+
+- **Fix:** Spelling triggered on non valid document type (before document type is determined by extension) ([#222](https://github.com/bartosz-antosik/vscode-spellright/issues/222)).
+
 ## **3.0.5** released on 16th October 2018
 
 - **Change:** Temporary workaround for VSCode's error ([#60394](https://github.com/Microsoft/vscode/issues/60394)) updating diagnostics.

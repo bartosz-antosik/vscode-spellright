@@ -1145,6 +1145,7 @@ var SpellRight = (function () {
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
+            this.doCancelSpellCheck();
             indicator.updateStatusBarIndicator();
             this.diagnosticCollection.delete(_document.uri);
             this.diagnosticMap[_document.uri.toString()] = undefined;
@@ -1388,6 +1389,7 @@ var SpellRight = (function () {
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
+            this.doCancelSpellCheck();
             indicator.updateStatusBarIndicator();
             this.diagnosticCollection.delete(_document.uri);
             this.diagnosticMap[_document.uri.toString()] = undefined;
