@@ -1386,6 +1386,8 @@ var SpellRight = (function () {
             }
         });
 
+        this.getSettings(_document);
+
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
             this.doCancelSpellCheck();
@@ -1394,8 +1396,6 @@ var SpellRight = (function () {
             this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
-
-        this.getSettings(_document);
 
         // Is language set to "none"?
         if (settings.language == []) {

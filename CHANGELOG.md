@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.10** released on 9th October 2018
+
+- **Fix:** Manually changing settings does not modify them in some cases ([#226](https://github.com/bartosz-antosik/vscode-spellright/issues/226)).
+
 ## **3.0.6** released on 22nd October 2018
 
 - **Fix:** Spelling triggered on non valid document type (before document type is determined by extension) ([#222](https://github.com/bartosz-antosik/vscode-spellright/issues/222)).
