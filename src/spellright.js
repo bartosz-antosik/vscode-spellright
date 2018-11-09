@@ -689,7 +689,7 @@ var SpellRight = (function () {
         }
     };
 
-    SpellRight.prototype.checkAndMark = function (document, context, diagnostics, token, linenumber, colnumber) {
+    SpellRight.prototype.checkAndMarkCallback = function (document, context, diagnostics, token, linenumber, colnumber) {
 
         var _linenumber = linenumber;
         var _colnumber = colnumber;
@@ -854,7 +854,7 @@ var SpellRight = (function () {
                         _token.source = _source;
                     }
 
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -882,7 +882,7 @@ var SpellRight = (function () {
                         _token.source = _source;
                     }
 
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -910,7 +910,7 @@ var SpellRight = (function () {
                         _token.source = _source;
                     }
 
-                    _this.checkAndMark(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
                 }
             });
             return;
@@ -1064,7 +1064,7 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.interpretCommand = function (command, parameters, range) {
+    SpellRight.prototype.commandCallback = function (command, parameters) {
         if (this.spellingContext.length > 0) {
             if (command === 'on') {
                 this.spellingContext[0]._enabled = true;
@@ -1210,7 +1210,7 @@ var SpellRight = (function () {
                     // It has to be push, because the order and
                     // repetition of languages makes the difference.
                     helpers._commands.languages.push(_language);
-        } else {
+                } else {
                     parser.pushIfNotExist(helpers._commands.nlanguages, _language, function (e) {
                         return e === _language;
                     });
@@ -1288,7 +1288,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
+            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1311,7 +1311,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMark(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1359,9 +1359,8 @@ var SpellRight = (function () {
                     }
                 }
             });
-            // To update status bar if there were more than one visible editor
-            this.doInitiateSpellCheck(_active, force);
         }
+        indicator.updateStatusBarIndicator();
     }
 
     SpellRight.prototype.doInitiateSpellCheck = function (document, force = false) {
@@ -1557,7 +1556,7 @@ var SpellRight = (function () {
 
         if (line <= document.lineCount) {
 
-            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMark(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.interpretCommand(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: settings.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMarkCallback(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
