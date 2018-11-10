@@ -1123,25 +1123,15 @@ var SpellRight = (function () {
 
         var _document = event.document;
 
-        var _languages = helpers._commands.languages;
-        var _nlanguages = helpers._commands.nlanguages;
-
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = [];
-        helpers._commands.nlanguages = [];
 
         var _this = this;
 
-        settings.language.slice().forEach(function (_parameter) {
-            if (_this.checkDictionary(_parameter)) {
-                helpers._commands.languages.push(_parameter);
-            } else {
-                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
-                    return e === _parameter;
-                });
-            }
-        });
+        var _languages = helpers._commands.languages.slice();
+        var _nlanguages = helpers._commands.nlanguages.slice();
+
+        this.getSettings(_document);
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
@@ -1151,8 +1141,6 @@ var SpellRight = (function () {
             this.diagnosticMap[_document.uri.toString()] = undefined;
             return;
         }
-
-        this.getSettings(_document);
 
         // Is language set to "none"?
         if (settings.language == []) {
@@ -1371,20 +1359,8 @@ var SpellRight = (function () {
         helpers._commands.signature = '';
         helpers._commands.ignore = false;
         helpers._commands.force = false;
-        helpers._commands.languages = [];
-        helpers._commands.nlanguages = [];
 
         var _this = this;
-
-        settings.language.slice().forEach(function (_parameter) {
-            if (_this.checkDictionary(_parameter)) {
-                helpers._commands.languages.push(_parameter);
-            } else {
-                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
-                    return e === _parameter;
-                });
-            }
-        });
 
         this.getSettings(_document);
 
@@ -2164,6 +2140,21 @@ var SpellRight = (function () {
         this.collectDictionaries();
         this.selectDefaultLanguage();
 
+        helpers._commands.languages = [];
+        helpers._commands.nlanguages = [];
+
+        var _this = this;
+
+        settings.language.slice().forEach(function (_parameter) {
+            if (_this.checkDictionary(_parameter)) {
+                helpers._commands.languages.push(_parameter);
+            } else {
+                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                    return e === _parameter;
+                });
+            }
+        });
+
         this.prepareIgnoreRegExps(languageid);
 
         helpers._ignoreFilesSettings = ignore();
@@ -2232,7 +2223,7 @@ var SpellRightIndicator = (function () {
         }
         var document = editor.document;
 
-        var message = settings.language.join(', ');
+        var message = '';
         var color = 'default';
         var tooltip = 'Spelling - ';
 
