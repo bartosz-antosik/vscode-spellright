@@ -1099,8 +1099,8 @@ var SpellRight = (function () {
                 // Adjust diagnostics behind changed lines range BEFORE
                 if (shift != 0) {
                     if (_drange._end._line > range._end._line) {
-                        _drange._start._line += shift;
-                        _drange._end._line += shift;
+                        diagnostics[i].range._start._line += shift;
+                        diagnostics[i].range._end._line += shift;
                     }
                 }
             }
