@@ -208,6 +208,8 @@ Extends setting of `"spellright.ignoreRegExps"` per document type. Accepts objec
 * avoid spelling of multiline `<script></script>` tag content in HTML documents;
 * avoid spelling of "minted" code blocks in LaTeX documents.
 
+Please mind the fact that both `"spellright.ignoreRegExps"` and `"spellright.ignoreRegExpsByClass"` **may have serious impact on performance**. They are applied on whole document before every, even smallest spell check, has to reapply these filters so they may cost time in complicated expressions.
+
 `"spellright.ignoreFiles": [ "**/.gitignore", "**/.spellignore" ]`
 
 Set of file patterns to globally, silently exclude files from being spelled. Files described with this setting will not be reported as forced OFF spelling (red indicator in status bar). Patterns defined as for [gitignore](https://git-scm.com/docs/gitignore).
