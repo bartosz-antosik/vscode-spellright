@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.14** released on 11th October 2018
+## **3.0.14** released on 24th November 2018
 
 - **Change:** Hyphenation point (`‧`, U+2027) added to word separation rules ([#228](https://github.com/bartosz-antosik/vscode-spellright/issues/228)).
 - **Change:** Notice on need to select dictionary at first run when used in Windows 7 or Linux ([#231](https://github.com/bartosz-antosik/vscode-spellright/issues/231)).
