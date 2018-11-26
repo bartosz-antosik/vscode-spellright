@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.16** released on 24th November 2018
+
+- **Fix:** Error in In-Document command `spellcheck-language "CODE" ["CODE"]*` command interpreter.
+
 ## **3.0.14** released on 24th November 2018
 
 - **Change:** Hyphenation point (`‧`, U+2027) added to word separation rules ([#228](https://github.com/bartosz-antosik/vscode-spellright/issues/228)).
