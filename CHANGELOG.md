@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.16** released on 24th November 2018
+## **3.0.16** released on 30th November 2018
 
 - **Fix:** Error in In-Document command `spellcheck-language "CODE" ["CODE"]*` command interpreter.
 
