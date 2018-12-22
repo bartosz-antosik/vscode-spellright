@@ -108,7 +108,7 @@ Status bar indicator also shows when spelling for particular document class has 
 
 ![switch](media/screenshot-switch-off.png)
 
-Or when it has been forced OFF by In-Document command (`spellcheck-off`) or rule in `.spellignore`:
+Or when it has been forced OFF by In-Document command (`spellcheck&#x2d;off`) or rule in `.spellignore`:
 
 ![switch](media/screenshot-switch-forced-off.png)
 
@@ -360,13 +360,13 @@ Forces **switching spelling language** for the following part of the document or
 
 In-Document commands for switching spelling language have highest priority over `"spellright.languageContextByClass"` and `"spellright.languageContext"` and `"spellright.language"` configuration items.
 
-`spellcheck-off` (alternative syntax: `spellcheck: off`)
+`spellcheck&#x2d;off` (alternative syntax: `spellcheck: off`)
 
 Forces spelling **OFF** for the entire document despite global settings.
 
-`spellcheck-on` (alternative syntax: `spellcheck: on`)
+`spellcheck&#x2d;on` (alternative syntax: `spellcheck: on`)
 
-Forces spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *In-Document* `spellcheck-off` command and `.spellignore` patterns.
+Forces spelling **ON** for the entire document despite global settings. Has higher priority than turning spelling off with both *In-Document* `spellcheck&#x2d;off` command and `.spellignore` patterns.
 
 ## Ignore file
 

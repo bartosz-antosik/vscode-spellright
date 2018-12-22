@@ -2,13 +2,13 @@
 
 ## **3.0.16** released on 30th November 2018
 
-- **Fix:** Error in In-Document command `spellcheck-language "CODE" ["CODE"]*` command interpreter.
+- **Fix:** Error in In-Document command `spellcheck&#x2d;language "CODE" ["CODE"]*` command interpreter.
 
 ## **3.0.14** released on 24th November 2018
 
 - **Change:** Hyphenation point (`‧`, U+2027) added to word separation rules ([#228](https://github.com/bartosz-antosik/vscode-spellright/issues/228)).
 - **Change:** Notice on need to select dictionary at first run when used in Windows 7 or Linux ([#231](https://github.com/bartosz-antosik/vscode-spellright/issues/231)).
-- **Change:** In-Document command `spellcheck-language "CODE" ["CODE"]*` language selection corrected.
+- **Change:** In-Document command `spellcheck&#x2d;language "CODE" ["CODE"]*` language selection corrected.
 - **Fix:** Huge delay in extensions using key bindings contributions ([#225](https://github.com/bartosz-antosik/vscode-spellright/issues/225)).
 - **Fix:** Manually changing settings does not modify them in some cases ([#226](https://github.com/bartosz-antosik/vscode-spellright/issues/226)).
 
@@ -34,7 +34,7 @@
 
 - **New:** Added multi-language spelling without the need of inline documentation switches ([#171](https://github.com/bartosz-antosik/vscode-spellright/issues/171)).
 - **New:** Added context menu screenshot. It is often confusing for new users that errors are not corrected with "right click" menu.
-- **Change:** In-Document command `spellcheck-language "CODE" ["CODE"]*` can now accept multiple languages.
+- **Change:** In-Document command `spellcheck&#x2d;language "CODE" ["CODE"]*` can now accept multiple languages.
 - **Change:** Series of minor changes and fixes (screenshots updated, GUI texts etc.)
 - **Fix:** Option `spellright.configurationScope` set to `user` not working correctly for an out of workspace file ([#205](https://github.com/bartosz-antosik/vscode-spellright/issues/205)).
 - **Fix:** Error assigning `spellright.parserByClass` when using GUI ([#205](https://github.com/bartosz-antosik/vscode-spellright/issues/205)).
@@ -110,7 +110,7 @@
 
 ## **2.4.9** released on 16th May 2018
 
-- **Fix:** Regression in In-Document command `spellcheck-off` ([#161](https://github.com/bartosz-antosik/vscode-spellright/issues/161)).
+- **Fix:** Regression in In-Document command `spellcheck&#x2d;off` ([#161](https://github.com/bartosz-antosik/vscode-spellright/issues/161)).
 
 ## **2.4.8** released on 14th May 2018
 
@@ -130,7 +130,7 @@
 
 - **Change:** LaTeX 'magic comment' (`!TEX spellcheck = "CODE"`) changed as consequence of ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)) requires language code in double quotes.
 - **Change:** Word separation rules extended with additional punctuation characters ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)).
-- **Fix:** Incorrect dictionary name in block comments ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)). This changes the syntax of In-Document `spellcheck-language "CODE"` command: the language code/dictionary name has to be in double quotes.
+- **Fix:** Incorrect dictionary name in block comments ([#151](https://github.com/bartosz-antosik/vscode-spellright/issues/151)). This changes the syntax of In-Document `spellcheck&#x2d;language "CODE"` command: the language code/dictionary name has to be in double quotes.
 - **Fix:** Regression introduced by parenthetical plural ([#152](https://github.com/bartosz-antosik/vscode-spellright/issues/152)).
 
 ## **2.3.3** released on 3rd May 2018
@@ -189,7 +189,7 @@
 
 ## **2.1.32** released on 19th March 2018
 
-- **Change:** In-Document `spellcheck-language` command's parameter may contain spaces now (e.g. dictionary names like `English (British)` are set correctly).
+- **Change:** In-Document `spellcheck&#x2d;language` command's parameter may contain spaces now (e.g. dictionary names like `English (British)` are set correctly).
 - **Change:** Added `jsonc` (JSON with Comments) to list of file types using code parser ([#127](https://github.com/bartosz-antosik/vscode-spellright/issues/127)).
 
 ## **2.1.30** released on 9th March 2018
@@ -368,7 +368,7 @@
 
 ## **1.2.10** released on 26th September 2017
 
-- **New:** Added support for LaTeX 'magic comment' (`!TEX spellcheck = CODE`) which allow to switch spelling language inside LaTeX document, functionally identical to an `spellcheck-language CODE` In-Document command.
+- **New:** Added support for LaTeX 'magic comment' (`!TEX spellcheck = CODE`) which allow to switch spelling language inside LaTeX document, functionally identical to an `spellcheck&#x2d;language CODE` In-Document command.
 
 ## **1.2.8** released on 20th September 2017
 
@@ -397,7 +397,7 @@
 ## **1.1.32** released on 5th September 2017
 
 - **Change:** Word separation rules updated with tilde ('~') character which is used as non breaking space in LaTeX ([#62](https://github.com/bartosz-antosik/vscode-spellright/issues/62)).
-- **Change:** Optimized spelling of whole document when In-Document Commands (like `spellcheck-off` etc.) are modified.
+- **Change:** Optimized spelling of whole document when In-Document Commands (like `spellcheck&#x2d;off` etc.) are modified.
 
 ## **1.1.31** released on 1st September 2017
 
@@ -508,7 +508,7 @@
 
 ## **1.0.20** released on 1st June 2017
 
-- **New:** In-Document command to switch between languages in one document (see `spellcheck-language` in README.md).
+- **New:** In-Document command to switch between languages in one document (see `spellcheck&#x2d;language` in README.md).
 
 ## **1.0.19** released on 30th May 2017
 
