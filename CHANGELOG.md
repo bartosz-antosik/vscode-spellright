@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.22** released on 31st December 2018
+
+- **Change:** Notice on dictionaries location in Insiders edition added in README.md (#238).
+
 ## **3.0.16** released on 30th November 2018
 
 - **Fix:** Error in In-Document command `spellcheck&#x2d;language "CODE" ["CODE"]*` command interpreter.
