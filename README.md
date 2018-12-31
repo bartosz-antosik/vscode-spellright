@@ -50,6 +50,8 @@ On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker librar
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
+In case you run *Insiders* edition of VSCode then `Code` part of the path has to be changed to `Code - Insiders` appropriately.
+
 Spell Right cannot automatically match the dictionary name with system locale settings when using *Hunspell* dictionaries hence **at first run dictionary has to be selected manually** (e.g from status bar).
 
 On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported, verify `SET` line in \*.aff file) by soft linking the system folder e.g.:
