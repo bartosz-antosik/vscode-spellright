@@ -1,8 +1,12 @@
 # Change Log
 
+## **3.0.24** released on 7th February 2019
+
+- **Fix:** Incorrectly parsed line end ('\\\\') in LaTeX ([#246](https://github.com/bartosz-antosik/vscode-spellright/issues/246)).
+
 ## **3.0.22** released on 31st December 2018
 
-- **Change:** Notice on dictionaries location in Insiders edition added in README.md (#238).
+- **Change:** Notice on dictionaries location in Insiders edition added in README.md ([#238](https://github.com/bartosz-antosik/vscode-spellright/issues/238)).
 
 ## **3.0.16** released on 30th November 2018
 
@@ -55,7 +59,7 @@
 
 ## **2.5.28** released on 7th August 2018
 
-- **Fix:** Incorrectly encoded accent acute in latex diacritics ([#192](https://github.com/bartosz-antosik/vscode-spellright/issues/192)).
+- **Fix:** Incorrectly encoded accent acute in LaTeX diacritics ([#192](https://github.com/bartosz-antosik/vscode-spellright/issues/192)).
 - **Fix:** Silent crash when document symbols returned as undefined ([#190](https://github.com/bartosz-antosik/vscode-spellright/issues/190)).
 
 ## **2.5.24** released on 31st July 2018
