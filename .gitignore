@@ -4,7 +4,7 @@
 .output
 *.vsix
 .samples
-.study
+.research
 .test
 .vscode/*
 .spellignore
