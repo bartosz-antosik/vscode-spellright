@@ -13,8 +13,38 @@ global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
 
 const spellright = require('./spellright');
 const vscode = require('vscode');
+const vscode_languageclient = require("vscode-languageclient");
+const path = require("path");
+
+var client;
 
 function activate(context) {
+
+    var serverModule = context.asAbsolutePath(path.join('src', 'server.js'));
+
+    var debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
+
+    // If the extension is launched in debug mode then the debug server options are used
+    // Otherwise the run options are used
+    var serverOptions = {
+        run: { module: serverModule, transport: vscode_languageclient.TransportKind.ipc },
+        debug: {
+            module: serverModule,
+            transport: vscode_languageclient.TransportKind.ipc,
+            options: debugOptions
+        }
+    };
+
+    var clientOptions = {
+        // Register the server for plain text documents
+        documentSelector: [{ scheme: '*', language: '*' }],
+        synchronize: {}
+    };
+
+    // Create the language client and start the client.
+    client = new vscode_languageclient.LanguageClient('spellright', 'Spell Right', serverOptions, clientOptions);
+    // Start the client. This will also launch the server
+    client.start();
 
     if (SPELLRIGHT_DEBUG_OUTPUT) {
         console.log('[spellright] Activated (' + process.platform + ', ' + process.arch + ').');
@@ -38,6 +68,11 @@ exports.activate = activate;
 function deactivate() {
 
     SpellRight.deactivate();
+
+    if (!client) {
+        return undefined;
+    }
+    return client.stop();
 
     if (SPELLRIGHT_DEBUG_OUTPUT)
         console.log('[spellright] Deactivated.');
