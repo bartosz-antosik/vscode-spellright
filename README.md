@@ -60,11 +60,7 @@ On most Linux distributions system-wide dictionaries can be reused (for now only
 ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
 ```
 
-On Fedora, system-wide dictionaries located under `myspell` instead of `hunspell`, so Fedora users use:
-
-```bash
-ln -s /usr/share/myspell ~/.config/Code/Dictionaries
-```
+The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/share/myspell` etc.)
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 

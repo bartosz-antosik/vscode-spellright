@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.26** released on 2nd March 2019
+
+- **Change:** Notice on dictionary directory location on different breeds of Linux added in README.md ([#252](https://github.com/bartosz-antosik/vscode-spellright/pull/252)). Thanks to [@Eido95](https://github.com/Eido95).
+- **Fix:** Installation command fixed in README.md ([#251](https://github.com/bartosz-antosik/vscode-spellright/pull/251)). Thanks to [@Eido95](https://github.com/Eido95).
+
 ## **3.0.24** released on 7th February 2019
 
 - **Fix:** Incorrectly parsed line end ('\\\\') in LaTeX ([#246](https://github.com/bartosz-antosik/vscode-spellright/issues/246)).
