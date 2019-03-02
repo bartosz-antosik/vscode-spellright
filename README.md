@@ -24,7 +24,7 @@
 Search for *Spell Right* from the extension installer within VSCode or execute below line in the **command palette** (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>):
 
 ```PowerShell
-ext install spellright
+ext install ban.spellright
 ```
 
 Spell Right requires spelling back-end which is different for various platforms. Please read carefully the section below on how to provide dictionaries for Spell Right to work properly.
