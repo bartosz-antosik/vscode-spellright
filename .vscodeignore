@@ -10,4 +10,7 @@
 .eslintrc.json
 lib/bin/node-spellchecker/**
 jsconfig.json
+GPATH
+GRTAGS
+GTAGS
 makefile
