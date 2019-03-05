@@ -11,10 +11,6 @@ const vscode_languageserver_1 = require("vscode-languageserver");
 // Also include all preview / proposed LSP features.
 let connection = vscode_languageserver_1.createConnection(vscode_languageserver_1.ProposedFeatures.all);
 
-// Create a simple text document manager. The text document manager
-// supports full document sync only
-let documents = new vscode_languageserver_1.TextDocuments();
-
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
@@ -56,17 +52,12 @@ connection.onDidChangeConfiguration(change => {
     connection.console.log('onDidChangeConfiguration');
 });
 
-
-documents.onDidClose(event => {
-    connection.console.log('onDidClose');
-});
-
-documents.onDidChangeContent(change => {
-    connection.console.log('onDidChangeContent');
-});
-
 connection.onDidOpenTextDocument((params) => {
     connection.console.log(`${params.textDocument.uri} opened.`);
+});
+
+connection.onDidSaveTextDocument((params) => {
+    connection.console.log(`${params.textDocument.uri} saved.`);
 });
 
 connection.onDidChangeTextDocument((params) => {
@@ -77,7 +68,6 @@ connection.onDidCloseTextDocument((params) => {
     connection.console.log(`${params.textDocument.uri} closed.`);
 });
 
-documents.listen(connection);
 connection.listen();
 
 Object.defineProperty(exports, "__esModule", { value: true });
