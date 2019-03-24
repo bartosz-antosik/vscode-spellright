@@ -2,7 +2,7 @@
   "name": "spellright",
   "displayName": "Spell Right",
   "description": "Multilingual, Offline and Lightweight Spellchecker",
-  "version": "3.0.28",
+  "version": "3.0.29",
   "publisher": "ban",
   "engines": {
     "vscode": "^1.20.0"
@@ -237,13 +237,14 @@
     "@types/node": "^6.0.40",
     "electron": "^1.4.13",
     "electron-rebuild": "^1.5.7",
-    "eslint": "^3.6.0",
-    "mocha": "^2.3.3"
+    "eslint": "^5.15.3",
+    "mocha": "^6.0.2"
   },
   "dependencies": {
     "any-promise": "^1.3.0",
     "fs": "0.0.1-security",
     "glob": "^7.1.1",
+    "growl": "^1.10.5",
     "ignore": "^3.3.3",
     "jsonminify": "^0.4.1",
     "mkdirp": "^0.5.1",
