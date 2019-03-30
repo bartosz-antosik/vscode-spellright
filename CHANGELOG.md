@@ -1,5 +1,19 @@
 # Change Log
 
+## **3.0.36** released on 30th March 2019
+
+- **Fix:** Another regression introduced when speeding up LaTeX parser ([#263](https://github.com/bartosz-antosik/vscode-spellright/issues/263)).
+- **Fix:** Parentheses cause ignored words checked ([#261](https://github.com/bartosz-antosik/vscode-spellright/issues/261)).
+
+## **3.0.30** released on 24th March 2019
+
+- **Fix:** Regression introduced when speeding up LaTeX parser ([#258](https://github.com/bartosz-antosik/vscode-spellright/issues/258)).
+
+## **3.0.28** released on 5nd March 2019
+
+- **Change:** Notice on dictionary directory location on different breeds of Linux added in README.md ([#252](https://github.com/bartosz-antosik/vscode-spellright/pull/252)). Thanks to [@Eido95](https://github.com/Eido95).
+- **Fix:** Installation command fixed in README.md ([#251](https://github.com/bartosz-antosik/vscode-spellright/pull/251)). Thanks to [@Eido95](https://github.com/Eido95).
+
 ## **3.0.24** released on 7th February 2019
 
 - **Fix:** Incorrectly parsed line end ('\\\\') in LaTeX ([#246](https://github.com/bartosz-antosik/vscode-spellright/issues/246)).
