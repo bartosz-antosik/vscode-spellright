@@ -670,19 +670,19 @@ var SpellRight = (function () {
     }
 
     SpellRight.prototype.testWordInDictionaries = function (word) {
-         for (var i = 0; i < helpers._UserDictionary.length; i++) {
-             if (helpers._UserDictionary[i].toLowerCase() == word.toLowerCase())
-                 return true;
-         }
-         for (var i = 0; i < helpers._WorkspaceDictionary.length; i++) {
-             if (helpers._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase())
-                 return true;
-         }
-        for (var i = 0; i < helpers._DocumentSymbols.length; i++) {
-            if (helpers._DocumentSymbols[i] == word)
+        for (var i = 0; i < helpers._UserDictionary.length; i++) {
+            if (helpers._UserDictionary[i].toLowerCase() == word.toLowerCase().trim())
                 return true;
         }
-         return false;
+        for (var i = 0; i < helpers._WorkspaceDictionary.length; i++) {
+            if (helpers._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase().trim())
+                return true;
+        }
+        for (var i = 0; i < helpers._DocumentSymbols.length; i++) {
+            if (helpers._DocumentSymbols[i] == word.trim())
+                return true;
+        }
+        return false;
     };
 
     SpellRight.prototype.getEffectiveLanguage = function () {
