@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.32** released on 30th March 2019
+
+- **Fix:** Another regression introduced when speeding up LaTeX parser ([#263](https://github.com/bartosz-antosik/vscode-spellright/issues/263)).
+
 ## **3.0.30** released on 24th March 2019
 
 - **Fix:** Regression introduced when speeding up LaTeX parser ([#258](https://github.com/bartosz-antosik/vscode-spellright/issues/258)).
