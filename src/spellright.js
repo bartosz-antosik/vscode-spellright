@@ -52,7 +52,7 @@ var SpellRight = (function () {
     function SpellRight() {
         this.diagnosticMap = {};
         this.ignoreRegExpsMap = [];
-        this.latexSpellParameters = [];
+        this.latexSpellParametersMap = [];
         this.lastChanges = null;
         this.lastSyntax = 0;
         this.spellingContext = [];
@@ -582,6 +582,7 @@ var SpellRight = (function () {
     SpellRight.prototype.prepareIgnoreRegExps = function (languageid) {
 
         this.ignoreRegExpsMap = [];
+        this.latexSpellParametersMap = [];
 
         for (var i = 0; i < settings.ignoreRegExps.length; i++) {
             try {
@@ -621,20 +622,18 @@ var SpellRight = (function () {
             }
         }
 
-        if (settings.latexSpellParameters) {
-            for (var i = 0; i < settings.latexSpellParameters.length; i++) {
-                try {
-                    // Convert the JSON of RegExp Strings into a real RegExp
-                    if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('[spellright] RegExp prepare: ' + settings.latexSpellParameters[i] + ' = /' + pattern + '/' + 'g');
-                    }
-                    this.latexSpellParameters.push(new RegExp(settings.latexSpellParameters[i], 'g'));
+        for (var i = 0; i < settings.latexSpellParameters.length; i++) {
+            try {
+                // Convert the JSON of RegExp Strings into a real RegExp
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    console.log('[spellright] RegExp prepare: ' + settings.latexSpellParameters[i] + ' = /^' + pattern + '$/' + '');
                 }
-                catch (e) {
-                    vscode.window.showErrorMessage('SpellRight: LaTeX Spell Parameters: \"' + settings.ignoreRegExps[i] + '\" malformed. Ignoring.');
-                    if (SPELLRIGHT_DEBUG_OUTPUT) {
-                        console.log('[spellright] LaTeX Spell Parameters: \"' + settings.latexSpellParameters[i] + '\" malformed. Ignoring.');
-                    }
+                this.latexSpellParametersMap.push(new RegExp('^' + settings.latexSpellParameters[i] + '$', ''));
+            }
+            catch (e) {
+                vscode.window.showErrorMessage('SpellRight: LaTeX Spell Parameters: \"' + settings.latexSpellParameters[i] + '\" malformed. Ignoring.');
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    console.log('[spellright] LaTeX Spell Parameters: \"' + settings.latexSpellParameters[i] + '\" malformed. Ignoring.');
                 }
             }
         }
@@ -1168,7 +1167,7 @@ var SpellRight = (function () {
         var _signature = '';
         var _local_context = false;
 
-        _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParameters }, function (command, parameters, range) {
+        _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParametersMap }, function (command, parameters, range) {
 
             _signature = _signature + command + '-' + parameters;
 
@@ -1285,7 +1284,7 @@ var SpellRight = (function () {
 
             this.adjustDiagnostics(diagnostics, range, shift);
 
-            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
+            _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParametersMap }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
         }
 
         // Spell check trail left after changes/jumps
@@ -1308,7 +1307,7 @@ var SpellRight = (function () {
                         var _range = new vscode.Range(range.start.line + shift, range.start.character, range.end.line + shift, range.end.character);
                         this.adjustDiagnostics(diagnostics, _range, 0);
 
-                        _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParameters }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
+                        _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParametersMap }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line + shift, void 0, range.end.line + shift, void 0);
                     }
                 }
             }
@@ -1426,7 +1425,7 @@ var SpellRight = (function () {
         var _length = this.spellingContext.length;
 
         _return = _parser.parseForCommands(_document, { ignoreRegExpsMap: this.ignoreRegExpsMap,
-            latexSpellParameters: this.latexSpellParameters }, function (command, parameters, range) {
+            latexSpellParameters: this.latexSpellParametersMap }, function (command, parameters, range) {
 
             _signature = command + '-' + parameters;
 
@@ -1541,7 +1540,7 @@ var SpellRight = (function () {
 
         if (line <= document.lineCount) {
 
-            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParameters }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMarkCallback(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
+            _return = parser.spellCheckRange(document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParametersMap }, (document, context, diagnostics, token, linenumber, colnumber) => _this.checkAndMarkCallback(document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), line, void 0, line + (SPELLRIGHT_LINES_BATCH - 1), void 0);
 
             // Update interface with already collected diagnostics
             if (this.updateInterval > 0) {
