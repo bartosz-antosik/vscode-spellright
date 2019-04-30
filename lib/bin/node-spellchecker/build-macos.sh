@@ -13,3 +13,6 @@ cp build/Release/spellchecker.node ../spellchecker-darwin-2.0.7-x64.node
 
 node-gyp rebuild --target=3.0.10 --arch=x64 --dist-url=https://atom.io/download/electron
 cp build/Release/spellchecker.node ../spellchecker-darwin-3.0.10-x64.node
+
+node-gyp rebuild --target=4.1.1 --arch=x64 --dist-url=https://atom.io/download/electron
+cp build/Release/spellchecker.node ../spellchecker-darwin-4.1.1-x64.node
