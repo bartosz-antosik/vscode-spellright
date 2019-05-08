@@ -248,8 +248,7 @@
     "opn": "^5.1.0",
     "os-locale": "^2.0.0",
     "path": "^0.12.7",
-    "xregexp": "^3.2.0",
-    "napi-spellchecker": "^0.1.0"
+    "xregexp": "^3.2.0"
   },
   "icon": "icon.png",
   "license": "SEE LICENSE IN LICENSE.md",
