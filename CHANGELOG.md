@@ -1,8 +1,9 @@
 # Change Log
 
-## **3.0.40** released on 1st April 2019
+## **3.0.46** released on 4th July 2019
 
 - **Change:** Notice on using extension in Hunspell mode on Windows 8+ added in README.md ([#256](https://github.com/bartosz-antosik/vscode-spellright/pull/256)). Thanks to [@BreakBB](https://github.com/BreakBB)
+- **Fix:** Binaries updated for Electron 4.x.
 
 ## **3.0.38** released on 1st April 2019
 
