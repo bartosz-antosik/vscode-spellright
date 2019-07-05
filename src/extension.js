@@ -13,8 +13,8 @@ global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
 
 const spellright = require('./spellright');
 const vscode = require('vscode');
-const vscode_languageclient = require("vscode-languageclient");
-const path = require("path");
+const vscode_lc = require('vscode-languageclient');
+const path = require('path');
 
 var client;
 
@@ -27,10 +27,10 @@ function activate(context) {
     // If the extension is launched in debug mode then the debug server options are used
     // Otherwise the run options are used
     var serverOptions = {
-        run: { module: serverModule, transport: vscode_languageclient.TransportKind.ipc },
+        run: { module: serverModule, transport: vscode_lc.TransportKind.ipc },
         debug: {
             module: serverModule,
-            transport: vscode_languageclient.TransportKind.ipc,
+            transport: vscode_lc.TransportKind.ipc,
             options: debugOptions
         }
     };
@@ -42,7 +42,7 @@ function activate(context) {
     };
 
     // Create the language client and start the client.
-    client = new vscode_languageclient.LanguageClient('spellright', 'Spell Right', serverOptions, clientOptions);
+    client = new vscode_lc.LanguageClient('spellright', 'Spell Right', serverOptions, clientOptions);
     // Start the client. This will also launch the server
     client.start();
 
