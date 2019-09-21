@@ -3,13 +3,38 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <stdint.h>
 
 namespace spellchecker {
 
+const int USE_SYSTEM_DEFAULTS = 0;
+const int ALWAYS_USE_SYSTEM = 1;
+const int ALWAYS_USE_HUNSPELL = 2;
+
 struct MisspelledRange {
   size_t start;
   size_t end;
+};
+
+class SpellcheckerImplementation;
+
+class SpellcheckerThreadView {
+public:
+  SpellcheckerThreadView(SpellcheckerImplementation *impl) : impl{impl}
+  {
+    //
+  }
+
+  virtual ~SpellcheckerThreadView()
+  {
+    //
+  }
+
+  virtual std::vector<MisspelledRange> CheckSpelling(const uint16_t *text, size_t length);
+
+private:
+  SpellcheckerImplementation *impl;
 };
 
 class SpellcheckerImplementation {
@@ -29,19 +54,29 @@ public:
   // NB: When using Hunspell, this will not modify the .dic file; custom words must be added each
   // time the spellchecker is created. Use a custom dictionary file.
   virtual void Add(const std::string& word) = 0;
-  
+
   // Removes a word from the custom dictionary added by Add.
   // NB: When using Hunspell, this will not modify the .dic file; custom words must be added each
   // time the spellchecker is created. Use a custom dictionary file.
   virtual void Remove(const std::string& word) = 0;
+
+  virtual std::unique_ptr<SpellcheckerThreadView> CreateThreadView()
+  {
+    return std::unique_ptr<SpellcheckerThreadView>(new SpellcheckerThreadView(this));
+  }
 
   virtual ~SpellcheckerImplementation() {}
 };
 
 class SpellcheckerFactory {
 public:
-  static SpellcheckerImplementation* CreateSpellchecker();
+  static SpellcheckerImplementation* CreateSpellchecker(int spellcheckerType);
 };
+
+inline std::vector<MisspelledRange> SpellcheckerThreadView::CheckSpelling(const uint16_t *text, size_t length)
+{
+  return impl->CheckSpelling(text, length);
+}
 
 }  // namespace spellchecker
 

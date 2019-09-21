@@ -22,7 +22,8 @@ CheckSpellingWorker::~CheckSpellingWorker()
 }
 
 void CheckSpellingWorker::Execute() {
-  misspelled_ranges = impl->CheckSpelling(corpus.data(), corpus.size());
+  std::unique_ptr<SpellcheckerThreadView> view = impl->CreateThreadView();
+  misspelled_ranges = view->CheckSpelling(corpus.data(), corpus.size());
 }
 
 void CheckSpellingWorker::HandleOKCallback() {

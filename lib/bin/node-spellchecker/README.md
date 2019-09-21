@@ -54,3 +54,42 @@ When using Hunspell, this will not modify the .dic file; new words must be added
 `word` - String word to add.
 
 Returns nothing.
+
+### new Spellchecker()
+
+In addition to the above functions that are used on a default instance, a new instance of SpellChecker can be instantiated with the use of the `new` operator. The same methods are available with the instance but the dictionary and underlying API can be changed independently from the default instance.
+
+```javascript
+const checker = new SpellChecker.Spellchecker()
+```
+
+#### SpellChecker.Spellchecker.setSpellcheckerType(type)
+
+Overrides the library selection for checking. Without this, the checker will use [Hunspell](http://hunspell.github.io/) on Linux, the [Spell Checking API](https://docs.microsoft.com/en-us/windows/desktop/intl/spell-checker-api) for Windows, and [NSSpellChecker](https://developer.apple.com/documentation/appkit/nsspellchecker) on Macs.
+
+If the environment variable `SPELLCHECKER_PREFER_HUNSPELL` is set to any value, the library will fallback to always using the Hunspell implementation.
+
+This is the same behavior as calling `setSpellcheckerType` with the `USE_SYSTEM_DEFAULTS` constant:
+
+```coffeescript
+checker = new SpellChecker.Spellchecker
+checker.setSpellcheckerType SpellChecker.USE_SYSTEM_DEFAULTS
+```
+
+To always use the system API and not fallback to Hunspell regardless of the environment variable, use the `ALWAYS_USE_SYSTEM` constant:
+
+```coffeescript
+checker = new SpellChecker.Spellchecker
+checker.setSpellcheckerType SpellChecker.ALWAYS_USE_SYSTEM
+```
+
+Likewise, Hunspell can be forced with the `ALWAYS_USE_HUNSPELL` constant.
+
+```javascript
+const checker = new SpellChecker.Spellchecker();
+checker.setSpellcheckerType(SpellChecker.ALWAYS_USE_SYSTEM);
+```
+
+On Linux, Hunspell is always used regardless of the setting. This method must also be called before any spelling is done otherwise it will throw an error.
+
+This returns nothing.
