@@ -2,10 +2,10 @@
   "name": "spellright",
   "displayName": "Spell Right",
   "description": "Multilingual, Offline and Lightweight Spellchecker",
-  "version": "3.0.40",
+  "version": "3.0.41",
   "publisher": "ban",
   "engines": {
-    "vscode": "^1.20.0"
+    "vscode": "^1.30.0"
   },
   "categories": [
     "Other"
@@ -242,8 +242,6 @@
     "vscode": "^1.1.35"
   },
   "dependencies": {
-    "vscode-languageclient": "^5.2.1",
-    "vscode-languageserver": "^5.2.1",
     "any-promise": "^1.3.0",
     "fs": "0.0.1-security",
     "glob": "^7.1.1",
@@ -254,6 +252,8 @@
     "opn": "^5.1.0",
     "os-locale": "^2.0.0",
     "path": "^0.12.7",
+    "vscode-languageclient": "^5.2.1",
+    "vscode-languageserver": "^5.2.1",
     "xregexp": "^3.2.0"
   },
   "icon": "icon.png",
