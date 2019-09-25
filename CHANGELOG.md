@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.42** released on 26th September 2019
+
+- **Change:** Binaries updated for Electron 6.0.9 (insiders build at the moment).
+- **Fix:** Extending token one character after context switch in some cases ([#309](https://github.com/bartosz-antosik/vscode-spellright/issues/309)).
+
 ## **3.0.36** released on 30th March 2019
 
 - **Fix:** Another regression introduced when speeding up LaTeX parser ([#263](https://github.com/bartosz-antosik/vscode-spellright/issues/263)).
