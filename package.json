@@ -238,7 +238,7 @@
     "electron": "^1.4.13",
     "electron-rebuild": "^1.5.7",
     "eslint": "^5.15.3",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
     "vscode": "^1.1.35"
   },
   "dependencies": {
