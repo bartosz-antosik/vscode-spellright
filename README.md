@@ -64,7 +64,6 @@ The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/sha
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
-
 ### **User Dictionaries**
 
 Spell Right stores words considered as spelled correctly and not existing in the main spelling engine (a.k.a. ignored words) in plaintext dictionary files. All the extension's commands add words to two main files, user and workspace dictionaries, both contained in `spellright.dict` files, one located in user settings folder and the other in workspace settings folder (`.vscode`). Besides these there can be any number of `*.dict` files in workspace settings folder e.g. dictionaries containing specialized vocabularies like **medical terms**, **trademark names** etc. User dictionary is always used and workspace dictionaries are used in the context of opened folder. All provided dictionaries are used in conjunction.
@@ -387,10 +386,9 @@ Select appropriate class to be able to spell the document. If `spellright.config
 
 ## Known Issues
 
-* Hint box associated with "Bulb" Code Action has an ugly habit of wrapping text at certain width not at white/punctuation character thus suggestions got cut in weird places (this is probably more of a VSCode's issue).
 * There is a limit, imposed by VSCode, on the number of diagnostics that an extension (Spell Right among) can provide for one file. The number is 1000 and Spell Right cannot display more spelling errors. Once the spelling errors from the head of the file are corrected or added to the dictionaries more issues will appear at the end.
 * Due to [bug](https://stackoverflow.com/questions/31214926/how-to-add-language-to-nsspellcheckers-available-languages) in `NSSpellChecker` layer of macOS Spell Right cannot currently use dictionaries installed in `~/Library/Spelling` folder, just those that came with the system.
-* There are rare situations when dictionaries are not reported correctly on Windows using Windows Spelling API (Windows 8+). This can result in no dictionary or only some dictionaries available to the extension. So far the reason for this is unknown but seems to be outside of the extension (see [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53) for details). In such a situation the extension still can be used in Hunspell mode by setting `SPELLCHECKER_PREFER_HUNSPELL` environment variable to `1` in Windows systems' `Environment Variables` configuration. This workaround requires downloading dictionaries and creating appropriate folder as it is described above in case of Linux and Windows 7.
+* There are rare situations when dictionaries are not reported correctly on Windows using Windows Spelling API (Windows 8+). They can result in no dictionary or only some dictionaries available. So far the reason for this is unknown but seems to be outside of the extension (see [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53), especially [this](https://github.com/bartosz-antosik/vscode-spellright/issues/106#issuecomment-528431502) and [this](https://github.com/bartosz-antosik/vscode-spellright/issues/53#issuecomment-529458630) comments for details).
 
 ## Notice
 

@@ -1,5 +1,12 @@
 # Change Log
 
+## **3.0.48** released on 25th September 2019
+
+- **Change:** Binaries updated for Electron 6.0.9 (insiders build at the moment).
+- **Change:** README.md updated with information on possible solution to Windows issues [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53).
+- **Fix:** Extending token one character after context switch in some cases ([#309](https://github.com/bartosz-antosik/vscode-spellright/issues/309)).
+- **Fix:** Temporary fix for broken cross platform remote development [#279](https://github.com/bartosz-antosik/vscode-spellright/issues/279).
+
 ## **3.0.46** released on 4th July 2019
 
 - **Change:** Notice on using extension in Hunspell mode on Windows 8+ added in README.md ([#256](https://github.com/bartosz-antosik/vscode-spellright/pull/256)). Thanks to [@BreakBB](https://github.com/BreakBB)
