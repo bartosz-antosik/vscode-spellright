@@ -1,121 +1,25 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "spellchecker",
-        "scope": null,
-        "escapedName": "spellchecker",
-        "name": "spellchecker",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "C:\\Users\\ban.necne\\Projects\\_vscode_\\spellright"
-    ]
-  ],
-  "_from": "spellchecker@latest",
-  "_id": "spellchecker@3.4.1",
-  "_inCache": true,
-  "_location": "/spellchecker",
-  "_nodeVersion": "8.1.1",
-  "_npmOperationalInternal": {
-    "host": "s3://npm-registry-packages",
-    "tmp": "tmp/spellchecker-3.4.1.tgz_1498745679110_0.3870486051309854"
+  "main": "./lib/spellchecker.js",
+  "name": "spellchecker",
+  "description": "Bindings to native spellchecker",
+  "version": "3.7.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atom/node-spellchecker.git"
   },
-  "_npmUser": {
-    "name": "atom-team",
-    "email": "atom@github.com"
-  },
-  "_npmVersion": "5.0.4",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "spellchecker",
-    "scope": null,
-    "escapedName": "spellchecker",
-    "name": "spellchecker",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/spellchecker/-/spellchecker-3.4.1.tgz",
-  "_shasum": "0caedceff314baef0123051bc597ba28e89c2ac3",
-  "_shrinkwrap": null,
-  "_spec": "spellchecker",
-  "_where": "C:\\Users\\ban.necne\\Projects\\_vscode_\\spellright",
   "bugs": {
     "url": "https://github.com/atom/node-spellchecker/issues"
   },
-  "dependencies": {
-    "any-promise": "^1.3.0",
-    "nan": "^2.0.0"
-  },
-  "description": "Bindings to native spellchecker",
-  "devDependencies": {
-    "jasmine-focused": "1.x"
-  },
-  "directories": {},
-  "dist": {
-    "integrity": "sha512-xCjX074p9JPPHR0Hsa+T4L7MaflM6Vw61/+ujtEg4TX0wD3CbnXy6rzLD3HcrX8ucVzSvDqhKIJf/BnewRcBHw==",
-    "shasum": "0caedceff314baef0123051bc597ba28e89c2ac3",
-    "tarball": "https://registry.npmjs.org/spellchecker/-/spellchecker-3.4.1.tgz"
-  },
-  "gitHead": "59d2d5eee5785c4b34e9669cd5d987181d17c098",
-  "gypfile": true,
   "homepage": "http://atom.github.io/node-spellchecker",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/atom/node-spellchecker/raw/master/LICENSE.md"
-    }
-  ],
-  "main": "./lib/spellchecker.js",
-  "maintainers": [
-    {
-      "name": "atom-team",
-      "email": "atom@github.com"
-    },
-    {
-      "name": "jlord",
-      "email": "to.jlord@gmail.com"
-    },
-    {
-      "name": "benogle",
-      "email": "ogle.ben@gmail.com"
-    },
-    {
-      "name": "thedaniel",
-      "email": "danielwh@gmail.com"
-    },
-    {
-      "name": "nathansobo",
-      "email": "nathan@github.com"
-    },
-    {
-      "name": "maxbrunsfeld",
-      "email": "maxbrunsfeld@gmail.com"
-    },
-    {
-      "name": "kevinsawicki",
-      "email": "kevinsawicki@gmail.com"
-    },
-    {
-      "name": "zcbenz",
-      "email": "zcbenz@gmail.com"
-    }
-  ],
-  "name": "spellchecker",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/atom/node-spellchecker.git"
-  },
   "scripts": {
-    "install": "node-gyp rebuild",
     "test": "jasmine-focused --captureExceptions --coffee spec/"
   },
-  "version": "3.4.1"
+  "devDependencies": {
+    "jasmine-focused": "^1.0.7"
+  },
+  "dependencies": {
+    "any-promise": "^1.3.0",
+    "nan": "^2.14.0"
+  }
 }

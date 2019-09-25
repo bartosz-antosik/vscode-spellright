@@ -137,9 +137,9 @@ std::vector<std::string> MacSpellchecker::GetCorrectionsForMisspelling(const std
 }
 
 void MacSpellchecker::UpdateGlobalSpellchecker() {
-  const NSString* autoLangauge = @"___AUTO_LANGUAGE";
-  NSString* globalLang = currentGlobalLanguage ? currentGlobalLanguage : autoLangauge;
-  NSString* ourLang = this->spellCheckerLanguage ? this->spellCheckerLanguage : autoLangauge;
+  NSString* autoLanguage = @"___AUTO_LANGUAGE";
+  NSString* globalLang = currentGlobalLanguage ? currentGlobalLanguage : autoLanguage;
+  NSString* ourLang = this->spellCheckerLanguage ? this->spellCheckerLanguage : autoLanguage;
 
   if ([globalLang isEqualToString: ourLang]) {
     return;
@@ -154,12 +154,14 @@ void MacSpellchecker::UpdateGlobalSpellchecker() {
   }
 }
 
-SpellcheckerImplementation* SpellcheckerFactory::CreateSpellchecker() {
-  if (getenv("SPELLCHECKER_PREFER_HUNSPELL")) {
-    return new HunspellSpellchecker();
+SpellcheckerImplementation* SpellcheckerFactory::CreateSpellchecker(int spellcheckerType) {
+  bool preferHunspell = getenv("SPELLCHECKER_PREFER_HUNSPELL") && spellcheckerType != ALWAYS_USE_SYSTEM;
+
+  if (spellcheckerType != ALWAYS_USE_HUNSPELL && !preferHunspell) {
+    return new MacSpellchecker();
   }
 
-  return new MacSpellchecker();
+  return new HunspellSpellchecker();
 }
 
 }  // namespace spellchecker

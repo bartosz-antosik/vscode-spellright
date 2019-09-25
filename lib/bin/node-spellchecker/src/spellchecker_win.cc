@@ -1,10 +1,14 @@
+#define _WINSOCKAPI_
+
+#include <spellcheck.h>
+#include <uv.h>
+
 #include <windows.h>
 #include <guiddef.h>
 #include <initguid.h>
 #include <string>
 #include <algorithm>
 #include <cstdlib>
-#include <spellcheck.h>
 
 #include "spellchecker.h"
 #include "spellchecker_win.h"
@@ -54,12 +58,106 @@ std::wstring ToWString(const std::string& string) {
   return ret;
 }
 
+class Lock {
+public:
+  Lock(uv_mutex_t &m) : m{m}
+  {
+    uv_mutex_lock(&this->m);
+  }
+
+  ~Lock()
+  {
+    uv_mutex_unlock(&this->m);
+  }
+
+private:
+  uv_mutex_t &m;
+};
+
+std::vector<MisspelledRange> DoCheckSpelling(ISpellChecker *spellchecker, const uint16_t *text, size_t length)
+{
+  std::vector<MisspelledRange> result;
+
+  if (spellchecker == NULL) {
+    return result;
+  }
+
+  IEnumSpellingError* errors = NULL;
+  std::wstring wtext(reinterpret_cast<const wchar_t *>(text), length);
+  if (FAILED(spellchecker->Check(wtext.c_str(), &errors))) {
+    return result;
+  }
+
+  ISpellingError *error;
+  while (errors->Next(&error) == S_OK) {
+    ULONG start, length;
+    error->get_StartIndex(&start);
+    error->get_Length(&length);
+
+    MisspelledRange range;
+    range.start = start;
+    range.end = start + length;
+    result.push_back(range);
+    error->Release();
+  }
+
+  errors->Release();
+  return result;
+}
+
+WindowsSpellcheckerThreadView::WindowsSpellcheckerThreadView(WindowsSpellchecker *impl, DWORD spellcheckerCookie) :
+  SpellcheckerThreadView(impl),
+  spellchecker{NULL}
+{
+  if (!spellcheckerCookie) {
+    return;
+  }
+
+  this->initResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+  if (FAILED(this->initResult)) {
+    return;
+  }
+
+  IGlobalInterfaceTable* gTable = NULL;
+  HRESULT gTableRes = CoCreateInstance(
+    CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable,
+    reinterpret_cast<PVOID*>(&gTable));
+  if (FAILED(gTableRes) || !gTable) {
+    return;
+  }
+
+  Lock tableLock(impl->GetGlobalTableMutex());
+  HRESULT intRes = gTable->GetInterfaceFromGlobal(spellcheckerCookie, __uuidof(ISpellChecker),
+    reinterpret_cast<PVOID*>(&this->spellchecker));
+  if (FAILED(intRes)) {
+    this->spellchecker = NULL;
+  }
+}
+
+WindowsSpellcheckerThreadView::~WindowsSpellcheckerThreadView()
+{
+  if (spellchecker != NULL) {
+    spellchecker->Release();
+  }
+
+  if (SUCCEEDED(initResult)) {
+    CoUninitialize();
+  }
+}
+
+std::vector<MisspelledRange> WindowsSpellcheckerThreadView::CheckSpelling(const uint16_t *text, size_t length)
+{
+  return DoCheckSpelling(spellchecker, text, length);
+}
+
 WindowsSpellchecker::WindowsSpellchecker() {
+  this->gTable = NULL;
+  this->currentSpellcheckerCookie = 0;
   this->spellcheckerFactory = NULL;
   this->currentSpellchecker = NULL;
 
   if (InterlockedIncrement(&g_COMRefcount) == 1) {
-    g_COMFailed = FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED));
+    g_COMFailed = FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
     if (g_COMFailed) return;
   }
 
@@ -71,9 +169,22 @@ WindowsSpellchecker::WindowsSpellchecker() {
   if (FAILED(hr)) {
     this->spellcheckerFactory = NULL;
   }
+
+  HRESULT gTableRes = CoCreateInstance(CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER,
+    IID_IGlobalInterfaceTable, reinterpret_cast<PVOID*>(&gTable));
+  if (FAILED(gTableRes)) {
+    this->gTable = NULL;
+  }
+
+  gTableMutexOk = uv_mutex_init(&this->gTableMutex) == 0;
 }
 
 WindowsSpellchecker::~WindowsSpellchecker() {
+  if (this->currentSpellcheckerCookie) {
+    this->gTable->RevokeInterfaceFromGlobal(this->currentSpellcheckerCookie);
+    this->currentSpellcheckerCookie = 0;
+  }
+
   if (this->currentSpellchecker) {
     this->currentSpellchecker->Release();
     this->currentSpellchecker = NULL;
@@ -82,6 +193,15 @@ WindowsSpellchecker::~WindowsSpellchecker() {
   if (this->spellcheckerFactory) {
     this->spellcheckerFactory->Release();
     this->spellcheckerFactory = NULL;
+  }
+
+  if (this->gTable) {
+    this->gTable->Release();
+    this->gTable = NULL;
+  }
+
+  if (this->gTableMutexOk) {
+    uv_mutex_destroy(&this->gTableMutex);
   }
 
   if (InterlockedDecrement(&g_COMRefcount) == 0) {
@@ -98,9 +218,16 @@ bool WindowsSpellchecker::SetDictionary(const std::string& language, const std::
     return false;
   }
 
+  if (this->currentSpellcheckerCookie) {
+    Lock tableLock(this->gTableMutex);
+    this->gTable->RevokeInterfaceFromGlobal(this->currentSpellcheckerCookie);
+    this->currentSpellcheckerCookie = 0;
+  }
+
   if (this->currentSpellchecker != NULL) {
     this->currentSpellchecker->Release();
     this->currentSpellchecker = NULL;
+    this->currentSpellcheckerCookie = 0;
   }
 
   // Figure out if we have a dictionary installed for the language they want
@@ -119,6 +246,28 @@ bool WindowsSpellchecker::SetDictionary(const std::string& language, const std::
   if (!isSupported) return false;
 
   if (FAILED(this->spellcheckerFactory->CreateSpellChecker(wlanguage.c_str(), &this->currentSpellchecker))) {
+    return false;
+  }
+
+  IUnknown* unknown = NULL;
+  HRESULT queryRes = this->currentSpellchecker->QueryInterface(IID_IUnknown, reinterpret_cast<PVOID*>(&unknown));
+  if (FAILED(queryRes) || !unknown) {
+    this->currentSpellchecker->Release();
+    this->currentSpellchecker = NULL;
+    this->currentSpellcheckerCookie = 0;
+    return false;
+  }
+
+  HRESULT regResult = S_OK;
+  {
+    Lock tableLock(this->gTableMutex);
+    regResult = this->gTable->RegisterInterfaceInGlobal(unknown, __uuidof(ISpellChecker*),
+      &this->currentSpellcheckerCookie);
+  }
+  unknown->Release();
+  if (FAILED(regResult) || !this->currentSpellcheckerCookie) {
+    this->currentSpellchecker->Release();
+    this->currentSpellchecker = NULL;
     return false;
   }
 
@@ -188,33 +337,7 @@ bool WindowsSpellchecker::IsMisspelled(const std::string& word) {
 }
 
 std::vector<MisspelledRange> WindowsSpellchecker::CheckSpelling(const uint16_t *text, size_t length) {
-  std::vector<MisspelledRange> result;
-
-  if (this->currentSpellchecker == NULL) {
-    return result;
-  }
-
-  IEnumSpellingError* errors = NULL;
-  std::wstring wtext(reinterpret_cast<const wchar_t *>(text), length);
-  if (FAILED(this->currentSpellchecker->Check(wtext.c_str(), &errors))) {
-    return result;
-  }
-
-  ISpellingError *error;
-  while (errors->Next(&error) == S_OK) {
-    ULONG start, length;
-    error->get_StartIndex(&start);
-    error->get_Length(&length);
-
-    MisspelledRange range;
-    range.start = start;
-    range.end = start + length;
-    result.push_back(range);
-    error->Release();
-  }
-
-  errors->Release();
-  return result;
+  return DoCheckSpelling(currentSpellchecker, text, length);
 }
 
 void WindowsSpellchecker::Add(const std::string& word) {
@@ -267,13 +390,30 @@ std::vector<std::string> WindowsSpellchecker::GetCorrectionsForMisspelling(const
   return ret;
 }
 
-SpellcheckerImplementation* SpellcheckerFactory::CreateSpellchecker() {
-  WindowsSpellchecker* ret = new WindowsSpellchecker();
-  if (ret->IsSupported() && getenv("SPELLCHECKER_PREFER_HUNSPELL") == NULL) {
-    return ret;
+std::unique_ptr<SpellcheckerThreadView> WindowsSpellchecker::CreateThreadView() {
+  return std::unique_ptr<SpellcheckerThreadView>(
+    new WindowsSpellcheckerThreadView(this, this->currentSpellcheckerCookie)
+  );
+}
+
+uv_mutex_t &WindowsSpellchecker::GetGlobalTableMutex()
+{
+  return this->gTableMutex;
+}
+
+SpellcheckerImplementation* SpellcheckerFactory::CreateSpellchecker(int spellcheckerType) {
+  bool preferHunspell = getenv("SPELLCHECKER_PREFER_HUNSPELL") && spellcheckerType != ALWAYS_USE_SYSTEM;
+
+  if (spellcheckerType != ALWAYS_USE_HUNSPELL && !preferHunspell) {
+    WindowsSpellchecker* ret = new WindowsSpellchecker();
+
+    if (ret->IsSupported()) {
+      return ret;
+    }
+
+    delete ret;
   }
 
-  delete ret;
   return new HunspellSpellchecker();
 }
 
