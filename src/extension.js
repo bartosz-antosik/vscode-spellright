@@ -19,6 +19,9 @@ const path = require('path');
 var client;
 
 function activate(context) {
+        if (vscode.env.remoteName) {
+            return;
+        }
 
     var serverModule = context.asAbsolutePath(path.join('src', 'server.js'));
 

@@ -5,6 +5,7 @@
 - **Change:** Binaries updated for Electron 6.0.9 (insiders build at the moment).
 - **Change:** README.md updated with information on possible solution to Windows issues [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53).
 - **Fix:** Extending token one character after context switch in some cases ([#309](https://github.com/bartosz-antosik/vscode-spellright/issues/309)).
+- **Fix:** Temporary fix for broken cross platform remote development [#279](https://github.com/bartosz-antosik/vscode-spellright/issues/279).
 
 ## **3.0.36** released on 30th March 2019
 
