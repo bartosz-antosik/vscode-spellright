@@ -11,10 +11,14 @@ global.SPELLRIGHT_MILLISECS_BATCH = 100;
 
 global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
 
-const spellright = require('./spellright');
 const vscode = require('vscode');
 
 function activate(context) {
+    if (vscode.env.remoteName) {
+        return;
+    }
+
+    const spellright = require('./spellright');
 
     if (SPELLRIGHT_DEBUG_OUTPUT) {
         console.log('[spellright] Activated (' + process.platform + ', ' + process.arch + ').');
