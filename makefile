@@ -16,7 +16,7 @@ vsce-pack:
 	mv *.vsix .output/
 
 vsce-publish:
-	vsce publish patch
+	vsce publish
 
 package: initialize clean vsce-pack finalize
 
