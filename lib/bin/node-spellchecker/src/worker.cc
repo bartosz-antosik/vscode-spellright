@@ -35,11 +35,24 @@ void CheckSpellingWorker::HandleOKCallback() {
     uint32_t start = iter->start, end = iter->end;
 
     Local<Object> misspelled_range = Nan::New<Object>();
+#ifdef V8_USE_MAYBE
+    {
+      Isolate* isolate = misspelled_range->GetIsolate();
+      Local<Context> context = isolate->GetCurrentContext();
+      misspelled_range->Set(context, Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start)).Check();
+      misspelled_range->Set(context, Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end)).Check();
+    }
+    Isolate* isolate = result->GetIsolate();
+    Local<Context> context = isolate->GetCurrentContext();
+    result->Set(context, index, misspelled_range).Check();
+#else
     misspelled_range->Set(Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start));
     misspelled_range->Set(Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end));
-    result->Set(index, misspelled_range);
+    result->Set(index, misspelled_range); 
+#endif
   }
 
   Local<Value> argv[] = { Nan::Null(), result };
-  callback->Call(2, argv);
+  Nan::AsyncResource resource("CheckSpellingWorker::HandleOKCallback");
+  callback->Call(2, argv, &resource);
 }

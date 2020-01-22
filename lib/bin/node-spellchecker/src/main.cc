@@ -134,9 +134,22 @@ class Spellchecker : public Nan::ObjectWrap {
       uint32_t start = iter->start, end = iter->end;
 
       Local<Object> misspelled_range = Nan::New<Object>();
+
+#ifdef V8_USE_MAYBE
+      {
+        Isolate* isolate = misspelled_range->GetIsolate();
+        Local<Context> context = isolate->GetCurrentContext();
+        misspelled_range->Set(context, Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start)).Check();
+        misspelled_range->Set(context, Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end)).Check();
+      }
+      Isolate* isolate = result->GetIsolate();
+      Local<Context> context = isolate->GetCurrentContext();
+      result->Set(context, index, misspelled_range).Check();
+#else
       misspelled_range->Set(Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start));
       misspelled_range->Set(Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end));
       result->Set(index, misspelled_range);
+#endif
     }
   }
 
@@ -220,7 +233,13 @@ class Spellchecker : public Nan::ObjectWrap {
     Local<Array> result = Nan::New<Array>(dictionaries.size());
     for (size_t i = 0; i < dictionaries.size(); ++i) {
       const std::string& dict = dictionaries[i];
+#ifdef V8_USE_MAYBE
+      Isolate* isolate = result->GetIsolate();
+      Local<Context> context = isolate->GetCurrentContext();
+      result->Set(context, i, Nan::New(dict.data(), dict.size()).ToLocalChecked()).Check();
+#else
       result->Set(i, Nan::New(dict.data(), dict.size()).ToLocalChecked());
+#endif
     }
 
     info.GetReturnValue().Set(result);
@@ -246,7 +265,13 @@ class Spellchecker : public Nan::ObjectWrap {
       const std::string& word = corrections[i];
 
       Nan::MaybeLocal<String> val = Nan::New<String>(word.data(), word.size());
+#ifdef V8_USE_MAYBE
+      Isolate* isolate = result->GetIsolate();
+      Local<Context> context = isolate->GetCurrentContext();
+      result->Set(context, i, val.ToLocalChecked()).Check();
+#else
       result->Set(i, val.ToLocalChecked());
+#endif
     }
 
     info.GetReturnValue().Set(result);
@@ -286,7 +311,11 @@ class Spellchecker : public Nan::ObjectWrap {
 
     Isolate* isolate = exports->GetIsolate();
     Local<Context> context = isolate->GetCurrentContext();
+#ifdef V8_USE_MAYBE
+    exports->Set(context, Nan::New("Spellchecker").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked()).Check();
+#else
     exports->Set(Nan::New("Spellchecker").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
+#endif
   }
 };
 
