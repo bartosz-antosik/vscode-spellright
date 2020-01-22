@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.48** released on 25th September 2019
+## **3.0.50** released on 22nd January 2020
 
 - **Change:** Binaries updated for Electron 6.0.9 (insiders build at the moment).
 - **Change:** README.md updated with information on possible solution to Windows issues [#106](https://github.com/bartosz-antosik/vscode-spellright/issues/106) and [#53](https://github.com/bartosz-antosik/vscode-spellright/issues/53).
