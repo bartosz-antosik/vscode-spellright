@@ -411,6 +411,11 @@ var SpellRight = (function () {
                         detail: ''
                     });
                     items.push({
+                        label: 'ChoiceScript',
+                        description: 'spells everything except ChoiceScript commands',
+                        detail: ''
+                    });
+                    items.push({
                         label: 'XML',
                         description: 'spells comments and everything outside markup',
                         detail: ''
@@ -437,6 +442,9 @@ var SpellRight = (function () {
                                     break;
                                 case 'LaTeX':
                                     _parser = 'latex';
+                                    break;
+                                case 'ChoiceScript':
+                                    _parser = 'choicescript';
                                     break;
                                 case 'XML':
                                     _parser = 'xml';
