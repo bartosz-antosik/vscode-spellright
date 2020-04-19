@@ -57,7 +57,7 @@ Spell Right cannot automatically match the dictionary name with system locale se
 On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported, verify `SET` line in \*.aff file) by soft linking the system folder e.g.:
 
 ```bash
-ln -s /usr/share/hunspell ~/.config/Code/Dictionaries
+ln -s /usr/share/hunspell/* ~/.config/Code/Dictionaries
 ```
 
 The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/share/myspell` etc.) It also has been suggested that some flavors of Linux require that the dictionary name [should not contain spaces and/or parentheses](https://github.com/bartosz-antosik/vscode-spellright/issues/264#issuecomment-480332688).
