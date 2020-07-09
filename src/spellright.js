@@ -1829,7 +1829,13 @@ var SpellRight = (function () {
             fs.closeSync(fs.openSync(filename, 'w'));
         }
 
-        fs.appendFileSync(filename, word + os.EOL);
+        vscode
+            .workspace
+            .openTextDocument(filename)
+            .then(doc => {
+                var eol = doc.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n"
+                fs.appendFileSync(filename, word + eol);
+            });
     }
 
     SpellRight.prototype.addWordToWorkspaceDictionary = function (word, save) {
@@ -2028,7 +2034,7 @@ var SpellRight = (function () {
                 var result = [];
                 try {
                     result = require('fs').readFileSync(fileName, 'utf-8')
-                        .split(os.EOL)
+                        .split(/\r?\n/)
                         .filter(Boolean);
 
                     if (SPELLRIGHT_DEBUG_OUTPUT) {
