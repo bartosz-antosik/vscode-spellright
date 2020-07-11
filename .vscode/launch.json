@@ -3,28 +3,29 @@
     "version": "1.0.0",
     "configurations": [
         {
-            "name": "Launch Extension",
+            "name": "Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
-            "stopOnEntry": false
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
+            "stopOnEntry": false,
+            "sourceMaps": true
         },
         {
-            "name": "Attach to Server",
+            "name": "Attach",
             "type": "node",
             "request": "attach",
             "address": "localhost",
             "protocol": "inspector",
             "port": 6009,
             "restart": true,
-            "timeout": 30000
+            "sourceMaps": true
         }
     ],
     "compounds": [
         {
-            "name": "Client + Server",
-            "configurations": ["Launch Extension", "Attach to Server"]
+            "name": "Debug Session",
+            "configurations": ["Extension", "Attach"]
         }
     ]
 }
