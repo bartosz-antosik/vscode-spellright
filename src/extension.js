@@ -5,11 +5,7 @@
 
 'use strict';
 
-global.SPELLRIGHT_DEBUG_OUTPUT = false;
-global.SPELLRIGHT_LINES_BATCH = 10;
-global.SPELLRIGHT_MILLISECS_BATCH = 100;
-
-global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
+const common = require('./common');
 
 const spellright = require('./spellright');
 const vscode = require('vscode');
@@ -19,30 +15,38 @@ const path = require('path');
 var client;
 
 function activate(context) {
-        if (vscode.env.remoteName) {
-            return;
-        }
+
+    // if (vscode.env.remoteName) {
+    //     return;
+    // }
 
     var serverModule = context.asAbsolutePath(path.join('src', 'server.js'));
 
     var debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
 
-    // If the extension is launched in debug mode then the debug server options are used
-    // Otherwise the run options are used
+    // If the extension is launched in debug mode then the debug server
+    // options are used. Otherwise the run options are used.
     var serverOptions = {
-        run: { module: serverModule, transport: vscode_lc.TransportKind.ipc },
+        run: {
+            module: serverModule,
+            transport: vscode_lc.TransportKind.ipc
+        },
         debug: {
             module: serverModule,
             transport: vscode_lc.TransportKind.ipc,
             options: debugOptions
         }
-    };
+    }
 
     var clientOptions = {
-        // Register the server for plain text documents
-        documentSelector: [{ scheme: '*', language: '*' }],
-        synchronize: {}
-    };
+        documentSelector: [
+            { scheme: 'file', language: '*' }
+        ],
+        synchronize: {
+            configurationSection: 'spellright'
+        },
+        diagnosticCollectionName: 'spellright'
+    }
 
     // Create the language client and start the client.
     client = new vscode_lc.LanguageClient('spellright', 'Spell Right', serverOptions, clientOptions);
@@ -62,15 +66,15 @@ function activate(context) {
         // });
     }
 
-    var SpellRight = new spellright.default();
+    // var SpellRight = new spellright.default();
 
-    SpellRight.activate(context);
+    // SpellRight.activate(context);
 }
 exports.activate = activate;
 
 function deactivate() {
 
-    SpellRight.deactivate();
+    // SpellRight.deactivate();
 
     if (!client) {
         return undefined;

@@ -125,35 +125,35 @@ var SpellRight = (function () {
 
         vscode.workspace.onDidChangeConfiguration(this.doRefreshConfiguration, this, subscriptions);
 
-        vscode.workspace.onDidOpenTextDocument(function (document) {
-            this.doInitiateSpellCheck(document);
-        }, this, subscriptions);
+        // vscode.workspace.onDidOpenTextDocument(function (document) {
+        //     this.doInitiateSpellCheck(document);
+        // }, this, subscriptions);
 
-        vscode.workspace.onDidCloseTextDocument(function (document) {
-            _this.diagnosticCollection.delete(document.uri);
-            _this.diagnosticMap[document.uri.toString()] = undefined;
-        }, this, subscriptions);
+        // vscode.workspace.onDidCloseTextDocument(function (document) {
+        //     _this.diagnosticCollection.delete(document.uri);
+        //     _this.diagnosticMap[document.uri.toString()] = undefined;
+        // }, this, subscriptions);
 
-        vscode.workspace.onDidSaveTextDocument(function (document) {
-            if(settings.recheckOnSave) {
-                _this.doInitiateSpellCheck(document, true);
-            }
-        }, this, subscriptions);
+        // vscode.workspace.onDidSaveTextDocument(function (document) {
+        //     if(settings.recheckOnSave) {
+        //         _this.doInitiateSpellCheck(document, true);
+        //     }
+        // }, this, subscriptions);
 
-        vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
+        // vscode.workspace.onDidChangeTextDocument(this.doDiffSpellCheck, this, subscriptions);
 
         // vscode.window.onDidChangeVisibleTextEditors(function () {
         //     _this.doInitiateSpellCheckVisible();
         // }, this, subscriptions);
 
-        vscode.window.onDidChangeActiveTextEditor(function () {
-            _this.doInitiateSpellCheckVisible();
-        }, this, subscriptions);
+        // vscode.window.onDidChangeActiveTextEditor(function () {
+        //     _this.doInitiateSpellCheckVisible();
+        // }, this, subscriptions);
 
         // register code actions provider for all languages
-        vscode.languages.registerCodeActionsProvider({ scheme: '*', language: '*' }, this);
+        // vscode.languages.registerCodeActionsProvider({ scheme: '*', language: '*' }, this);
 
-        this.doInitiateSpellCheckVisible();
+        // this.doInitiateSpellCheckVisible();
     };
 
     SpellRight.prototype.deactivate = function () {
