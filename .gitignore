@@ -21,6 +21,7 @@ Desktop.ini
 $RECYCLE.BIN/
 .testindent.log
 /temp/
+lib/bin/node-spellchecker/bin/
 lib/bin/node-spellchecker/build/
 lib/bin/node-spellchecker/node_modules/
 lib/bin/node-spellchecker/vendor/hunspell_dictionaries/
