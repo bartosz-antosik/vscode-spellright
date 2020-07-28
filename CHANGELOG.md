@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.52** released on 28th July 2020
+
+- **Change:** Binaries updated for Electron 9.x (insiders build at the moment).
+
 ## **3.0.50** released on 22nd January 2020
 
 - **Change:** Binaries updated for Electron 6.0.9 (insiders build at the moment).
