@@ -235,7 +235,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "electron": "^1.4.13",
+    "electron": "^7.2.4",
     "electron-rebuild": "^1.5.7",
     "eslint": "^5.15.3",
     "mocha": "^6.0.2",
