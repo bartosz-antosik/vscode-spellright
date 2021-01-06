@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.54** released on 6th January 2021
+## **3.0.56** released on 6th January 2021
 
 - **Change:** Binaries updated for Electron 11.x.
 
