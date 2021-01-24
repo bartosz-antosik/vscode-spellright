@@ -25,3 +25,7 @@ cp build/Release/spellchecker.node ../spellchecker-deb-11.1.0-ia32.node
 
 node-gyp rebuild --target=11.1.0 --arch=x64 --dist-url=https://atom.io/download/electron
 cp build/Release/spellchecker.node ../spellchecker-deb-11.1.0-x64.node
+
+# Build for headless VS Code Server (uses plain nodejs, not electron).
+node-gyp rebuild --target=12.14.1 --arch=x64 # --dist-url=https://atom.io/download/electron
+cp build/Release/spellchecker.node ../spellchecker-deb-12.14.1-x64.node
