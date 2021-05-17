@@ -23,3 +23,9 @@ copy build\Release\spellchecker.node ..\spellchecker-win32-11.1.0-ia32.node
 
 call node-gyp rebuild --target=11.1.0 --arch=x64 --dist-url=https://atom.io/download/electron --python=c:\bin\python27\python.exe
 copy build\Release\spellchecker.node ..\spellchecker-win32-11.1.0-x64.node
+
+call node-gyp rebuild --target=12.0.4 --arch=ia32 --dist-url=https://atom.io/download/electron --python=c:\bin\python27\python.exe
+copy build\Release\spellchecker.node ..\spellchecker-win32-12.0.4-ia32.node
+
+call node-gyp rebuild --target=12.0.4 --arch=x64 --dist-url=https://atom.io/download/electron --python=c:\bin\python27\python.exe
+copy build\Release\spellchecker.node ..\spellchecker-win32-12.0.4-x64.node
