@@ -49,6 +49,23 @@ var controller = null;
 
 var SpellRight = (function () {
 
+    // CamelCase cases: HTMLScript, camelCase, CamelCase, innerHTML, start0Case, snake_case, Snake_Case, HOMEToRent
+    const regExpSplitCamelCase = XRegExp('(^[\\p{Ll}.@\']+)|[0-9]+|[\\p{Lu}.@\'][\\p{Ll}.@\']+|[\\p{Lu}.@\']+(?=[\\p{Lu}.@\'][\\p{Ll}.@\']|[0-9])|[\\p{Lu}.@\']+');
+    // SnakeCase cases: HTML_Script, snake_Case, __test__
+    const regExpSplitSnakeCase = XRegExp('([^_]+)');
+    const regExpSplitSnakeCaseSep    = /_/;
+    const regExpSplitByOtherWhite = XRegExp('([^\ \.0-9\-\(\)‘’]+)');
+    const regExpSplitByOtherWhiteSep   = /[\ \.0-9\-\(\)‘’]/;
+
+    const regExpPeriod = /[\.]/;
+    const regExpApostrophe = /[\'\u2019]/;
+    const regExpDash = /[-]/;
+    const regExpDigitInside = /\D\d\D/;
+    const regExpEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]/;
+    const regExpParentheticalPlural = /^\w+\((\w{1,2})\)$/;
+    const regExpParenthesis = /[\(\)]/;
+    const regExpPossesiveApostrophe = /^\w+[\'\u2019]s$/;
+
     function SpellRight() {
         this.diagnosticMap = {};
         this.ignoreRegExpsMap = [];
@@ -512,12 +529,8 @@ var SpellRight = (function () {
 
     SpellRight.prototype.splitCamelCase = function (word) {
 
-        // CamelCase cases: HTMLScript, camelCase, CamelCase, innerHTML,
-        // start0Case, snake_case, Snake_Case, HOMEToRent.
-        var rcamel = XRegExp('(^[\\p{Ll}.@\']+)|[0-9]+|[\\p{Lu}.@\'][\\p{Ll}.@\']+|[\\p{Lu}.@\']+(?=[\\p{Lu}.@\'][\\p{Ll}.@\']|[0-9])|[\\p{Lu}.@\']+');
-
         var parts = [];
-        XRegExp.forEach(word, rcamel, (match, i) => {
+        XRegExp.forEach(word, regExpSplitCamelCase, (match, i) => {
             parts.push({
                 word: match[0],
                 offset: match.index
@@ -529,20 +542,17 @@ var SpellRight = (function () {
 
     SpellRight.prototype.splitSnakeCase = function (word) {
 
-        // SnakeCase cases: HTML_Script, snake_Case, __test__.
-        var rsnake = XRegExp('([^_]+)');
-        var rsep = /_/;
         var parts = [];
 
         // We need a phantom split (e.g. for "_sth: case).
-        if (rsep.test(word)) {
+        if (regExpSplitSnakeCaseSep.test(word)) {
             parts.push({
                 word: '',
                 offset: 0
             });
         }
 
-        XRegExp.forEach(word, rsnake, (match, i) => {
+        XRegExp.forEach(word, regExpSplitSnakeCase, (match, i) => {
             parts.push({
                 word: match[0],
                 offset: match.index
@@ -557,19 +567,17 @@ var SpellRight = (function () {
         // Here split some special cases like: period (`terminal.integrated`),
         // digit (`good2know`), dash (`wp-admin`) etc. Other consequence should
         // be that these words are spelled both as split and as the whole.
-        var rother = XRegExp('([^\ \.0-9\-\(\)‘’]+)');
-        var rsep = /[\ \.0-9\-\(\)‘’]/;
         var parts = [];
 
         // We need a phantom split (e.g. for "2sth", "(sth)" case).
-        if (rsep.test(word)) {
+        if (regExpSplitByOtherWhiteSep.test(word)) {
             parts.push({
                 word: '',
                 offset: 0
             });
         }
 
-        XRegExp.forEach(word, rother, (match, i) => {
+        XRegExp.forEach(word, regExpSplitByOtherWhite, (match, i) => {
             parts.push({
                 word: match[0],
                 offset: match.index
@@ -670,16 +678,19 @@ var SpellRight = (function () {
 
     SpellRight.prototype.testWordInDictionaries = function (word) {
         for (var i = 0; i < helpers._UserDictionary.length; i++) {
-            if (helpers._UserDictionary[i].toLowerCase() == word.toLowerCase().trim())
+            if (helpers._UserDictionary[i].toLowerCase() == word.toLowerCase().trim()) {
                 return true;
+            }
         }
         for (var i = 0; i < helpers._WorkspaceDictionary.length; i++) {
-            if (helpers._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase().trim())
+            if (helpers._WorkspaceDictionary[i].toLowerCase() == word.toLowerCase().trim()) {
                 return true;
+            }
         }
         for (var i = 0; i < helpers._DocumentSymbols.length; i++) {
-            if (helpers._DocumentSymbols[i] == word.trim())
+            if (helpers._DocumentSymbols[i] == word.trim()) {
                 return true;
+            }
         }
         return false;
     };
@@ -705,6 +716,7 @@ var SpellRight = (function () {
         if (SPELLRIGHT_DEBUG_OUTPUT && false) {
             console.log('[spellright] Spell [' + context + ']: \"' + token.word + '\"');
         }
+        var time0 = Date.now();
 
         // Check if current context not disabled by syntatic control
         if (settings.spellContextByClass[document.languageId]) {
@@ -746,20 +758,22 @@ var SpellRight = (function () {
             cword = cword.slice(1);
             _colnumber++;
         }
-        var _containsPeriod = /[\.]/.test(cword);
-        var _containsApostrophe = /[\'\u2019]/.test(cword);
-        var _containsDash = /[-]/.test(cword);
-        var _containsDigitInside = /\D\d\D/.test(cword);
-        var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]/.test(cword);
-        var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
-        var _containsParenthesis = /[\(\)]/.test(cword);
-        var _possesiveApostrophe = /^\w+[\'\u2019]s$/.test(cword);
+        var _containsPeriod = regExpPeriod.test(cword);
+        var _containsApostrophe = regExpApostrophe.test(cword);
+        var _containsDash = regExpDash.test(cword);
+        var _containsDigitInside = regExpDigitInside.test(cword);
+        var _containsEmoji = regExpEmoji.test(cword);
+        var _parentheticalPlural = regExpParentheticalPlural.test(cword);
+        var _containsParenthesis = regExpParenthesis.test(cword);
+        var _possesiveApostrophe = regExpPossesiveApostrophe.test(cword);
 
         // Detect placeholder replacement ("_") in used in markdown to
         // avoid false detection of indented code blocks in situation when
         // something is removed by regular expression or other rules.
         if (/_+/.test(cword)) {
-            if (/_+/.exec(cword)[0].length == cword.length) return;
+            if (/_+/.exec(cword)[0].length == cword.length) {
+                return;
+            }
         }
 
         // Emojis crash Hunspell both on Linux and Windows
@@ -843,84 +857,21 @@ var SpellRight = (function () {
             if (_endsWithPeriod) {
                 _split[_split.length - 1].word = _split[_split.length - 1].word + '.';
             }
-            var _this = this;
-            _split.forEach (function(e) {
-                if (e.word.length >= 2) {
-
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
-                }
-            });
+            this.checkAndMarkSplitCallback(document, context, diagnostics, token, cword, _split, _linenumber, _colnumber);
             return;
         }
 
         // Deal with CamelCase
         _split = this.splitCamelCase(cword);
         if (_split.length > 1) {
-            var _this = this;
-            _split.forEach(function (e) {
-                if (e.word.length >= 2) {
-
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
-                }
-            });
+            this.checkAndMarkSplitCallback(document, context, diagnostics, token, cword, _split, _linenumber, _colnumber);
             return;
         }
 
         // Deal with snake_case
         _split = this.splitSnakeCase(cword);
         if (_split.length > 1) {
-            var _this = this;
-            _split.forEach(function (e) {
-                if (e.word.length >= 2) {
-
-                    var _token = { word: e.word, parent: cword, parser: token.parser };
-                    var _source = '';
-                    var _offset = e.offset;
-
-                    if (token.map) {
-                        _offset = 0;
-                        for (var _i = 0; _i < e.offset; _i++) {
-                            _offset += token.map[_i].length;
-                        }
-                        for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
-                            _source += token.map[_i];
-                        }
-                        _token.source = _source;
-                    }
-
-                    _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
-                }
-            });
+            this.checkAndMarkSplitCallback(document, context, diagnostics, token, cword, _split, _linenumber, _colnumber);
             return;
         }
 
@@ -990,7 +941,12 @@ var SpellRight = (function () {
 
                 this.setDictionary(_effectiveLanguage);
 
+                var time1 = Date.now();
                 var suggestions = bindings.getCorrectionsForMisspelling(cword);
+                if (SPELLRIGHT_DEBUG_PERF) {
+                    console.log('[spellright] Spell [' + context + ']: \"' + token.word + '\" / getCorrectionsForMisspelling(): before -> after  = '
+                        + (time1 - time0) / 1000 + "s -> " + (Date.now() - time0) / 1000 + "s");
+                }
 
                 hintCount += suggestions.length;
 
@@ -1013,25 +969,11 @@ var SpellRight = (function () {
             } else {
                 message += ': suggestions' + hints;
             }
-    }
-
-        var diagnosticsType = vscode.DiagnosticSeverity.Error;
-
-        if (settings.notificationClass === 'warning') {
-            diagnosticsType = vscode.DiagnosticSeverity.Warning;
-        } else if (settings.notificationClass === 'information') {
-            diagnosticsType = vscode.DiagnosticSeverity.Information;
-        } else if (settings.notificationClass === 'hint') {
-            diagnosticsType = vscode.DiagnosticSeverity.Hint;
         }
 
-        if (settings.notificationClassByParser[token.parser] === 'warning') {
-            diagnosticsType = vscode.DiagnosticSeverity.Warning;
-        } else if (settings.notificationClassByParser[token.parser] === 'information') {
-            diagnosticsType = vscode.DiagnosticSeverity.Information;
-        } else if (settings.notificationClassByParser[token.parser] === 'hint') {
-            diagnosticsType = vscode.DiagnosticSeverity.Hint;
-        }
+
+        var diagnosticsType = this.getDiagnosticsType(vscode.DiagnosticSeverity.Error, settings.notificationClass);
+        diagnosticsType = this.getDiagnosticsType(diagnosticsType, settings.notificationClassByParser[token.parser]);
 
         var diag = new vscode.Diagnostic(range, message, diagnosticsType);
         diag.source = 'spelling';
@@ -1070,6 +1012,45 @@ var SpellRight = (function () {
                 break;
             }
         }
+        if (SPELLRIGHT_DEBUG_PERF) {
+            console.log('[spellright] Spell [' + context + ']: \"' + token.word + '\" = ' + (Date.now() - time0) / 1000 + "s");
+        }
+    }
+
+    SpellRight.prototype.checkAndMarkSplitCallback = function(document, context, diagnostics, token, cword, _split, _linenumber, _colnumber) {
+        var _this = this;
+        _split.forEach (function(e) {
+            if (e.word.length >= 2) {
+
+                var _token = { word: e.word, parent: cword, parser: token.parser };
+                var _source = '';
+                var _offset = e.offset;
+
+                if (token.map) {
+                    _offset = 0;
+                    for (var _i = 0; _i < e.offset; _i++) {
+                        _offset += token.map[_i].length;
+                    }
+                    for (var _i = e.offset; _i < e.offset + e.word.length; _i++) {
+                        _source += token.map[_i];
+                    }
+                    _token.source = _source;
+                }
+
+                _this.checkAndMarkCallback(document, context, diagnostics, _token, _linenumber, _colnumber + _offset);
+            }
+        });
+    }
+
+    SpellRight.prototype.getDiagnosticsType = function(diagnosticsType, notificationClass) {
+        if (notificationClass === 'warning') {
+            diagnosticsType = vscode.DiagnosticSeverity.Warning;
+        } else if (notificationClass === 'information') {
+            diagnosticsType = vscode.DiagnosticSeverity.Information;
+        } else if (notificationClass === 'hint') {
+            diagnosticsType = vscode.DiagnosticSeverity.Hint;
+        }
+        return diagnosticsType;
     }
 
     SpellRight.prototype.commandCallback = function (command, parameters) {
@@ -1093,34 +1074,50 @@ var SpellRight = (function () {
         }
     }
 
-    // Remove diagnostics in lines that were touched by change and in case
-    // change brings any shift up/down - shift diagnostics.
+    /**
+     * Remove diagnostics intersecting with change
+     * and in case change brings any shift up/down - shift diagnostics.
+     *
+     * @param {*} diagnostics
+     * @param {*} range
+     * @param {*} shift
+     * @returns number of diagnostics removed
+     */
     SpellRight.prototype.adjustDiagnostics = function (diagnostics, range, shift) {
-
+        var result = 0;
         for (var i = diagnostics.length - 1; i >= 0; i--) {
             var _drange = diagnostics[i].range;
-            if (_drange._start._line >= range._start._line &&
-                _drange._end._line <= range._end._line) {
-                // Remove diagnostics for changed lines range
-                diagnostics.splice(i, 1);
-            } else {
+            var intersect = diagnostics[i].range.intersection(range);
+            if (SPELLRIGHT_DEBUG_OUTPUT && false) {
+                console.log("[spellright] adjustDiagnostics: diagnostics[" + i + "]: \"" + diagnostics[i].token.word + "\" ["
+                       + _drange.start.line + ":" + _drange.start.character + "," + _drange.end.line + ":" + _drange.end.character + ") intersect="
+                       + (intersect && !intersect.isEmpty));
+            }
+            if (intersect) { // also if intersect.isEmpty = remove diagnostics on add to end of word
+                // Remove diagnostics for changed range
+                if (SPELLRIGHT_DEBUG_OUTPUT) {
+                    console.log("[spellright] adjustDiagnostics: remove: diagnostics[" + i + "]: \"" + diagnostics[i].token.word + "\" ["
+                           + _drange.start.line + ":" + _drange.start.character + "," + _drange.end.line + ":" + _drange.end.character + ")");
+                }
+                diagnostics.splice(i, 1); // moved to checkAndMarkCallback(): remove diagnostics only for tokens actually reprocessed
+                result++;
+            } else if (shift != 0) {
                 // Adjust diagnostics behind changed lines range BEFORE
-                if (shift != 0) {
-                    if (_drange._end._line > range._end._line) {
-                        diagnostics[i].range._start._line += shift;
-                        diagnostics[i].range._end._line += shift;
-                    }
+                if (_drange._end._line > range._end._line) {
+                    diagnostics[i].range._start._line += shift;
+                    diagnostics[i].range._end._line += shift;
                 }
             }
         }
+        return result;
     }
 
     SpellRight.prototype.removeFromDiagnostics = function (diagnostics, word) {
         var _removed = 0;
-        for (var j = diagnostics.length; j > 0 ; j--) {
-            var _token = diagnostics[j - 1]['token'];
+        for (var j = diagnostics.length - 1; j >= 0 ; j--) {
+            var _token = diagnostics[j]['token'];
             if (_token.word === word || _token.parent === word) {
-                diagnostics.splice(j - 1, 1);
+                diagnostics.splice(j, 1);
                 _removed++;
             }
         }
@@ -1161,6 +1158,7 @@ var SpellRight = (function () {
             return
         };
 
+        var time0 = Date.now();
         this.getDocumentSymbols(_document, _parser);
 
         var _return = { syntax: 0, linecount: 0 };
@@ -1286,6 +1284,9 @@ var SpellRight = (function () {
 
             _parser.spellCheckRange(_document, diagnostics, { ignoreRegExpsMap: this.ignoreRegExpsMap, latexSpellParameters: this.latexSpellParametersMap }, (_document, context, diagnostics, token, linenumber, colnumber) => this.checkAndMarkCallback(_document, context, diagnostics, token, linenumber, colnumber), (command, parameters) => this.commandCallback(command, parameters), range.start.line, range.start.character, range.end.line + shift, range.end.character);
         }
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('[spellright] doDiffSpellCheck / Main incremental spell check loop = ' + (Date.now() - time0) / 1000 + "s");
+        }
 
         // Spell check trail left after changes/jumps
         if (this.lastChanges !== null) {
@@ -1328,6 +1329,10 @@ var SpellRight = (function () {
             helpers._commands.syntax = _return.syntax;
             helpers._commands.signature = _signature;
             this.doInitiateSpellCheck(_document);
+        }
+
+        if (SPELLRIGHT_DEBUG_OUTPUT) {
+            console.log('[spellright] doDiffSpellCheck = ' + (Date.now() - time0) / 1000 + "s");
         }
     };
 
@@ -1631,9 +1636,9 @@ var SpellRight = (function () {
 
             var _effectiveLanguages = diagnostic['language'];
 
-            for (var _li = 0; _li < _effectiveLanguages.length; _li++) {
+            for (var _lj = 0; _lj < _effectiveLanguages.length; _lj++) {
 
-                var _effectiveLanguage = _effectiveLanguages[_li];
+                var _effectiveLanguage = _effectiveLanguages[_lj];
 
                 // Get suggestions
                 this.setDictionary(_effectiveLanguage);
