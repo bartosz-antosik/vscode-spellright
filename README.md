@@ -354,6 +354,10 @@ assigns parser of generic type `code` (Source Code Parser) to `perl` (Perl) docu
 
 If set to true Spell Right will use document symbols (variable, function names etc.) when spelling source code documents. Significantly reduces number of misspelled words in doc-strings and in comments whenever a symbol used in code is used and the symbol does not disassemble to properly spelled parts using CamelCase, snake_case etc. separation.
 
+`"spellright.sortWorkspaceDictionary": false`
+
+If set to true Spell Right will keep the words in the workspace dictionary in alphabetical order. This can reduce the likelihood of merge conflicts when multiple people are adding words to the workspace dictionary.
+
 ## In-Document Commands
 
 Beside global settings following commands can be embedded inside spelled parts of the document (e.g.: comments, strings etc.):

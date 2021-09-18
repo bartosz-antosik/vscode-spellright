@@ -193,6 +193,12 @@
           "default": true,
           "scope": "resource",
           "description": "Enable/disable using document symbols when spelling using code parser (source code documents)."
+        },
+        "spellright.sortWorkspaceDictionary": {
+          "type": "boolean",
+          "default": false,
+          "scope": "window",
+          "description": "Enable/disable sorting of words in the workspace dictionary file."
         }
       }
     },
