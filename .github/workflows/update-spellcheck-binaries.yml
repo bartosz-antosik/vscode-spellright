@@ -10,8 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - run: npm install
-      - run: build-windows.cmd
+      - run: ./build-windows.cmd
+        shell: cmd
         working-directory: lib/bin/node-spellchecker
       - uses: matheusalbino/git-commit@v1.1.0
         with:
@@ -26,6 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - run: npm install
       - run: ./build-macos-intel.sh
         working-directory: lib/bin/node-spellchecker
@@ -39,6 +44,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - run: npm install
       - run: ./build-linux-debian.sh
         working-directory: lib/bin/node-spellchecker
