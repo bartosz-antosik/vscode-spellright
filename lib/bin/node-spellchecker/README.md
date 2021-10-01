@@ -1,4 +1,4 @@
-> This is a fork of the original but only little maintained codebase at https://github.com/atom/node-spellchecker
+> **This is a fork of the original but only little maintained codebase at https://github.com/atom/node-spellchecker**
 
 # SpellChecker Node Module [![Build Status](https://travis-ci.org/atom/node-spellchecker.svg?branch=master)](https://travis-ci.org/atom/node-spellchecker) [![Build status](https://ci.appveyor.com/api/projects/status/up294b734wagwlaw/branch/master?svg=true)](https://ci.appveyor.com/project/kevinsawicki/node-spellchecker/branch/master)
 
