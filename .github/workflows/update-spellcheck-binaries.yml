@@ -42,6 +42,7 @@ jobs:
     name: Linux (Ubuntu 20) Binaries
     runs-on: ubuntu-20.04 
     steps:
+      - run: sudo apt-get install gcc-multilib g++-multilib # required for cross-compilation of x64 and ia32
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
