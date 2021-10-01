@@ -228,13 +228,12 @@
     ],
     "keybindings": []
   },
-  "scripts": {
-  },
+  "scripts": {},
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "electron": "^1.4.13",
-    "electron-rebuild": "^1.5.7",
+    "electron": "^11.0.0",
+    "electron-rebuild": "^3.2.3",
     "eslint": "^5.15.3",
     "mocha": "^6.0.2",
     "@vscode/test-electron": "^1.6.2",
