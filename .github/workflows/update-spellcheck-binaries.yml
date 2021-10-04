@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm install
+      - run: npm ci
+      - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
         shell: cmd
@@ -22,7 +22,7 @@ jobs:
         with:
           user-name: GitHub Actions
           user-email: actions@github.com
-          message: Automatic Rebuild of Windows Binaries
+          message: Automatic Build of Windows Binaries
           github-token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
   mac-intel-binaries:
@@ -33,15 +33,15 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm install
+      - run: npm ci
+      - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
         working-directory: lib/bin/node-spellchecker
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: "*.node"
-          commit_message: Automatic Rebuild of Mac Binaries
+          commit_message: Automatic Build of Mac Binaries
   linux-binaries:
     name: Linux (Ubuntu 20) Binaries
     runs-on: ubuntu-20.04 
@@ -51,13 +51,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm install
+      - run: npm ci
+      - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux-debian.sh
         working-directory: lib/bin/node-spellchecker
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: "*.node"
-          commit_message: Automatic Rebuild of Linux Binaries
+          commit_message: Automatic Build of Linux Binaries
     # macos-apple-silicon-binaries:  # This is not possible yet in GitHub actions because there is no arm based runners available
