@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
+      - run: npm install
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
         shell: cmd
@@ -33,6 +34,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
+      - run: npm install
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
         working-directory: lib/bin/node-spellchecker
@@ -49,6 +51,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+      - run: npm install
       - run: npm install
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux-debian.sh
