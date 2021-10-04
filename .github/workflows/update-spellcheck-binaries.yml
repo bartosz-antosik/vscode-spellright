@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm ci
+      # - run: npm ci
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux-debian.sh
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm ci
+      # - run: npm ci
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -42,8 +42,8 @@ jobs:
           user-name: GitHub Actions
           user-email: actions@github.com
           message: Automatic Build of Windows Binaries
+          branch: ${GITHUB_REF##*/} # works only on branches that have no slash
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.head_ref }}
   mac-intel-binaries:
     name: Mac OS 11 Intel Binaries
     needs: windows-binaries # git push fails if the jobs run in parallel
@@ -53,7 +53,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm ci
+      # - run: npm ci
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh

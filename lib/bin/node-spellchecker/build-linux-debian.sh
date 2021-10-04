@@ -21,9 +21,6 @@
 npx node-gyp rebuild --target=14.16.0 --arch=x64
 cp build/Release/spellchecker.node ../spellchecker-deb-14.16.0-x64.node
 
-npx node-gyp rebuild --target=14.16.0 --arch=x64
-cp build/Release/spellchecker.node ../spellchecker-deb-13.1.7-arm64.node
-
 npx node-gyp rebuild --target=12.18.3 --arch=x64
 cp build/Release/spellchecker.node ../spellchecker-deb-12.18.3-arm64.node
 
