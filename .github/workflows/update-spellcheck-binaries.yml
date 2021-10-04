@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
+        working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
         shell: cmd
         working-directory: lib/bin/node-spellchecker
@@ -32,6 +33,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
+        working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
         working-directory: lib/bin/node-spellchecker
       - uses: stefanzweifel/git-auto-commit-action@v4
@@ -48,10 +50,11 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
+        working-directory: lib/bin/node-spellchecker
       - run: ./build-linux-debian.sh
         working-directory: lib/bin/node-spellchecker
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: "*.node"
           commit_message: Automatic Rebuild of Linux Binaries
-    # macos-apple-silicon-binaries:  # This is not possible yet in GitHub actions because there is no matching runner. 
+    # macos-apple-silicon-binaries:  # This is not possible yet in GitHub actions because there is no arm based runners available
