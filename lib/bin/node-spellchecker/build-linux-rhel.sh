@@ -2,6 +2,8 @@
 
 # requires node-gyp (installed as a package.json dependency) plus CLI developer tools
 
+# TODO are redhat specific binaries really needed? 
+
 npx node-gyp rebuild --target=6.0.9 --arch=x64 --dist-url=https://atom.io/download/electron
 cp build/Release/spellchecker.node ../spellchecker-rpm-6.0.9-x64.node
 
