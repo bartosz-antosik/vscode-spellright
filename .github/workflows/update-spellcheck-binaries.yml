@@ -4,25 +4,7 @@ on:
     paths:
       - 'lib/bin/node-spellchecker/**'
 jobs:
-  linux-binaries:
-    name: Linux (Ubuntu 20) Binaries
-    runs-on: ubuntu-20.04 
-    steps:
-      - run: sudo apt-get install gcc-multilib g++-multilib # required for cross-compilation of x64 and ia32
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - run: npm ci
-        working-directory: lib/bin/node-spellchecker
-      - run: ./build-linux-debian.sh
-        working-directory: lib/bin/node-spellchecker
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          file_pattern: "*.node"
-          commit_message: Automatic Build of Linux Binaries
   windows-binaries:
-    needs: linux-binaries # git push fails if the jobs run in parallel
     name: Windows Binaries
     runs-on: windows-2019
     steps:
@@ -46,9 +28,28 @@ jobs:
           message: Automatic Build of Windows Binaries
           branch: ${{ steps.extract_branch.outputs.branch }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+  linux-binaries:
+    name: Linux (Ubuntu 20) Binaries
+    needs: windows-binaries # git is safer if the jobs are sequential
+    runs-on: ubuntu-20.04 
+    steps:
+      - run: sudo apt-get install gcc-multilib g++-multilib # required for cross-compilation of x64 and ia32
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm ci
+        working-directory: lib/bin/node-spellchecker
+      - run: ./build-linux-debian.sh
+        working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Linux Binaries
   mac-intel-binaries:
     name: Mac OS 11 Intel Binaries
-    needs: windows-binaries # git push fails if the jobs run in parallel
+    needs: linux-binaries # git is safer if the jobs are sequential
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
@@ -59,6 +60,7 @@ jobs:
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
         working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: "*.node"
