@@ -2,6 +2,9 @@
 
 # requires node-gyp (installed as a package.json dependency) plus CLI developer tools
 
+npx node-gyp rebuild --target=16.5.0 --arch=x64
+cp build/Release/spellchecker.node ../spellchecker-darwin-16.5.0-x64.node
+
 npx node-gyp rebuild --target=14.16.0 --arch=x64
 cp build/Release/spellchecker.node ../spellchecker-darwin-13.1.7-x64.node
 
