@@ -21,6 +21,8 @@ jobs:
       - run: ./build-windows.cmd
         shell: cmd
         working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+        shell: bash
       - uses: matheusalbino/git-commit@v1.1.0
         with:
           user-name: GitHub Actions
