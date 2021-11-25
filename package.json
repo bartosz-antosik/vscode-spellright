@@ -29,7 +29,7 @@
         "spellright.customDictionariesPath": {
           "type": "string",
           "default": "",
-          "scope": "machine",
+          "scope": "machine-overridable",
           "description": "Custom path to the folder containing dictionaries."
         },
         "spellright.language": {
