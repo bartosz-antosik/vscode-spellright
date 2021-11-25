@@ -1926,40 +1926,43 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.getDictionariesPath = function () {
-
-        var codeFolder = vscode.env.appName.replace("Visual Studio ", "");
-
-        if (process.platform == 'win32') {
-            // Regular version, workspace opened
-            if (process.env.VSCODE_PORTABLE) {
-                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
-            } else {
-                var sourcePath = path.join(process.env.APPDATA, codeFolder);
+        if(settings.customDictionariesPath) {
+            var dictionaryPath = path.normalize(settings.customDictionariesPath);
+        } else {
+            var codeFolder = vscode.env.appName.replace("Visual Studio ", "");
+    
+            if (process.platform == 'win32') {
+                // Regular version, workspace opened
+                if (process.env.VSCODE_PORTABLE) {
+                    var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+                } else {
+                    var sourcePath = path.join(process.env.APPDATA, codeFolder);
+                }
+            } else if (process.platform == 'darwin') {
+                if (process.env.VSCODE_PORTABLE) {
+                    var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+                } else {
+                    var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
+                }
+            } else if (process.platform == 'linux') {
+                if (process.env.VSCODE_PORTABLE) {
+                    var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
+                } else {
+                    var sourcePath = path.join(process.env.HOME, '.config', codeFolder);
+                }
             }
-        } else if (process.platform == 'darwin') {
-            if (process.env.VSCODE_PORTABLE) {
-                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
-            } else {
-                var sourcePath = path.join(process.env.HOME, 'Library', 'Application Support', codeFolder);
-            }
-        } else if (process.platform == 'linux') {
-            if (process.env.VSCODE_PORTABLE) {
-                var sourcePath = path.join(process.env.VSCODE_PORTABLE, 'user-data');
-            } else {
-                var sourcePath = path.join(process.env.HOME, '.config', codeFolder);
-            }
+            var userRoot = path.normalize(sourcePath);
+    
+            var dictionaryPath;
+            if (process.platform == 'win32')
+                dictionaryPath = path.join(userRoot, 'Dictionaries');
+            else if (process.platform == 'darwin')
+                dictionaryPath = path.join(userRoot, 'Dictionaries');
+            else if (process.platform == 'linux')
+                dictionaryPath = path.join(userRoot, 'Dictionaries');
+            else
+                dictionaryPath = '';
         }
-        var userRoot = path.normalize(sourcePath);
-
-        var dictionaryPath;
-        if (process.platform == 'win32')
-            dictionaryPath = path.join(userRoot, 'Dictionaries');
-        else if (process.platform == 'darwin')
-            dictionaryPath = path.join(userRoot, 'Dictionaries');
-        else if (process.platform == 'linux')
-            dictionaryPath = path.join(userRoot, 'Dictionaries');
-        else
-            dictionaryPath = '';
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('[spellright] Dictionaries path: \"' + dictionaryPath + '\"');
