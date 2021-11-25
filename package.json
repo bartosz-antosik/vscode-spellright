@@ -27,11 +27,11 @@
       "title": "Spell Right configuration",
       "properties": {
         "spellright.customDictionariesPath": {
-					"type": "string",
-					"default": "",
-					"scope": "machine",
-					"description": "Custom path to the folder containing dictionaries."
-				},
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Custom path to the folder containing dictionaries."
+        },
         "spellright.language": {
           "type": "array",
           "default": [],
