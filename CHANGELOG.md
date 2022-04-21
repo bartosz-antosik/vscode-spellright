@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.64** released on 22nd April 2022
+
+- **Change:** Binary dependencies for Apple M1 chip added.
+
 ## **3.0.62** released on 6th April 2022
 
 - **Change:** Binaries updated for Electron 17.x.
