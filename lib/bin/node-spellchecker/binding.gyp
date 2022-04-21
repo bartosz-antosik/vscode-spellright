@@ -1,5 +1,6 @@
 {
   'variables': {
+    'openssl_fips' : '0',
     'conditions': [
       ['OS=="mac"', {
         'spellchecker_use_hunspell%': 'true',
