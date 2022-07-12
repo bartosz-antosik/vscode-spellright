@@ -23,13 +23,10 @@ jobs:
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
         shell: bash
-      - uses: sharpninja/git-commit@v1.1.0
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          user-name: GitHub Actions
-          user-email: actions@github.com
-          message: Automatic Build of Windows Binaries
-          branch: ${{ steps.extract_branch.outputs.branch }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Windows Binaries
   linux-binaries:
     name: Linux Binaries
     # git is safer if the jobs are sequential
