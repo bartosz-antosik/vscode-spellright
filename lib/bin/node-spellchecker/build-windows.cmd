@@ -1,4 +1,4 @@
-rem Requires node-gyp (npm install -g node-gyp) plus CLI developper tools. Before building run 'npm install'.
+rem Requires node-gyp (npm install -g node-gyp) plus CLI developper tools.
 
 call npx node-gyp rebuild --target=18.3.5 --arch=x64 --dist-url=https://electronjs.org/headers --python=c:\bin\python27\python.exe
 copy build\Release\spellchecker.node ..\spellchecker-win32-18.3.5-x64.node
