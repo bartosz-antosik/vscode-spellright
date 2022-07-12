@@ -71,4 +71,5 @@ jobs:
           file_pattern: "*.node"
           commit_message: Automatic Build of Mac Binaries
 
-    # macos-apple-silicon-binaries:  # This is not possible yet in GitHub actions because there is no arm based runners available
+  # macos-apple-silicon-binaries:  # This is not possible yet in GitHub actions because there is no arm based runners available
+    # name: Mac OS (ARM) Binaries
