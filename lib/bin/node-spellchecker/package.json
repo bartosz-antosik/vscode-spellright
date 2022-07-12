@@ -16,7 +16,8 @@
     "test": "jasmine-focused --captureExceptions --coffee spec/"
   },
   "devDependencies": {
-    "jasmine-focused": "^1.0.7"
+    "jasmine-focused": "^1.0.7",
+    "node-gyp": "^8.2.0"
   },
   "dependencies": {
     "any-promise": "^1.3.0",
