@@ -6,7 +6,10 @@
 .research/**
 .test/**
 .vscode/**
+.github/**
+.mypy_cache/**
 .gitignore
+.spellignore
 .eslintrc.json
 lib/bin/node-spellchecker/**
 jsconfig.json
@@ -14,3 +17,4 @@ GPATH
 GRTAGS
 GTAGS
 makefile
+TODO
