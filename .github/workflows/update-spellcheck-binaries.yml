@@ -29,7 +29,7 @@ jobs:
           commit_message: Automatic Build of Windows Binaries
 
   linux-debian-binaries:
-    name: Linux (Debian) Binaries
+    name: Linux Binaries
     # git is safer if the jobs are sequential
     needs: windows-binaries
     runs-on: ubuntu-18.04
@@ -42,7 +42,7 @@ jobs:
           node-version: '17'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-linux-debian.sh
+      - run: ./build-linux.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
       - uses: stefanzweifel/git-auto-commit-action@v4
