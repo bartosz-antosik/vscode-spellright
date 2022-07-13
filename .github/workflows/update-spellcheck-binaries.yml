@@ -27,6 +27,7 @@ jobs:
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Windows Binaries
+
   linux-debian-binaries:
     name: Linux (Debian) Binaries
     # git is safer if the jobs are sequential
@@ -48,6 +49,7 @@ jobs:
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Linux Binaries
+
   linux-rhel-binaries:
     name: Linux (RHEL) Binaries
     # git is safer if the jobs are sequential
@@ -69,6 +71,7 @@ jobs:
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Linux Binaries
+
   mac-intel-binaries:
     name: Mac OS (Intel) Binaries
     # git is safer if the jobs are sequential
