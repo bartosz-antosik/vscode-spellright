@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.72** released on 13th July 2022
+
+- **Change:** Binary dependencies built system massively simplified with GitHub Actions, thanks to [Nikolaus Kühn](https://github.com/nkuehn) (should result in much quicker updates of binaries once Electron version change.) Also Apple Mx binaries built smoothly thanks to [@BreakBB](https://github.com/BreakBB).
+
 ## **3.0.64** released on 22nd April 2022
 
 - **Change:** Binary dependencies for Apple M1 chip added.
