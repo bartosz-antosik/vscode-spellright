@@ -1,0 +1,77 @@
+name: Update node-spellchecker binaries
+on:
+  push:
+    paths:
+      - 'lib/bin/node-spellchecker/**'
+jobs:
+  windows-binaries:
+    name: Windows Binaries
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: npm ci
+        working-directory: lib/bin/node-spellchecker
+      - run: ./build-windows.cmd
+        shell: cmd
+        working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+        shell: bash
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Windows Binaries
+
+  linux-binaries:
+    name: Linux Binaries
+    # git is safer if the jobs are sequential
+    needs: windows-binaries
+    runs-on: ubuntu-18.04
+    steps:
+        # required for cross-compilation of x64 and ia32
+      - run: sudo apt-get install gcc-multilib g++-multilib
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: npm ci
+        working-directory: lib/bin/node-spellchecker
+      - run: ./build-linux.sh
+        working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Linux Binaries
+
+  # linux-rhel-binaries: # Not supported for now
+  #   name: Linux (RHEL) Binaries
+
+  mac-intel-binaries:
+    name: Mac OS (Intel) Binaries
+    # git is safer if the jobs are sequential
+    needs: linux-binaries
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: npm ci
+        working-directory: lib/bin/node-spellchecker
+      - run: ./build-macos-intel.sh
+        working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Mac Binaries
+
+  # macos-apple-binaries: # Not supported for now
+  #   name: Mac OS (Apple) Binaries
