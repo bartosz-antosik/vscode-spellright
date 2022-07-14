@@ -1386,9 +1386,10 @@ var SpellRight = (function () {
             return;
         }
 
-        // Is this a private URI? (VSCode started having 'private:' versions
-        // of non-plaintext documents with languageId = 'plaintext')
-        if (_document.uri.scheme != 'file' && _document.uri.scheme != 'untitled') {
+        // * Is this a private URI? (VSCode started having 'private:' versions of non-plaintext documents with languageId = 'plaintext')
+        // * The text document of the SCM input field is being exposed with the "vscode" scheme and "scminput" languageId. In order to be
+        //   able to provide spell check for the SCM input field, we do need to process this text document.
+        if (_document.uri.scheme != 'file' && _document.uri.scheme != 'untitled' && _document.languageId != 'scminput') {
             return;
         }
 
