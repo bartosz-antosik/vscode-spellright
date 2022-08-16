@@ -41,12 +41,12 @@ On Microsoft Windows from version 8 on Spell Right uses system spelling API. Fol
 
 On macOS Spell Right uses system spelling API.
 
-### **Linux and Windows 7**
+### **Linux/WSL and Windows 7**
 
 On Linux and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded (remember to download RAW files) e.g. from [here](https://github.com/titoBouzout/Dictionaries) (multiple languages), [here](https://github.com/gusbemacbe/LanguagePortuguese) (Portuguese) or [here](https://github.com/superbob/SublimeTextLanguageFrench) (French) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
 
 * **Windows:** `%APPDATA%\Code\Dictionaries\`
-* **Linux:** `$HOME/.config/Code/Dictionaries/`
+* **Linux/WSL:** `$HOME/.config/Code/Dictionaries/`
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
