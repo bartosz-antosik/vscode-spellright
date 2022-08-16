@@ -14,8 +14,8 @@ cp build/Release/spellchecker.node ../spellchecker-linux-18.3.5-x64.node
 npx node-gyp rebuild --target=18.3.5 --arch=ia32 --dist-url=https://electronjs.org/headers
 cp build/Release/spellchecker.node ../spellchecker-linux-18.3.5-ia32.node
 
-npx node-gyp rebuild --arch=x64
-cp build/Release/spellchecker.node ../spellchecker-linux-remote-x64.node
+npx node-gyp rebuild --target=16.13.2 --arch=x64
+cp build/Release/spellchecker.node ../spellchecker-linux-node-16.13.2-x64.node
 
-npx node-gyp rebuild --arch=ia32
-cp build/Release/spellchecker.node ../spellchecker-linux-remote-ia32.node
+npx node-gyp rebuild --target=16.13.2 --arch=ia32
+cp build/Release/spellchecker.node ../spellchecker-linux-node-16.13.2-ia32.node
