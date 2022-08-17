@@ -177,6 +177,7 @@
             "item",
             "footnote(text)?",
             "caption(of)?",
+            "subcaption(of)?",
             "multicolumn",
             "href",
             "hyperref",
