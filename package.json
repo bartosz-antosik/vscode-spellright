@@ -236,7 +236,7 @@
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
     "electron": "^15.5.5",
-    "electron-rebuild": "^1.5.7",
+    "electron-rebuild": "^1.11.0",
     "eslint": "^5.15.3",
     "mocha": "^6.0.2",
     "vscode": "^1.1.35"
@@ -250,7 +250,7 @@
     "jsonminify": "^0.4.1",
     "mkdirp": "^0.5.1",
     "nan": "^2.12.1",
-    "node-gyp": "^3.8.0",
+    "node-gyp": "^9.1.0",
     "opn": "^5.1.0",
     "os-locale": "^2.0.0",
     "path": "^0.12.7",
