@@ -1,8 +1,8 @@
 # Change Log
 
-## **3.0.80** released on 17th August 2022
+## **3.0.82** released on 17th August 2022
 
-- **New:** SpellRight should now work in remote hosts (e.g. WSL on Windows, Linux via SSH etc.)
+- **New:** SpellRight should now work in remote hosts (e.g. WSL on Windows, Linux via SSH etc.), thanks to [@bwegge](@https://github.com/bwegge).
 - **Change:** Binaries updated for Electron 18.x and 19.x.
 
 ## **3.0.72** released on 13th July 2022
