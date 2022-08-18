@@ -1390,6 +1390,7 @@ var SpellRight = (function () {
         // of non-plaintext documents with languageId = 'plaintext')
         if (_document.uri.scheme != 'file' &&
             _document.uri.scheme != 'vscode-remote' &&
+            _document.uri.scheme != 'vscode-vfs' &&
             _document.uri.scheme != 'untitled') {
             return;
         }
