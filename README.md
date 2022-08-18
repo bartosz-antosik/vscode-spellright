@@ -41,12 +41,12 @@ On Microsoft Windows from version 8 on Spell Right uses system spelling API. Fol
 
 On macOS Spell Right uses system spelling API.
 
-### **Linux/WSL and Windows 7**
+### **Linux and Windows 7**
 
-On Linux/WSL (Remote SSH/Remote-WSL) and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded (remember to download RAW files) e.g. from [here](https://github.com/titoBouzout/Dictionaries) (multiple languages), [here](https://github.com/gusbemacbe/LanguagePortuguese) (Portuguese) or [here](https://github.com/superbob/SublimeTextLanguageFrench) (French) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
+On Linux/ and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded (remember to download RAW files) e.g. from [here](https://github.com/titoBouzout/Dictionaries) (multiple languages), [here](https://github.com/gusbemacbe/LanguagePortuguese) (Portuguese) or [here](https://github.com/superbob/SublimeTextLanguageFrench) (French) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
 
 * **Windows:** `%APPDATA%\Code\Dictionaries\`
-* **Linux/WSL:** `$HOME/.config/Code/Dictionaries/`
+* **Linux:** `$HOME/.config/Code/Dictionaries/`
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
@@ -63,6 +63,10 @@ ln -s /usr/share/hunspell/* ~/.config/Code/Dictionaries
 The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/share/myspell` etc.) It also has been suggested that some flavors of Linux require that the dictionary name [should not contain spaces and/or parentheses](https://github.com/bartosz-antosik/vscode-spellright/issues/264#issuecomment-480332688).
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+
+### WSL/Remote
+
+While editing WSL/Remote files (Remote SSH/Remote-WSL) SpellRight should use host dictionaries so all the above should apply.
 
 ### **User Dictionaries**
 
