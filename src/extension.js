@@ -6,6 +6,7 @@
 'use strict';
 
 global.SPELLRIGHT_DEBUG_OUTPUT = false;
+global.SPELLRIGHT_DEBUG_PERF = false;
 global.SPELLRIGHT_LINES_BATCH = 10;
 global.SPELLRIGHT_MILLISECS_BATCH = 100;
 
