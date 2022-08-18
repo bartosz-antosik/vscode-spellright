@@ -64,9 +64,9 @@ The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/sha
 
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
-### WSL/Remote
+### WSL/Remote/GitHub Repositories
 
-While editing WSL/Remote files (Remote SSH/Remote-WSL) SpellRight should use host dictionaries so all the above should apply.
+While editing WSL/Remote/GitHub files (Remote SSH/Remote-WSL) SpellRight should use host dictionaries so all the above should apply.
 
 ### **User Dictionaries**
 
