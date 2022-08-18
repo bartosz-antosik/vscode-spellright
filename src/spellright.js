@@ -1388,7 +1388,9 @@ var SpellRight = (function () {
 
         // Is this a private URI? (VSCode started having 'private:' versions
         // of non-plaintext documents with languageId = 'plaintext')
-        if (_document.uri.scheme != 'file' && _document.uri.scheme != 'untitled') {
+        if (_document.uri.scheme != 'file' &&
+            _document.uri.scheme != 'vscode-remote' &&
+            _document.uri.scheme != 'untitled') {
             return;
         }
 

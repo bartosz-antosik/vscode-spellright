@@ -5,8 +5,11 @@
   "version": "3.0.84",
   "publisher": "ban",
   "engines": {
-    "vscode": "1.66.0"
+    "vscode": "^1.66.0"
   },
+  "extensionKind": [
+    "ui"
+  ],
   "categories": [
     "Other"
   ],
