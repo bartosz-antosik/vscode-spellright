@@ -766,7 +766,7 @@ var SpellRight = (function () {
         // the ancient Hunspell version bundled with node-spellchecker.
         // HACK: This bypasses spellcheck for those codepoints altogether.
         if (this.hunspell) {
-            cword = cword.replace(/[\ud800-\udbff][\ud800-\udfff]/g, ' ')
+            cword = cword.replace(/[\ud800-\udbff][\ud800-\udfff]/g, '  ')
         }
 
         // Hunspell does not understand curly apostrophe
