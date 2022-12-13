@@ -13,6 +13,8 @@ global.SPELLRIGHT_STATUSBAR_ITEM_PRIORITY = (-1);
 
 const vscode = require('vscode');
 
+var SpellRight = null;
+
 function activate(context) {
     const spellright = require('./spellright');
 
@@ -29,7 +31,7 @@ function activate(context) {
         // });
     }
 
-    var SpellRight = new spellright.default();
+    SpellRight = new spellright.default();
 
     SpellRight.activate(context);
 }
