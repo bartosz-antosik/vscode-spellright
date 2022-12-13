@@ -1,8 +1,10 @@
 # Change Log
 
-## **3.0.94** released on 13th December 2022
+## **3.0.104** released on 14th December 2022
 
 - **Fix:** Small fix to internal object/property naming which was causing extension crashes.
+- **Fix:** Some long lasting annoyances in extensionHost log repaired.
+- **Fix:** Issue with race condition start of spelling of newly opened document.
 
 ## **3.0.90** released on 18th August 2022
 
