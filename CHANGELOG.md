@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.92** released on 14th December 2022
+
+- **Fix:** Small fix to internal object/property naming which was causing extension crashes.
+
 ## **3.0.90** released on 18th August 2022
 
 - **New:** SpellRight should now work in remote hosts (e.g. WSL on Windows, Linux via SSH, GitHub Repositories etc.), thanks to [@bwegge](@https://github.com/bwegge) and [@ flindeberg](https://github.com/flindeberg).

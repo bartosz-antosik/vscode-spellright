@@ -1047,9 +1047,9 @@ var SpellRight = (function () {
         if (diagnostics.length > 0) {
             var _drange = diagnostics[diagnostics.length - 1].range;
             // At the end if fits there
-            append = (_linenumber > _drange._end._line ||
-                (_linenumber == _drange._end._line &&
-                _colnumber >= _drange._end._character));
+            append = (_linenumber > _drange.end.line ||
+                (_linenumber == _drange.end.line &&
+                _colnumber >= _drange.end.character));
         } else {
             // Definitely at the end!
             append = true;
@@ -1099,16 +1099,16 @@ var SpellRight = (function () {
 
         for (var i = diagnostics.length - 1; i >= 0; i--) {
             var _drange = diagnostics[i].range;
-            if (_drange._start._line >= range._start._line &&
-                _drange._end._line <= range._end._line) {
+            if (_drange._start.line >= range._start.line &&
+                _drange._end.line <= range._end.line) {
                 // Remove diagnostics for changed lines range
                 diagnostics.splice(i, 1);
             } else {
                 // Adjust diagnostics behind changed lines range BEFORE
                 if (shift != 0) {
-                    if (_drange._end._line > range._end._line) {
-                        diagnostics[i].range._start._line += shift;
-                        diagnostics[i].range._end._line += shift;
+                    if (_drange._end.line > range._end.line) {
+                        diagnostics[i].range._start.line += shift;
+                        diagnostics[i].range._end.line += shift;
                     }
                 }
             }
