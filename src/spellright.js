@@ -64,7 +64,6 @@ var SpellRight = (function () {
         this.suggestCommand.dispose();
         this.addToWorkspaceCommand.dispose();
         this.addToUserCommand.dispose();
-        this.lastChanges.dispose();
     };
 
     SpellRight.prototype.activate = function (context) {
@@ -1107,8 +1106,8 @@ var SpellRight = (function () {
                 // Adjust diagnostics behind changed lines range BEFORE
                 if (shift != 0) {
                     if (_drange.end.line > range.end.line) {
-                        diagnostics[i].range.start.line += shift;
-                        diagnostics[i].range.end.line += shift;
+                        diagnostics[i].range.start.translate(shift, 0);
+                        diagnostics[i].range.end.translate(shift, 0);
                     }
                 }
             }
@@ -1374,7 +1373,6 @@ var SpellRight = (function () {
 
         // Is off for this document type?
         if (settings.documentTypes.indexOf(_document.languageId) == (-1)) {
-            this.doCancelSpellCheck();
             indicator.updateStatusBarIndicator();
             this.diagnosticCollection.delete(_document.uri);
             this.diagnosticMap[_document.uri.toString()] = undefined;
