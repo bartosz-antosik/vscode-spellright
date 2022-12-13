@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.92** released on 14th December 2022
+## **3.0.94** released on 13th December 2022
 
 - **Fix:** Small fix to internal object/property naming which was causing extension crashes.
 

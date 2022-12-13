@@ -1064,7 +1064,7 @@ var SpellRight = (function () {
             // are very few calls thus it should not degrade performance.
             for (var i = 0; i < diagnostics.length; i++) {
                 var _drange = diagnostics[i].range;
-                if (_drange._end.isBeforeOrEqual(diag.range.start))
+                if (_drange.end.isBeforeOrEqual(diag.range.start))
                     continue;
                 diagnostics.splice(i, 0, diag);
                 break;
@@ -1099,16 +1099,16 @@ var SpellRight = (function () {
 
         for (var i = diagnostics.length - 1; i >= 0; i--) {
             var _drange = diagnostics[i].range;
-            if (_drange._start.line >= range._start.line &&
-                _drange._end.line <= range._end.line) {
+            if (_drange.start.line >= range.start.line &&
+                _drange.end.line <= range.end.line) {
                 // Remove diagnostics for changed lines range
                 diagnostics.splice(i, 1);
             } else {
                 // Adjust diagnostics behind changed lines range BEFORE
                 if (shift != 0) {
-                    if (_drange._end.line > range._end.line) {
-                        diagnostics[i].range._start.line += shift;
-                        diagnostics[i].range._end.line += shift;
+                    if (_drange.end.line > range.end.line) {
+                        diagnostics[i].range.start.line += shift;
+                        diagnostics[i].range.end.line += shift;
                     }
                 }
             }
