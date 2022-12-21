@@ -749,7 +749,6 @@ var SpellRight = (function () {
         var _containsApostrophe = /[\'\u2019]/.test(cword);
         var _containsDash = /[-]/.test(cword);
         var _containsDigitInside = /\D\d\D/.test(cword);
-        var _containsEmoji = /[\ue000-\uf8ff]|\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]/.test(cword);
         var _parentheticalPlural = /^\w+\((\w{1,2})\)$/.test(cword);
         var _containsParenthesis = /[\(\)]/.test(cword);
         var _possesiveApostrophe = /^\w+[\'\u2019]s$/.test(cword);
@@ -761,9 +760,12 @@ var SpellRight = (function () {
             if (/_+/.exec(cword)[0].length == cword.length) return;
         }
 
-        // Emojis crash Hunspell both on Linux and Windows
-        if (_containsEmoji && this.hunspell) {
-            return;
+        // Any Unicode codepoint outside BMP (U+0000...U+FFFF), i.e. U+10000...
+        // (which, among many other things, includes most emoji) crash
+        // the ancient Hunspell version bundled with node-spellchecker.
+        // HACK: This bypasses spellcheck for those codepoints altogether.
+        if (this.hunspell) {
+            cword = cword.replace(/[\ud800-\udbff][\ud800-\udfff]/g, '  ')
         }
 
         // Hunspell does not understand curly apostrophe
