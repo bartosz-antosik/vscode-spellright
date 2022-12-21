@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.106** released on 22nd December 2022
+
+- **New:** Spelling of [quarto](https://quarto.org/) document type, thanks to [jjallaire](https://github.com/jjallaire).
+- **Fix:** Hunspell crashes on Supplementary Unicode plane codepoints, thanks to [@ antichris](@https://github.com/antichris).
+
 ## **3.0.104** released on 14th December 2022
 
 - **Fix:** Small fix to internal object/property naming which was causing extension crashes.
