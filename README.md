@@ -1,8 +1,9 @@
 # Multilingual, Offline and Lightweight Spellchecker for Visual Studio Code
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating/ban.spellright.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ban.spellright) [![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/ban.spellright.svg?style=flat-square)
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/ban.spellright.svg?style=flat-square)
+![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/ban.spellright.svg?style=flat-square)
+[![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
 ## Features
 
