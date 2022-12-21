@@ -3,7 +3,8 @@
 ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/ban.spellright.svg?style=flat-square)
 ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/ban.spellright.svg?style=flat-square)
 ![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/ban.spellright.svg?style=flat-square)
-[![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/ban.spellright.svg?style=flat-square)
+![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)
 
 ## Features
 
