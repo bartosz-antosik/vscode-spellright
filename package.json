@@ -40,7 +40,8 @@
           "default": [
             "markdown",
             "latex",
-            "plaintext"
+            "plaintext",
+            "quarto"
           ],
           "scope": "resource",
           "description": "Document types for which spelling will be turned ON by default."
