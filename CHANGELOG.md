@@ -2,8 +2,8 @@
 
 ## **3.0.114** released on 21st December 2022
 
-- **New:** Spelling of [quarto](https://quarto.org/) document type, thanks to [jjallaire](https://github.com/jjallaire).
-- **Fix:** Hunspell crashes on Supplementary Unicode plane codepoints, thanks to [@ antichris](@https://github.com/antichris).
+- **New:** Spelling of [quarto](https://quarto.org/) document type, thanks to [@jjallaire](https://github.com/jjallaire).
+- **Fix:** Hunspell crashes on Supplementary Unicode plane codepoints, thanks to [@antichris](@https://github.com/antichris).
 
 ## **3.0.104** released on 14th December 2022
 
