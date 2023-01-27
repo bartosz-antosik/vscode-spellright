@@ -52,7 +52,7 @@ On Linux/ and Windows 7 Spell Right uses built in *Hunspell* spell checker libra
 
 `Dictionaries` subfolder does not exists there by default and has to be created manually.
 
-In case you run *Insiders* edition of VSCode then `Code` part of the path has to be changed to `Code - Insiders` appropriately.
+In case you run the *Insiders* edition of VSCode or *VSCodium* then `Code` part of the path has to be changed to `Code - Insiders` or `VSCodium`, respectively.
 
 Spell Right cannot automatically match the dictionary name with system locale settings when using *Hunspell* dictionaries hence **at first run dictionary has to be selected manually** (e.g from status bar).
 
