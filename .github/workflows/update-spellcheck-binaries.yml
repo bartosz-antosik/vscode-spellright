@@ -2,6 +2,7 @@ name: Update node-spellchecker binaries
 on:
   push:
     paths:
+      - '.github/**'
       - 'lib/bin/node-spellchecker/**'
 jobs:
   windows-binaries:
