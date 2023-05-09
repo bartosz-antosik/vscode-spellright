@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.116** released on 10th May 2022
+
+- **Change:** Binaries updated for Electron 22.x.
+
 ## **3.0.114** released on 21st December 2022
 
 - **New:** Spelling of [quarto](https://quarto.org/) document type, thanks to [@jjallaire](https://github.com/jjallaire).
