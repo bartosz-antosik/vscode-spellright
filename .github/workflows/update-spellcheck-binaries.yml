@@ -32,7 +32,7 @@ jobs:
     name: Linux Binaries
     # git is safer if the jobs are sequential
     needs: windows-binaries
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
         # required for cross-compilation of x64 and ia32
       - run: sudo apt-get install gcc-multilib g++-multilib
