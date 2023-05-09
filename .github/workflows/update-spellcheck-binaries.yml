@@ -2,6 +2,7 @@ name: Update node-spellchecker binaries
 on:
   push:
     paths:
+      - '.github/**'
       - 'lib/bin/node-spellchecker/**'
 jobs:
   windows-binaries:
@@ -15,7 +16,7 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '19'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -32,14 +33,14 @@ jobs:
     name: Linux Binaries
     # git is safer if the jobs are sequential
     needs: windows-binaries
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
         # required for cross-compilation of x64 and ia32
       - run: sudo apt-get install gcc-multilib g++-multilib
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '19'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux.sh
@@ -57,12 +58,12 @@ jobs:
     name: Mac OS (Intel) Binaries
     # git is safer if the jobs are sequential
     needs: linux-binaries
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '19'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
