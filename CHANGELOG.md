@@ -1,6 +1,10 @@
 # Change Log
 
-## **3.0.116** released on 10th May 2022
+## **3.0.118** released on 11th September 2023
+
+- **Change:** Binaries updated for Electron 25.x.
+
+## **3.0.116** released on 10th May 2023
 
 - **Change:** Binaries updated for Electron 22.x.
 
