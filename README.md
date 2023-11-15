@@ -228,7 +228,7 @@ Set of file patterns to globally, silently exclude files from being spelled. Fil
 
 `"spellright.notificationClass": "error"`
 
-Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (green), `"hint"` (invisible).
+Allows to change class of diagnostic messages produced by Spell Right which changes in turn underline color. Possible values (with corresponding underline color) are: `"error"` (red), `"warning"` (green), `"information"` (orange), `"hint"` (invisible).
 
 `"spellright.notificationClassByParser": {}`
 
