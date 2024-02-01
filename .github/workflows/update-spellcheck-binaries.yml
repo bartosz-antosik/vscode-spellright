@@ -16,7 +16,7 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v2
         with:
-          node-version: '19'
+          node-version: '18'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '19'
+          node-version: '18'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux.sh
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '19'
+          node-version: '18'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
@@ -81,12 +81,12 @@ jobs:
     name: Mac OS (Mx) Binaries
     # git is safer if the jobs are sequential
     needs: mac-intel-binaries
-    runs-on: macos-12-large
+    runs-on: flyci-macos-large-latest-m1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '19'
+          node-version: '18'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
