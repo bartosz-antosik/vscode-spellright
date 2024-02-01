@@ -29,8 +29,8 @@ jobs:
           file_pattern: "*.node"
           commit_message: Automatic Build of Windows Binaries
 
-  linux-binaries:
-    name: Linux Binaries
+  linux-binaries-debian:
+    name: Linux Binaries (Debian)
     # git is safer if the jobs are sequential
     needs: windows-binaries
     runs-on: ubuntu-22.04
@@ -52,12 +52,12 @@ jobs:
           commit_message: Automatic Build of Linux Binaries
 
   # linux-rhel-binaries: # Not supported for now
-  #   name: Linux (RHEL) Binaries
+  #   name: Linux Binaries (RHEL)
 
   mac-binaries-intel:
     name: MacOS Binaries (Intel)
     # git is safer if the jobs are sequential
-    needs: linux-binaries
+    needs: linux-binaries-debian
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v4
