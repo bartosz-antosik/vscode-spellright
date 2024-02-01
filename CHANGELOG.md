@@ -78,7 +78,7 @@
 
 - **Fix:** Regression introduced when speeding up LaTeX parser ([#258](https://github.com/bartosz-antosik/vscode-spellright/issues/258)).
 
-## **3.0.28** released on 5nd March 2019
+## **3.0.28** released on 5th March 2019
 
 - **Change:** Notice on dictionary directory location on different breeds of Linux added in README.md ([#252](https://github.com/bartosz-antosik/vscode-spellright/pull/252)). Thanks to [@Eido95](https://github.com/Eido95).
 - **Fix:** Installation command fixed in README.md ([#251](https://github.com/bartosz-antosik/vscode-spellright/pull/251)). Thanks to [@Eido95](https://github.com/Eido95).
