@@ -78,7 +78,7 @@ jobs:
   #   name: Mac OS (Apple) Binaries
 
   mac-apple-binaries:
-    name: Mac OS (Intel) Binaries
+    name: Mac OS (Mx) Binaries
     # git is safer if the jobs are sequential
     needs: linux-binaries
     runs-on: macos-12-large
