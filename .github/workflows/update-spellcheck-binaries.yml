@@ -16,7 +16,7 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux.sh
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-arm.sh
