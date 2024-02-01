@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.122** released on 1st February 2024
+
+- **Change:** Binaries updated for Electron 27.x.
+- **Change:** GitHub Actions updated for MacOS on ARM hardware.
+
 ## **3.0.118** released on 11th September 2023
 
 - **Change:** Binaries updated for Electron 25.x.
