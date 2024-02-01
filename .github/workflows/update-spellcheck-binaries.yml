@@ -9,12 +9,12 @@ jobs:
     name: Windows Binaries
     runs-on: windows-2019
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm ci
@@ -37,8 +37,8 @@ jobs:
     steps:
         # required for cross-compilation of x64 and ia32
       - run: sudo apt-get install gcc-multilib g++-multilib
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm ci
@@ -54,14 +54,14 @@ jobs:
   # linux-rhel-binaries: # Not supported for now
   #   name: Linux (RHEL) Binaries
 
-  mac-intel-binaries:
-    name: Mac OS (Intel) Binaries
+  mac-binaries-intel:
+    name: MacOS Binaries (Intel)
     # git is safer if the jobs are sequential
     needs: linux-binaries
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm ci
@@ -77,19 +77,19 @@ jobs:
   # macos-apple-binaries: # Not supported for now
   #   name: Mac OS (Apple) Binaries
 
-  mac-apple-binaries:
-    name: Mac OS (Mx) Binaries
+  mac-binaries-arm:
+    name: MacOS Binaries (ARM)
     # git is safer if the jobs are sequential
     needs: mac-intel-binaries
     runs-on: flyci-macos-large-latest-m1
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-macos-intel.sh
+      - run: ./build-macos-arm.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
       - uses: stefanzweifel/git-auto-commit-action@v4
