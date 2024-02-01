@@ -80,7 +80,7 @@ jobs:
   mac-binaries-arm:
     name: MacOS Binaries (ARM)
     # git is safer if the jobs are sequential
-    needs: mac-intel-binaries
+    needs: mac-binaries-intel
     runs-on: flyci-macos-large-latest-m1
     steps:
       - uses: actions/checkout@v4
