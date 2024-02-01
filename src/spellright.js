@@ -1827,12 +1827,19 @@ var SpellRight = (function () {
         }
     }
 
-    SpellRight.prototype.addWordToDictionary = function (word, filename) {
+    SpellRight.prototype.addWordToDictionary = function (word, filename, sort = false) {
         if (!fs.existsSync(filename)) {
             fs.closeSync(fs.openSync(filename, 'w'));
         }
 
-        fs.appendFileSync(filename, word + os.EOL);
+        if (sort) {
+            let words = this.readDictionaryFile(filename);
+            words.push(word);
+            words.sort();
+            fs.writeFileSync(filename, words.join(os.EOL) + os.EOL);
+        } else {
+            fs.appendFileSync(filename, word + os.EOL);
+        }
     }
 
     SpellRight.prototype.addWordToWorkspaceDictionary = function (word, save) {
@@ -1840,7 +1847,7 @@ var SpellRight = (function () {
         if (helpers._WorkspaceDictionary.indexOf(word) < 0) {
             helpers._WorkspaceDictionary.push(word);
             if (save) {
-                this.addWordToDictionary(word, this.getWorkspaceDictionaryFilename());
+                this.addWordToDictionary(word, this.getWorkspaceDictionaryFilename(), settings.sortWorkspaceDictionary);
             }
             return true;
         }
