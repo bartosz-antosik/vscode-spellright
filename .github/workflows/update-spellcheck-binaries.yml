@@ -76,3 +76,24 @@ jobs:
 
   # macos-apple-binaries: # Not supported for now
   #   name: Mac OS (Apple) Binaries
+
+  mac-apple-binaries:
+    name: Mac OS (Intel) Binaries
+    # git is safer if the jobs are sequential
+    needs: linux-binaries
+    runs-on: macos-12-large
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '19'
+      - run: npm ci
+        working-directory: lib/bin/node-spellchecker
+      - run: ./build-macos-intel.sh
+        working-directory: lib/bin/node-spellchecker
+      - run: git pull --no-edit
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*.node"
+          commit_message: Automatic Build of Mac Binaries
+
