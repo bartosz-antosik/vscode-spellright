@@ -80,7 +80,7 @@ jobs:
   mac-apple-binaries:
     name: Mac OS (Mx) Binaries
     # git is safer if the jobs are sequential
-    needs: linux-binaries
+    needs: mac-intel-binaries
     runs-on: macos-12-large
     steps:
       - uses: actions/checkout@v2
