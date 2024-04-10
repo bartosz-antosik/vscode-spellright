@@ -29,30 +29,18 @@ void CheckSpellingWorker::Execute() {
 void CheckSpellingWorker::HandleOKCallback() {
   Nan::HandleScope scope;
 
+  v8::Local<v8::Context> context = Nan::GetCurrentContext();
   Local<Array> result = Nan::New<Array>();
   for (auto iter = misspelled_ranges.begin(); iter != misspelled_ranges.end(); ++iter) {
     size_t index = iter - misspelled_ranges.begin();
     uint32_t start = iter->start, end = iter->end;
 
     Local<Object> misspelled_range = Nan::New<Object>();
-#ifdef V8_USE_MAYBE
-    {
-      Isolate* isolate = misspelled_range->GetIsolate();
-      Local<Context> context = isolate->GetCurrentContext();
-      misspelled_range->Set(context, Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start)).Check();
-      misspelled_range->Set(context, Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end)).Check();
-    }
-    Isolate* isolate = result->GetIsolate();
-    Local<Context> context = isolate->GetCurrentContext();
-    result->Set(context, index, misspelled_range).Check();
-#else
-    misspelled_range->Set(Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start));
-    misspelled_range->Set(Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end));
-    result->Set(index, misspelled_range); 
-#endif
+    misspelled_range->Set(context, Nan::New("start").ToLocalChecked(), Nan::New<Integer>(start));
+    misspelled_range->Set(context, Nan::New("end").ToLocalChecked(), Nan::New<Integer>(end));
+    result->Set(context, index, misspelled_range);
   }
 
   Local<Value> argv[] = { Nan::Null(), result };
-  Nan::AsyncResource resource("CheckSpellingWorker::HandleOKCallback");
-  callback->Call(2, argv, &resource);
+  callback->Call(2, argv);
 }
