@@ -9,7 +9,6 @@
             "label": "package",
             "command": "make",
             "args": [ "package" ],
-            "type": "shell",
             "presentation": {
                 "reveal": "silent",
                 "panel": "shared"
@@ -20,7 +19,6 @@
             "label": "publish",
             "command": "make",
             "args": [ "publish" ],
-            "type": "shell",
             "presentation": {
                 "reveal": "silent",
                 "panel": "shared"
