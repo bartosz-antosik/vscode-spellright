@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.126** released on 6th June 2024
+## **3.0.128** released on 8th June 2024
 
 - **Change:** Binaries updated for Electron 29.x.
 
