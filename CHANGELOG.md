@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.132** released on 14th June 2024
+
+- **Fix:** Synchronous use of glob corrected.
+
 ## **3.0.128** released on 8th June 2024
 
 - **Change:** Binaries updated for Electron 29.x.
