@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.136** released on 2nd August 2024
+
+- **Change:** Binaries updated for Electron 30.x.
+
 ## **3.0.134** released on 12th July 2024
 
 - **Fix:** Corrected use of globSync, thanks to [@reduckted](https://github.com/reduckted).
