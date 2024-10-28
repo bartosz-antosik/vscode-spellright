@@ -2047,14 +2047,10 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.readDictionaryFiles = function (pathName) {
-        let globPath = path.join(pathName, '.vscode', '*.dict');
+        const globPath = path.join(pathName, '.vscode', '*.dict');
 
-        if (require('os').platform() === 'win32') {
-            globPath = globPath.replaceAll('\\', '/');
-        }
+        const dictionaryFiles = glob.globSync(globPath, { windowsPathsNoEscape: true });
 
-        const dictionaryFiles = glob.globSync(globPath);
-        
         var result = [];
 
         dictionaryFiles.forEach((file) => {
