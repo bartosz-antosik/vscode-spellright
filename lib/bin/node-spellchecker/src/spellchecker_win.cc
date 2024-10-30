@@ -360,7 +360,7 @@ std::vector<std::string> WindowsSpellchecker::GetCorrectionsForMisspelling(const
     return std::vector<std::string>();
   }
 
-  std::wstring& wword = ToWString(word);
+  const std::wstring& wword = ToWString(word);
   IEnumString* words = NULL;
 
   HRESULT hr = this->currentSpellchecker->Suggest(wword.c_str(), &words);

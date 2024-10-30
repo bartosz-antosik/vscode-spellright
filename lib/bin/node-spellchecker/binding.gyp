@@ -22,6 +22,13 @@
           4530,  # C++ exception handler used, but unwind semantics are not enabled
           4506,  # no definition for inline function
         ],
+        'msvs_settings': {
+            'VCCLCompilerTool': {
+              'AdditionalOptions': [
+                '/std:c++20'
+              ]
+            }
+          }
       }],
       ['OS=="mac"', {
         'xcode_settings': {
@@ -38,6 +45,9 @@
       'sources': [
         'src/main.cc',
         'src/worker.cc'
+      ],
+      'defines': [
+        "NOMINMAX"
       ],
       'conditions': [
         ['spellchecker_use_hunspell=="true"', {
