@@ -17,10 +17,10 @@
   },
   "devDependencies": {
     "jasmine-focused": "^1.0.7",
-    "node-gyp": "^10.1.0"
+    "node-gyp": "^10.2.0"
   },
   "dependencies": {
     "any-promise": "^1.3.0",
-    "nan": "^2.20.0"
+    "nan": "^2.22.0"
   }
 }
