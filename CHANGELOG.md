@@ -1,9 +1,9 @@
 # Change Log
 
-## **3.0.138** released on 30th October 2024
+## **3.0.140** released on 31st October 2024
 
 - **Fix:** Extension fails to read workspace/project dictionary corrected ([#584](https://github.com/bartosz-antosik/vscode-spellright/issues/584)). Thanks to [@rotemdan](https://github.com/rotemdan).
-- **Change:** Binaries updated for Electron 32.x.
+- **Change:** Binaries updated for Electron 32.x. Many thanks to [@rotemdan](https://github.com/rotemdan) for hints on compiling Windows binaries!
 
 ## **3.0.136** released on 2nd August 2024
 
