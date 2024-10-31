@@ -21,14 +21,7 @@
           4267,  # conversion from 'size_t' to 'int', possible loss of data
           4530,  # C++ exception handler used, but unwind semantics are not enabled
           4506,  # no definition for inline function
-        ],
-        'msvs_settings': {
-            'VCCLCompilerTool': {
-              'AdditionalOptions': [
-                '/std:c++20'
-              ]
-            }
-          }
+        ]
       }],
       ['OS=="mac"', {
         'xcode_settings': {
