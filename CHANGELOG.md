@@ -1,5 +1,10 @@
 # Change Log
 
+## **3.0.142** released on 31st October 2024
+
+- **Change:** Binaries updated for Electron 34.x.
+- **Fix:** Typo corrected in README [#565](https://github.com/bartosz-antosik/vscode-spellright/pull/565) thanks to [@shadoath](https://github.com/shadoath).
+
 ## **3.0.140** released on 31st October 2024
 
 - **Fix:** Extension fails to read workspace/project dictionary corrected ([#584](https://github.com/bartosz-antosik/vscode-spellright/issues/584)). Thanks to [@rotemdan](https://github.com/rotemdan).
