@@ -2,7 +2,7 @@
   "name": "spellright",
   "displayName": "Spell Right",
   "description": "Multilingual, Offline and Lightweight Spellchecker",
-  "version": "2",
+  "version": "3.0.142",
   "publisher": "ban",
   "engines": {
     "vscode": "^1.80.0"
