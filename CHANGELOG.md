@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.142** released on 31st October 2024
+## **3.0.142** released on 9th March 2025
 
 - **Change:** Binaries updated for Electron 34.x.
 - **Fix:** Typo corrected in README [#565](https://github.com/bartosz-antosik/vscode-spellright/pull/565) thanks to [@shadoath](https://github.com/shadoath).
