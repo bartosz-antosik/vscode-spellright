@@ -1,5 +1,9 @@
 # Change Log
 
+## **3.0.144** released on 16th June 2025
+
+- **Change:** Binaries updated for Electron 35.x.
+
 ## **3.0.142** released on 9th March 2025
 
 - **Change:** Binaries updated for Electron 34.x.
