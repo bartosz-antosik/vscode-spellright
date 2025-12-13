@@ -287,7 +287,8 @@ class Spellchecker : public Nan::ObjectWrap {
     Nan::SetPrototypeMethod(tpl, "add", Spellchecker::Add);
     Nan::SetPrototypeMethod(tpl, "remove", Spellchecker::Remove);
 
-    Isolate* isolate = exports->GetIsolate();
+    // Isolate* isolate = exports->v8::Isolate::GetIsolate();
+    Isolate* isolate = v8::Isolate::GetCurrent();
     Local<Context> context = isolate->GetCurrentContext();
     Nan::Set(exports, Nan::New("Spellchecker").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
   }
