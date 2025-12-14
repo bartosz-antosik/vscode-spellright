@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.146** released on 13th December 2025
+## **3.0.148** released on 13th December 2025
 
 - **Change:** Binaries updated for Electron 39.x.
 
