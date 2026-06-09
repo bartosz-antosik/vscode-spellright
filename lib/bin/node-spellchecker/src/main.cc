@@ -115,10 +115,12 @@ class Spellchecker : public Nan::ObjectWrap {
     }
 
     std::vector<uint16_t> text(string->Length() + 1);
-    string->Write(
+    string->WriteV2(
 #if V8_MAJOR_VERSION > 6
         info.GetIsolate(),
 #endif
+        0,
+        string->Length(),
         reinterpret_cast<uint16_t *>(text.data()));
 
     Spellchecker* that = Nan::ObjectWrap::Unwrap<Spellchecker>(info.Holder());
@@ -155,10 +157,12 @@ class Spellchecker : public Nan::ObjectWrap {
     Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
 
     std::vector<uint16_t> corpus(string->Length() + 1);
-    string->Write(
+    string->WriteV2(
 #if V8_MAJOR_VERSION > 6
         info.GetIsolate(),
 #endif
+        0,
+        string->Length(),
         reinterpret_cast<uint16_t *>(corpus.data()));
 
     Spellchecker* that = Nan::ObjectWrap::Unwrap<Spellchecker>(info.Holder());
