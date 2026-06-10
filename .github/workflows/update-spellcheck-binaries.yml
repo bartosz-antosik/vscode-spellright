@@ -69,7 +69,7 @@ jobs:
           node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-macos-intel.sh
+      - run: ./build-darwin-intel.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
       - uses: stefanzweifel/git-auto-commit-action@v7
@@ -92,7 +92,7 @@ jobs:
           node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-macos-arm.sh
+      - run: ./build-darwin-arm.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
       - uses: stefanzweifel/git-auto-commit-action@v7
