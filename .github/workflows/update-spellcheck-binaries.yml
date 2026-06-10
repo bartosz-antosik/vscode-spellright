@@ -1,3 +1,6 @@
+# List of CPU Runners:
+# https://docs.github.com/en/actions/reference/runners/github-hosted-runners#single-cpu-runners
+
 name: Update node-spellchecker binaries
 on:
   push:
@@ -16,7 +19,7 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -40,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux.sh
@@ -63,7 +66,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-macos-intel.sh
