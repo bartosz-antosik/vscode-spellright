@@ -1,6 +1,6 @@
 # Change Log
 
-## **3.0.154** released on 12th June 2025
+## **3.0.154** released on 12th June 2026
 
 - **Change:** Binaries updated for Electron 42.x.
 - **Change:** Binaries loading limited to platform, should resolve {#624](https://github.com/bartosz-antosik/vscode-spellright/issues/624) thanks to [@angelo-peronio](https://github.com/angelo-peronio).
