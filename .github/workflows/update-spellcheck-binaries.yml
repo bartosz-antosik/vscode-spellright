@@ -1,3 +1,6 @@
+# List of CPU Runners:
+# https://docs.github.com/en/actions/reference/runners/github-hosted-runners#single-cpu-runners
+
 name: Update node-spellchecker binaries
 on:
   push:
@@ -7,16 +10,16 @@ on:
 jobs:
   windows-binaries:
     name: Windows Binaries
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Extract branch name
         shell: bash
         run: echo echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-windows.cmd
@@ -24,7 +27,7 @@ jobs:
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
         shell: bash
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Windows Binaries
@@ -37,16 +40,16 @@ jobs:
     steps:
         # required for cross-compilation of x64 and ia32
       - run: sudo apt-get install gcc-multilib g++-multilib
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
       - run: ./build-linux.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Linux Binaries
@@ -60,16 +63,16 @@ jobs:
     needs: linux-binaries-debian
     runs-on: macos-15-intel
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-macos-intel.sh
+      - run: ./build-darwin-intel.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Mac Binaries
@@ -83,16 +86,16 @@ jobs:
     needs: mac-binaries-intel
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - run: npm ci
         working-directory: lib/bin/node-spellchecker
-      - run: ./build-macos-arm.sh
+      - run: ./build-darwin-arm.sh
         working-directory: lib/bin/node-spellchecker
       - run: git pull --no-edit
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: "*.node"
           commit_message: Automatic Build of Mac Binaries
