@@ -29,6 +29,12 @@
       "type": "object",
       "title": "Spell Right configuration",
       "properties": {
+        "spellright.customDictionariesPath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine-overridable",
+          "description": "Custom path to the folder containing dictionaries."
+        },
         "spellright.language": {
           "type": "array",
           "default": [],

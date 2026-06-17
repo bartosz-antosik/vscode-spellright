@@ -64,6 +64,8 @@ ln -s /usr/share/hunspell/* ~/.config/Code/Dictionaries
 
 The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/share/myspell` etc.) It also has been suggested that some flavors of Linux require that the dictionary name [should not contain spaces and/or parentheses](https://github.com/bartosz-antosik/vscode-spellright/issues/264#issuecomment-480332688).
 
+It's also possible to specify custom path in the extension's settings (`customDictionariesPath`) instead.
+
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
 
 ### WSL/Remote/GitHub Repositories
@@ -173,6 +175,10 @@ This extension contributes the following settings (with default values):
 `"spellright.language": [ "" ]`
 
 Default language (dictionary/country name) used for spelling. Typically in a LANGUAGE (e.g.: "en", "fr", when `"spellright.groupDictionaries"` is `true`) or LANGUAGE-COUNTRY format (e.g.: "en-US", "en-GB", "fr-CA", "pl-PL", when  `"spellright.groupDictionaries"` is `false`). When *Hunspell* spelling engine is used (e.g. in Windows 7) this setting should be the name of the dictionary file without extension. In case `language` parameter is not set then language from OS locales is used.
+
+`"spellright.customDictionariesPath": ""`
+
+Custom path to the folder containing dictionaries.
 
 `"spellright.statusBarIndicator": true`
 
