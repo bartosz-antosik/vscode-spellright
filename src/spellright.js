@@ -21,6 +21,13 @@ const langcode = require('../lib/langcode')
 const doctype = require('../lib/doctype');
 const parser = require('../lib/parser');
 
+/** configuration parameters */
+var settingsCfg = {
+    init:       true, // to be initialized
+    uri:        undefined,
+    urifspath:  undefined,
+    languageid: undefined,
+};
 var settings = {};
 var dictionaries = [];
 
@@ -2140,51 +2147,77 @@ var SpellRight = (function () {
 
         if (document !== undefined) {
             uri = document.uri;
-            languageid = document.languageId;
             uriwpath = vscode.workspace.getWorkspaceFolder(uri);
-            if (uriwpath !== undefined)
+            if (uriwpath !== undefined) {
                 urifspath = uriwpath.uri.fsPath;
-        }
-
-        var _settings = vscode.workspace.getConfiguration('spellright', uri);
-        for (var p in _settings) settings[p] = _settings[p];
-        settings.language = this.readAsArray(_settings.language);
-        settings.parserByClass = Object.assign({}, _settings.parserByClass);
-
-        this.collectDictionaries();
-        this.selectDefaultLanguage();
-
-        helpers._commands.languages = [];
-        helpers._commands.nlanguages = [];
-
-        var _this = this;
-
-        settings.language.slice().forEach(function (_parameter) {
-            if (_this.checkDictionary(_parameter)) {
-                helpers._commands.languages.push(_parameter);
-            } else {
-                parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
-                    return e === _parameter;
-                });
             }
-        });
-
-        this.prepareIgnoreRegExps(languageid);
-
-        helpers._ignoreFilesSettings = ignore();
-        settings.ignoreFiles.forEach(function (key) {
-            helpers._ignoreFilesSettings.add(key);
-        });
-
-        helpers._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
-
-        // Here loading workspace "per resource" dictionaries
-        if (uri && vscode.workspace.getWorkspaceFolder(uri)) {
-            helpers._WorkspaceDictionary = this.readDictionaryFiles(urifspath);
-            helpers._ignoreFilesSpellignore = this.readIgnoreFile(urifspath);
+            languageid = document.languageId;
         }
 
+        if (this.isSettingsChanged(uri)) {
+            var _settings = vscode.workspace.getConfiguration('spellright', uri);
+            for (var p in _settings) settings[p] = _settings[p];
+            settings.language = this.readAsArray(_settings.language);
+            settings.parserByClass = Object.assign({}, _settings.parserByClass);
+
+            this.collectDictionaries();
+            this.selectDefaultLanguage();
+
+            helpers._commands.languages = [];
+            helpers._commands.nlanguages = [];
+
+        }
+
+        if (this.isSettingsChanged(uri) || this.isSettingsLanguageChanged(languageid)) {
+            var _this = this;
+
+            settings.language.slice().forEach(function (_parameter) {
+                if (_this.checkDictionary(_parameter)) {
+                    helpers._commands.languages.push(_parameter);
+                } else {
+                    parser.pushIfNotExist(helpers._commands.nlanguages, _parameter, function (e) {
+                        return e === _parameter;
+                    });
+                }
+            });
+
+            this.prepareIgnoreRegExps(languageid);
+
+            helpers._ignoreFilesSettings = ignore();
+            settings.ignoreFiles.forEach(function (key) {
+                helpers._ignoreFilesSettings.add(key);
+            });
+
+            helpers._UserDictionary = this.readDictionaryFile(this.getUserDictionaryFilename());
+
+            // Here loading workspace "per resource" dictionaries
+            if (uri && uriwpath && this.isSettingsUriFsPathChanged(urifspath)) {
+                helpers._WorkspaceDictionary = this.readDictionaryFiles(urifspath);
+                helpers._ignoreFilesSpellignore = this.readIgnoreFile(urifspath);
+            }
+        }
+
+        this.setSettingsCfg(uri, urifspath, languageid);
         return;
+    };
+
+    SpellRight.prototype.isSettingsChanged = function (uri) {
+        return settingsCfg.init || settingsCfg.uri !== uri;
+    };
+
+    SpellRight.prototype.isSettingsUriFsPathChanged = function (urifspath) {
+        return settingsCfg.init || settingsCfg.urifspath !== urifspath;
+    };
+
+    SpellRight.prototype.isSettingsLanguageChanged = function (languageid) {
+        return settingsCfg.init || settingsCfg.languageid !== languageid;
+    };
+
+    SpellRight.prototype.setSettingsCfg = function (uri, urifspath, languageid) {
+        settingsCfg.init       = false;
+        settingsCfg.uri        = uri;
+        settingsCfg.urifspath  = urifspath;
+        settingsCfg.languageid = languageid;
     };
 
     SpellRight.suggestCommandId = 'spellright.fixSuggestionCodeAction';
