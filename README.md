@@ -45,26 +45,20 @@ On macOS Spell Right uses system spelling API.
 
 ### **Linux and Windows 7**
 
-On Linux/ and Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded (remember to download RAW files) e.g. from [here](https://github.com/titoBouzout/Dictionaries) (multiple languages), [here](https://github.com/gusbemacbe/LanguagePortuguese) (Portuguese) or [here](https://github.com/superbob/SublimeTextLanguageFrench) (French) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory, located at:
+**Note:** In case you run *Insiders* edition of VSCode then the `Code` part of the path has to be changed to `Code - Insiders`. If you run VS Codium then it needs to be `VSCodium`.
 
-* **Windows:** `%APPDATA%\Code\Dictionaries\`
-* **Linux:** `$HOME/.config/Code/Dictionaries/`
+On Windows 7 Spell Right uses built in *Hunspell* spell checker library. To use it a pair of Dictionary (\*.dic) and Affixes (\*.aff) files with **UTF-8 encoding** have to be downloaded (remember to download RAW files) e.g. from [here](https://github.com/titoBouzout/Dictionaries) (multiple languages), [here](https://github.com/gusbemacbe/LanguagePortuguese) (Portuguese) or [here](https://github.com/superbob/SublimeTextLanguageFrench) (French) and placed in `Dictionaries` subfolder of VSCode's user global configuration directory at `%APPDATA%\Code\Dictionaries\`.  `Dictionaries` subfolder does not exist there by default and has to be created manually.
 
-`Dictionaries` subfolder does not exists there by default and has to be created manually.
-
-In case you run *Insiders* edition of VSCode then `Code` part of the path has to be changed to `Code - Insiders` appropriately.
-
-Spell Right cannot automatically match the dictionary name with system locale settings when using *Hunspell* dictionaries hence **at first run dictionary has to be selected manually** (e.g from status bar).
-
-On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported, verify `SET` line in \*.aff file) by soft linking the system folder e.g.:
+On most Linux distributions system-wide dictionaries can be reused (for now only UTF-8 encoded dictionaries are supported, verify `SET` line in \*.aff file) by soft linking the system folder as seen below. The location may vary among distributions. On Fedora Linux it is `/usr/share/myspell`. On Arch it is `/usr/share/hunspell` but the dictionaries are not installed along with hunspell by default so you need to run `sudo pacman -S hunspell-en_us` or the correct command for your locale. It also has been suggested that some flavors of Linux require that the dictionary name [should not contain spaces and/or parentheses](https://github.com/bartosz-antosik/vscode-spellright/issues/264#issuecomment-480332688).
 
 ```bash
-ln -s /usr/share/hunspell/* ~/.config/Code/Dictionaries
+mkdir -p $HOME/.config/Code/Dictionaries
+ln -s /usr/share/hunspell/* $HOME/.config/Code/Dictionaries
 ```
 
-The location may vary among distributions (e.g.: on Fedora Linux it is `/usr/share/myspell` etc.) It also has been suggested that some flavors of Linux require that the dictionary name [should not contain spaces and/or parentheses](https://github.com/bartosz-antosik/vscode-spellright/issues/264#issuecomment-480332688).
-
 Dictionaries from the folder will be listed in the language selection list and used for spelling documents. Because *Hunspell* engine is slower in serving suggestions to misspelled words it may be useful to set `spellright.suggestionsInHints` to `false` which will speed spelling up and suggestions will still be available in context menu called upon action for the suggestion.
+
+Spell Right cannot automatically match the dictionary name with system locale settings when using *Hunspell* dictionaries hence **at first run dictionary has to be selected manually**. Open the command pallete (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and run "SpellRight: Select Dictionary (Language)".
 
 ### WSL/Remote/GitHub Repositories
 
