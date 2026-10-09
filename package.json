@@ -175,6 +175,16 @@
             "paragraph",
             "subparagraph",
             "text(rm|sf|tt|md|bf|up|it|sl|sc|normal)",
+            "tiny",
+            "scriptsize",
+            "footnotesize",
+            "small",
+            "normalsize",
+            "large",
+            "Large",
+            "LARGE",
+            "huge",
+            "Huge",
             "underline",
             "emph",
             "item",
@@ -240,6 +250,7 @@
     "fs": "0.0.1-security",
     "glob": "^9.3.0",
     "growl": "^1.10.5",
+    "hunspell-asm": "^4.0.2",
     "ignore": "^5.3.1",
     "jsonminify": "^0.4.2",
     "mkdirp": "^3.0.1",
@@ -251,10 +262,10 @@
     "xregexp": "^5.1.1"
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.2.9",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.7",
     "electron": "^28.2.10",
-    "@electron/rebuild": "^3.2.9",
     "eslint": "^9.0.0",
     "mocha": "^10.4.0"
   },
@@ -272,5 +283,8 @@
     "id": "f6e8f06b-e4dc-40e4-83d6-afd7ef0f3e44",
     "publisherId": "2274a5e4-f24b-4cd7-9d0b-d00ca3d481b1",
     "publisherDisplayName": "Bartosz Antosik"
+  },
+  "allowScripts": {
+    "electron@28.2.10": true
   }
 }

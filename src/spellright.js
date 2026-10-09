@@ -67,6 +67,19 @@ var SpellRight = (function () {
     };
 
     SpellRight.prototype.activate = function (context) {
+        // Wait for the spellchecker engine (WASM fallback needs async init)
+        // before registering listeners or checking documents.
+        var _this = this;
+        return Promise.resolve(bindings.ready).then(function () {
+            _this._activateSync(context);
+        }, function (err) {
+            var _msg = (err && err.message) ? err.message : err;
+            console.error('[spellright] Spellchecker engine failed to initialize: ' + _msg);
+            vscode.window.showErrorMessage('SpellRight: spellchecker engine failed to initialize. ' + _msg);
+        });
+    };
+
+    SpellRight.prototype._activateSync = function (context) {
 
         var subscriptions = context.subscriptions;
         this.context = context;
@@ -194,9 +207,11 @@ var SpellRight = (function () {
         var languages = {};
 
         if (this.hunspell) {
-            // Hunspell dictionaries are files in the directory
+            // Hunspell dictionaries are files in the directory. Match only
+            // real ".dic" files (anchored, escaped dot) so that e.g. VS Code's
+            // Chromium "en-US-10-1.bdic" binary is not picked up as dictionary.
+            var dict = /^(.*)\.dic$/;
             if (fs.existsSync(this.getDictionariesPath())) {
-                var dict = /(.*).(dic)/;
                 var _files = fs.readdirSync(this.getDictionariesPath());
                 for (var i = 0; i < _files.length; i++) {
                     var _file = _files[i];
@@ -460,6 +475,7 @@ var SpellRight = (function () {
     SpellRight.prototype.setDictionary = function (dictionary) {
         // Check if what we are trying to set is on the list of available
         // dictionaries. If not then set as [none], that is ''.
+        // Returns true when a usable dictionary is active afterwards.
         var _dict = '';
         dictionaries.forEach(function (entry) {
             // Adjust for various LANGUAGE-COUNTRY separators ("_" or "-")
@@ -472,7 +488,7 @@ var SpellRight = (function () {
         });
 
         if (_dict === '') {
-            return;
+            return false;
         }
 
         if (this.hunspell) {
@@ -482,15 +498,20 @@ var SpellRight = (function () {
         }
 
         if (helpers._currentDictionary === _dict && helpers._currentPath === _path)
-            return;
+            return true;
 
-        bindings.setDictionary(_dict, _path);
+        try {
+            bindings.setDictionary(_dict, _path);
+        } catch (e) {
+            return false;
+        }
 
         if (SPELLRIGHT_DEBUG_OUTPUT) {
             console.log('[spellright] Dictionary (language) set to: \"' + _dict + '\" in \"' + _path + '\".');
         }
         helpers._currentDictionary = _dict;
         helpers._currentPath = _path
+        return true;
     };
 
     SpellRight.prototype.checkDictionary = function (dictionary) {
@@ -507,6 +528,28 @@ var SpellRight = (function () {
             }
         });
         return result;
+    }
+
+    SpellRight.prototype.resolveLanguage = function (language) {
+
+        if (typeof language === 'undefined') return language;
+
+        // Already a valid dictionary id.
+        if (this.checkDictionary(language)) return language;
+
+        // Accept a display label instead of an id, e.g. "English - United
+        // States" instead of "en_US" (case- and separator-insensitive).
+        var _normalize = function (s) {
+            return String(s).toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+        };
+        var _wanted = _normalize(language);
+        for (var i = 0; i < dictionaries.length; i++) {
+            if (_normalize(dictionaries[i].label) === _wanted ||
+                _normalize(dictionaries[i].id) === _wanted) {
+                return dictionaries[i].id;
+            }
+        }
+        return language;
     }
 
     SpellRight.prototype.splitCamelCase = function (word) {
@@ -796,6 +839,29 @@ var SpellRight = (function () {
         }
 
         var _effectiveLanguages = this.getEffectiveLanguage();
+
+        // Keep only languages backed by a usable dictionary. Anything else
+        // (unknown id, missing dictionary files) is skipped instead of
+        // aborting the whole spelling pass with an exception.
+        var _usableLanguages = [];
+        for (var _li = 0; _li < _effectiveLanguages.length; _li++) {
+
+            var _effectiveLanguage = _effectiveLanguages[_li];
+
+            if (this.setDictionary(_effectiveLanguage)) {
+                _usableLanguages.push(_effectiveLanguage);
+            } else {
+                helpers._warnedBadLanguages = helpers._warnedBadLanguages || {};
+                if (!helpers._warnedBadLanguages[_effectiveLanguage]) {
+                    helpers._warnedBadLanguages[_effectiveLanguage] = true;
+                    vscode.window.showWarningMessage('SpellRight: ignoring language "' + _effectiveLanguage + '" (no usable dictionary found).');
+                }
+            }
+        }
+        if (_usableLanguages.length === 0) {
+            return;
+        }
+        _effectiveLanguages = _usableLanguages;
 
         // Here check if the word is correct in ANY of the languages. If it is
         // then exit. If it is incorrect in ALL of them then proceed.
@@ -2153,6 +2219,13 @@ var SpellRight = (function () {
 
         this.collectDictionaries();
         this.selectDefaultLanguage();
+
+        // Resolve display labels to dictionary ids (e.g. "English - United
+        // States" -> "en_US") so hand-written configuration keeps working.
+        var _self = this;
+        settings.language = settings.language.map(function (entry) {
+            return _self.resolveLanguage(entry);
+        });
 
         helpers._commands.languages = [];
         helpers._commands.nlanguages = [];

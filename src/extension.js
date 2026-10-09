@@ -16,7 +16,17 @@ const vscode = require('vscode');
 var SpellRight = null;
 
 function activate(context) {
-    const spellright = require('./spellright');
+    var spellright = null;
+    try {
+        spellright = require('./spellright');
+    } catch (err) {
+        // Native binding (or another hard dependency) failed to load.
+        // Stay deactivated but tell the user why instead of crashing
+        // the extension host activation with a cryptic TypeError.
+        console.error('[spellright] Activation failed: ' + (err && err.message ? err.message : err));
+        vscode.window.showErrorMessage('SpellRight: activation failed. ' + (err && err.message ? err.message : err));
+        return;
+    }
 
     if (SPELLRIGHT_DEBUG_OUTPUT) {
         console.log('[spellright] Activated (' + process.platform + ', ' + process.arch + ').');
@@ -33,13 +43,15 @@ function activate(context) {
 
     SpellRight = new spellright.default();
 
-    SpellRight.activate(context);
+    return SpellRight.activate(context);
 }
 exports.activate = activate;
 
 function deactivate() {
 
-    SpellRight.deactivate();
+    if (SpellRight !== null) {
+        SpellRight.deactivate();
+    }
 
     if (SPELLRIGHT_DEBUG_OUTPUT)
         console.log('[spellright] Deactivated.');
